@@ -34,10 +34,14 @@ export default {
             if (!this.answered && this.selectedIndex === index)
             {
                 answerClass = 'selected'
+                this.$router.push({path: `/Dashboard/Admin/${this.username}/${this.opciones[index]}`, params: {username: this.username, rol: this.rol, opciones: this.opciones[index]}})
+
             }
             else if (this.answered && this.correctIndex === index)
             {
                 answerClass = 'correct'
+                //this.$router.push({path: `/Dashboard/Admin/${this.username}/${this.opciones[index]}`, params: {username: this.username, rol: this.rol, opciones: this.opciones[index]}})
+
             }
 
             return answerClass

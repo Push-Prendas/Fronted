@@ -2,8 +2,10 @@ import Vue from "vue";
 import VueRouter from 'vue-router'
 
 import Login from "./views/Login.vue";
-import Hellow from "./views/Dashboard.vue";
-
+import Dashboard from "./views/Dashboard.vue";
+import usuariosAdmin from "./views/Admin/usuarios.vue";
+import notariasAdmin from "./views/Admin/notarias.vue";
+import oficinasAdmin from "./views/Admin/oficinas.vue";
 Vue.use(VueRouter)
 
 const routes = [
@@ -13,9 +15,27 @@ const routes = [
       component: Login
     },
     {
-      path: "/HellowWorld/:rol/:username",
-      name: "Hellow",
-      component: Hellow,
+      path: "/Dashboard/:rol/:username",
+      name: "Dashboard",
+      component: Dashboard,
+      props: true
+    },
+    {
+      path: "/Dashboard/Admin/:username/Usuarios",
+      name: "usuariosAdmin",
+      component: usuariosAdmin,
+      props: true
+    },
+    {
+      path: "/Dashboard/Admin/:username/Notarias",
+      name: "notariasAdmin",
+      component: notariasAdmin,
+      props: true
+    },
+    {
+      path: "/Dashboard/Admin/:username/Oficinas",
+      name: "oficinasAdmin",
+      component: oficinasAdmin,
       props: true
     }
   ];

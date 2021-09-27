@@ -5,14 +5,9 @@
 </template>
 
 <script>
-//import HelloWorld from './components/Login.vue'
 
 export default {
   name: 'App',
-  /*components: {
-    HelloWorld
-  }*/
-  //<HelloWorld msg="Welcome to Your Vue.js App"/>
 }
 </script>
 

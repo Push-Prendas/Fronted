@@ -19,7 +19,7 @@ export default {
         },
         rol :  {
             type: String,
-            default: "User"
+            default: "Admin"
         }
   },
   components: {
@@ -27,18 +27,20 @@ export default {
     Navbar
   },
   mounted() {
-      if (this.rol == "Admin"){
-          this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Solicitud de rectificación contraro de prendas', 'Consultar estado de una solicutud', 'Emision de certificados']
-      }
+      //if (this.rol == "Admin"){
+        this.opcion = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
+
+      /*}
       else{
-           this.opcion = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
+        this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Solicitud de rectificación contraro de prendas', 'Consultar estado de una solicutud', 'Emision de certificados']
+
            //this.opcion = ['Prendas vigentes','Asignación de solicitudes','Solicitudes rechazadas', 'Informes']
            //this.opcion = ['Mis solicitudes','Buscar solicitudes']
            //this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Buscador']
            //this.opcion = ['Pagos pendientes','Resumen de Pagos']
            //this.opcion = ['Mis solicitudes']
            //this.opcion = ['Usuarios', 'Parametros', 'Tipo de contratante', 'Funcionarios Examinadores', 'Causales de rechazo', 'Tipo de modificaciones', 'Valor Arancel', 'Plazos']
-      }
+      }*/
   }
   
 }

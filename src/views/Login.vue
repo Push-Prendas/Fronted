@@ -14,6 +14,7 @@
                 <div class="title-navbar">
                     SIN DESPLAZAMIENTO
                 </div>
+                
             </div>
             
         </div>
@@ -24,41 +25,62 @@
 
         <div id="inputs">
             <div class="row">
-                <p class="context-letter">Usuario</p>
-                <input id="user" class="context-input" v-model="username">
-                <p class="context-letter">Contraseña</p>
-                <input id="contrasena" class="context-input" v-model="contrasena">
-                <router-link class="btn entrar-button"  :to="{ path: `/HellowWorld/${Login(username,contrasena)}/${username}`, params: {username: this.username, rol: this.rol}}" >Entrar</router-link>
-                <p>Para ayuda, favor contáctese con nuestro</p>
-                <p>Call Center </p>
+            <form v-on:submit.prevent="Login">
+                <input type="text" id="username" class="fadeIn second" name="login" placeholder="Usuario" v-model="username">
+                <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
+                <input type="submit" class="fadeIn fourth" value="Entrar" >
+            </form>              
+            <p>Para ayuda, favor contáctese con nuestro</p>
+            <p>Call Center </p>
+            <div class="alert alert-danger" role="alert" v-if="error">
+            {{error_msg}}
+            </div> 
             </div>
         </div>
     </div>
 </template>
 
 <script>
-
+//import axios from "axios";
 export default {
   name: 'App',
+  components: {
+    },
   props:{
       msg:String
   },
     data(){
         return{
             username:"",
-            rol:"Admin",
-            contrasena:""
+            password:"",
+            error: false,
+            error_msg: "",
         }
-        
     },
     
     methods: {
-        Login(user,password) {
+        Login() {
             //const path = 'http://localhost:8003/api/v1/authuser'
-            console.log(user,password),
-            this.rol="Adm"
-            console.log(this.rol)
-            return this.rol
+            console.log(this.user,this.password)
+            let json = {
+                "usuario" : this.username,
+                "password" : this.password
+            }
+            console.log(json)
+            //axios.post('https://api.solodata.es/auth', json).then( data => {
+                //console.log(data)
+            //})
+            this.rol="Admin"
+            if(this.username=="" || this.password==""){
+                this.error = true
+                this.error_msg="Debe llenar todos los campos"
+            }else{
+                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
+
+            }
+
+            //console.log(this.rol)
+            //return this.rol
         }
     }
     
@@ -121,15 +143,108 @@ export default {
     height: 1em;
     padding: 0em;
 }
-.context-input{
+.form-control{
     text-align: left;
     width: 100%;
     margin-bottom: 1em;
 }
 
 .entrar-button{
+    margin-bottom:10px;
     color: white;
     background-color: #514BD5;
 }
+input[type=button], input[type=submit], input[type=reset]  {
+  background-color:  #514BD5;
+  border: none;
+  color: white;
+  padding: 15px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 13px;
+  -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+  box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 20px 40px 20px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
 
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
+  background-color:  #514BD5;
+}
+
+input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
+  -moz-transform: scale(0.95);
+  -webkit-transform: scale(0.95);
+  -o-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
+}
+
+input[type=text] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 85%;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+input[type=text]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid  #514BD5;
+}
+
+input[type=text]:placeholder {
+  color: #cccccc;
+}
+
+input[type=password] {
+  background-color: #f6f6f6;
+  border: none;
+  color: #0d0d0d;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 5px;
+  width: 85%;
+  border: 2px solid #f6f6f6;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+}
+
+input[type=password]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid  #514BD5;
+}
+
+input[type=password]:placeholder {
+  color: #cccccc;
+}
 </style>
