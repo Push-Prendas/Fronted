@@ -41,7 +41,7 @@
 </template>
 
 <script>
-//import axios from "axios";
+import axios from "axios";
 export default {
   name: 'App',
   components: {
@@ -60,24 +60,33 @@ export default {
     
     methods: {
         Login() {
-            //const path = 'http://localhost:8003/api/v1/authuser'
+            const path = 'http://127.0.0.1:8000/api-token-auth/'
             console.log(this.user,this.password)
             let json = {
-                "usuario" : this.username,
+                "username" : this.username,
                 "password" : this.password
             }
             console.log(json)
-            //axios.post('https://api.solodata.es/auth', json).then( data => {
-                //console.log(data)
-            //})
-            this.rol="Admin"
+            axios.post(path,json).then( data => {
+                
+                this.rol= data.data.first_name
+                this.username = "Admin"
+                console.log(data.data.first_name)
+                localStorage.setItem('name', this.username)
+            
             if(this.username=="" || this.password==""){
                 this.error = true
                 this.error_msg="Debe llenar todos los campos"
             }else{
+                console.log(this.rol)
+                
                 this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
+                
 
             }
+
+            })
+
 
             //console.log(this.rol)
             //return this.rol

@@ -20,8 +20,16 @@ export default {
             answered: false
         }
     },
-  props: {
-        opciones:Array
+props: {
+        opciones:Array,
+        username:{
+            type: String,
+            default: "Admin"
+        },
+        rol :  {
+            type: String,
+            default: "Admin"
+        }
   },
   methods:{
       selectAnswer(index) {
