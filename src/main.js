@@ -11,11 +11,14 @@ import VueAxios from 'vue-axios'
 library.add(faDoorOpen)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.config.productionTip = false;
+
 
 new Vue({
   router,
   render: h => h(App)
-}).$mount("#app");
+}).$mount('#app');
+
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)

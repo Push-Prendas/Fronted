@@ -6,7 +6,8 @@ import Dashboard from "./views/Dashboard.vue";
 import usuariosAdmin from "./views/Admin/usuarios.vue";
 import notariasAdmin from "./views/Admin/notarias.vue";
 import oficinasAdmin from "./views/Admin/oficinas.vue";
-Vue.use(VueRouter)
+
+
 
 const routes = [
     {
@@ -37,7 +38,12 @@ const routes = [
       name: "oficinasAdmin",
       component: oficinasAdmin,
       props: true
-    }
+    },
+    {
+      path: '*',
+      name: 'catchAll',
+      component: Login
+   }
   ];
 
 
@@ -48,4 +54,7 @@ const routes = [
     routes
   });
   
+
+  Vue.use(VueRouter)
+
   export default router;
