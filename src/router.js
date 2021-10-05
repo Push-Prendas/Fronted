@@ -22,19 +22,19 @@ const routes = [
       props: true
     },
     {
-      path: "/Dashboard/Admin/:username/Usuarios",
+      path: "/Dashboard/:rol/:username/Usuarios",
       name: "usuariosAdmin",
       component: usuariosAdmin,
       props: true
     },
     {
-      path: "/Dashboard/Admin/:username/Notarias",
+      path: "/Dashboard/:rol/:username/Notarias",
       name: "notariasAdmin",
       component: notariasAdmin,
       props: true
     },
     {
-      path: "/Dashboard/Admin/:username/Oficinas",
+      path: "/Dashboard/:rol/:username/Oficinas",
       name: "oficinasAdmin",
       component: oficinasAdmin,
       props: true

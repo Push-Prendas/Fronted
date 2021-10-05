@@ -60,6 +60,13 @@ export default {
     
     methods: {
         Login() {
+            if(this.username=="" || this.password==""){
+                this.error = true
+                this.error_msg="Debe llenar todos los campos"
+            }else{
+                //console.log(this.rol)
+                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
+            }
             const path = 'http://127.0.0.1:8000/api-token-auth/'
             console.log(this.user,this.password)
             let json = {
@@ -67,25 +74,18 @@ export default {
                 "password" : this.password
             }
             console.log(json)
-            axios.post(path,json).then( data => {
+            
+           axios.post(path,json).then( data => {// comentar esta linea para correr localmente
+               //this.rol = "Admin" // descomentar para correr local
+               this.rol= data.data.first_name//comentar para correr local
                 
-                this.rol= data.data.first_name
-                this.username = "Admin"
-                console.log(data.data.first_name)
+                
+                //console.log(data.data.first_name)
                 localStorage.setItem('name', this.username)
             
-            if(this.username=="" || this.password==""){
-                this.error = true
-                this.error_msg="Debe llenar todos los campos"
-            }else{
-                console.log(this.rol)
-                
-                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
-                
+            
 
-            }
-
-            })
+            })//comentar para correr local
 
 
             //console.log(this.rol)
