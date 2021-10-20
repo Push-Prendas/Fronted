@@ -6,7 +6,10 @@ import Dashboard from "./views/Dashboard.vue";
 import usuariosAdmin from "./views/Admin/usuarios.vue";
 import notariasAdmin from "./views/Admin/notarias.vue";
 import oficinasAdmin from "./views/Admin/oficinas.vue";
-
+import FormularioInscripcion from "./views/FormularioInscrpcion.vue"
+import BusquedaAlzamiento from "./views/BusquedaAlzamiento.vue"
+import FormularioAlzamiento from "./views/FormularioAlzamiento.vue"
+import FormularioModificacion from "./views/FormularioModificacion.vue"
 
 
 const routes = [
@@ -43,7 +46,31 @@ const routes = [
       path: '*',
       name: 'catchAll',
       component: Login
-   }
+   },
+   {
+    path: "/SolicitudInscripcion",
+    name: "solicitudInscripcion",
+    component: FormularioInscripcion,
+    props: true
+  },
+  {
+    path: "/BusquedaAlzamientoario",
+    name: "BusquedaAlzamiento",
+    component: BusquedaAlzamiento,
+    props: true
+  },
+  {
+    path: "/SolicitudAlzamientoario",
+    name: "solicitudAlzamiento",
+    component: FormularioAlzamiento,
+    props: true
+  },
+  {
+    path: "/SolicitudModificacion",
+    name: "solicitudModificacion",
+    component: FormularioModificacion,
+    props: true
+  }
   ];
 
 

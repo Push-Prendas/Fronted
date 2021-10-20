@@ -1,0 +1,184 @@
+<template>
+    <div id="contenedor" class="row">
+        <div class="row">
+            <div class="titleFormulario col">Constituyentes </div> 
+            <b-button v-b-modal.modal-1 class="col buttonAdd">+</b-button>
+
+            <b-modal id="modal-1" hide-footer>
+
+                <div class="row">
+                    <div class="d-flex justify-content-center titleModal">CONSTITUYENTE </div> 
+                    <div class="col row">
+                        <div class="titles d-flex justify-content-start">
+                            TIPO DE PERSONA
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <select id="tipoDePersonaConstituyente" class="form-select" @change ="changeOption()">
+                                <option selected value="natural">Natural</option>
+                                <option value="juridico">Juridica</option>
+                                <option value="extranjero">Extranjero</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col row" v-if="option == 'natural'">
+                        <div class="titles d-flex justify-content-start" >
+                            RUN
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input type="text" v-model="idDocumento">
+                        </div>
+                    </div>
+                    <div class="col row" v-if="option == 'extranjero'">
+                        <div class="titles d-flex justify-content-start" >
+                            ID
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input type="text" v-model="idDocumento">
+                        </div>
+                    </div>
+                    <div class="col row" v-if="option == 'juridico'">
+                        <div class="titles d-flex justify-content-start" >
+                            RUT
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input type="text" v-model="idDocumento" >
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="titles d-flex justify-content-start" >
+                                NOMBRE
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input id="textNombre" type="text" v-model="nombrePersona">
+                            </div>
+                    </div>
+                </div>
+                <b-button id="ADDConstituyente" @click="add()">Agregar Constituyente</b-button>
+                
+            </b-modal>    
+        </div>
+        
+        <table class="table">
+            <thead class="encabezadoTabla">
+                <tr>
+                <th scope="col">TIPO DE PERSONA</th>
+                <th scope="col">IDENTIFICADOR</th>
+                <th scope="col">NOMBRE/RAZON</th>
+                </tr>
+            </thead>
+            <tbody class="bodyTabla" v-if="items.length == 0">
+                <td>No data</td>
+            </tbody>
+            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
+                <td>{{item.Tipo}}</td>
+                <td>{{item.Id}}</td>
+                <td>{{item.Name}}</td>
+            </tbody>
+ 
+        </table> 
+         
+    </div>
+</template>
+
+<script>
+export default {
+  name: 'ConstituyenteFormulario',
+  data() {
+        return {
+            option:'natural',
+            headers: ['Tipo', 'Id', 'Name'],
+            items: [{}],
+            idDocumento:"",
+            nombrePersona: "",
+        }
+    },
+
+    methods:{
+        changeOption(){
+            var selectBox = document.getElementById("tipoDePersonaConstituyente");
+            this.option = selectBox.options[selectBox.selectedIndex].value; 
+            console.log(this.option);
+        },
+        add() {
+            let item = {
+                "Tipo": this.option,
+                "Id": this.idDocumento,
+                "Name": this.nombrePersona}
+            this.items.push(item);
+        }
+    }
+
+}
+
+</script>
+
+
+<style scoped>
+
+:root {
+    --blueOscuro: #514BD5;
+}
+#contenedor{
+    width: 60em;
+    margin-left: 34%;
+    margin-top: 2%;
+}
+
+.titleFormulario{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    width: 10em;
+    margin-bottom: 2em;
+}
+
+.titleModal{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    margin-bottom: 2em;
+}
+.tamanoTipoDocumento{
+    width: 10em;
+}
+
+.titles{
+    margin-bottom: 0.5em;
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+.encabezadoTabla{
+    background:#CEF1FF;
+    color: #514BD5;
+    border-top-left-radius: 5em;
+    border-radius: 15em 0em 0em 15em;
+}
+
+.bodyTabla{
+    background: #E5E5E5;
+}
+
+
+.buttonAdd{
+    background: #514BD5;
+    color: white;
+    border-radius: 15em;
+    width: 1em;
+    padding: 0em;
+    margin-left: 10em;
+    margin-right: 30em;
+    height: 2em;
+}
+
+#ADDConstituyente{
+    background: #514BD5;
+    color: white;
+    border-radius: 15em;
+    margin-top: 2em;
+}
+</style>
