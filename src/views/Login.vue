@@ -101,8 +101,8 @@ export default {
     width: 40em;
     height: 40em;
     border: 0.2em gray outset;
-    margin-left: 34%;
-    margin-top: 10%;
+    margin-left: 29%;
+    margin-top: 5%;
     padding: 2em;
 }
 .title-navbar{
