@@ -1,8 +1,8 @@
 <template>
-<div>
-    <Menu :opciones= opcion />
-    <Navbar :username= username />
-    <div  class="d-flex justify-content-center contenedor row">
+    <div id="BusquedaAlzamiento">
+        <Navbar :username= username />
+        <Menu :opciones= opcion />
+        <div  class="d-flex justify-content-center contenedor right row">
         <h1 class="title">Solicitud de alzamiento de contrato de prendas</h1>
         <div class="row d-flex justify-content-center item">
             <div class="col-2">
@@ -45,12 +45,16 @@
 <script>
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import {opciones} from "@/views/Dashboard"
+import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+console.log(emailGlobal, rolGlobal)
+
 export default {
     name: 'BusquedaAlzamiento',
     data() {
         return {
-            opcion: ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Consultar estado de una solicutud'],
-            username: "Maria",
+            opcion: opciones,
+            username: usernameGlobal,
         }
     },
     methods:{
@@ -70,7 +74,14 @@ export default {
 .contenedor{
     margin-top: 2em;
     color: #514BD5;
-    
+    width: 80%;
+
+}
+.right {
+    margin-right: 10px;
+    float: right;
+    width: 80%;
+    height: auto;
 }
 
 .item{

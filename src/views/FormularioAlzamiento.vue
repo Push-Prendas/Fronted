@@ -3,7 +3,7 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div>
-            <AntecedentesFormulario :rol="rol" />
+            <AntecedentesFormulario :rol="rolGlobal" />
             <RequirenteFormulario  v-if="rol == 'Oficina'"/>
             <VehiculosFormulario :tipoSolicitud="Alzamiento" />
             <ContratoFormulario />
@@ -26,13 +26,15 @@ import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-
+import {opciones} from "@/views/Dashboard"
+import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+console.log(emailGlobal)
 export default {
   name: 'Dashboard',
   data() {
         return {
-            opcion: ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Consultar estado de una solicutud'],
-            username: "Maria",
+            opcion: opciones,
+            username: usernameGlobal,
         }
     },
   props: {
@@ -40,7 +42,7 @@ export default {
         
         rol :  {
             type: String,
-            default: "Notaria"
+            default: rolGlobal
         },
 
   },
@@ -61,7 +63,7 @@ export default {
 <style scoped>
 #contenedor{
     width: 60em;
-    margin-left: 34%;
+    margin-left: 29%;
     margin-top: 2%;
 }
 

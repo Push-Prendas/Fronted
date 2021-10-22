@@ -45,8 +45,9 @@ import {auth, db} from "@/main";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 
-
-
+var usernameGlobal;
+var emailGlobal;
+var rolGlobal;
 export default {
   name: 'App',
   components: {
@@ -80,13 +81,17 @@ export default {
                                 //TEST SAVE
                                 this.username = user.username
                                 this.rol = user.rol
-                                localStorage.setItem('user_rol', user.rol)
-                                localStorage.setItem('user_loged', user.mail)
+                                emailGlobal = user.email
+                                usernameGlobal = user.nombre
+                                rolGlobal = user.rol
+                                localStorage.setItem('emailGlobal', emailGlobal)
+                                localStorage.setItem('usernameGlobal', usernameGlobal)
+                                localStorage.setItem('rolGlobal', rolGlobal)
                                 //TEST LOAD
                                 const rol_load = localStorage.getItem('user_rol')
                                 console.log(rol_load)
                                 this.username=user.nombre
-                                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
+                                this.$router.push({path: `/Dashboard/${rolGlobal}/${usernameGlobal}`, params: {username: usernameGlobal, rol: rolGlobal}})
 
                                 //loginForm.reset();
                                 //Logeado
@@ -125,6 +130,7 @@ export default {
     }
     
 }
+export{ usernameGlobal, emailGlobal, rolGlobal}
 </script>
 
 <style scoped>

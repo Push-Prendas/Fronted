@@ -654,7 +654,7 @@ export default({
         },
         {
             "id" : 49,
-            "name" : "Reunión"
+            "name" : "Reunion"
         },
         {
             "id" : 217,

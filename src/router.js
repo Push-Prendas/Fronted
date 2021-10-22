@@ -42,35 +42,34 @@ const routes = [
       component: oficinasAdmin,
       props: true
     },
-    {
-      path: '*',
-      name: 'catchAll',
-      component: Login
-   },
    {
-    path: "/SolicitudInscripcion",
-    name: "solicitudInscripcion",
+    path: "/Dashboard/:rol/:username/Inscripciondecontratodeprendas",
+    name: "Inscripciondecontratodeprendas",
     component: FormularioInscripcion,
     props: true
   },
   {
-    path: "/BusquedaAlzamientoario",
-    name: "BusquedaAlzamiento",
+    path: "/Dashboard/:rol/:username/Alzamientodecontratodeprendas",
+    name: "Alzamientodecontratodeprendas",
     component: BusquedaAlzamiento,
     props: true
   },
   {
-    path: "/SolicitudAlzamientoario",
+    path: "/Dashboard/:rol/:username/solicitudAlzamiento",
     name: "solicitudAlzamiento",
     component: FormularioAlzamiento,
     props: true
   },
   {
-    path: "/SolicitudModificacion",
-    name: "solicitudModificacion",
+    path: "/Dashboard/:rol/:username/Modificaciondecontratodeprendas",
+    name: "Modificaciondecontratodeprendas",
     component: FormularioModificacion,
     props: true
-  }
+  },{
+    path: '*',
+    name: 'catchAll',
+    component: Login
+ }
   ];
 
 

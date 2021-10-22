@@ -2,8 +2,8 @@
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
-        <div>
-            <AntecedentesFormulario :rol="rol" />
+        <div class="right">
+            <AntecedentesFormulario :rol="rolGlobal" />
             <AcreedorFormulario />
             <ConstituyentesFormulario />
             <DeudoresFormulario />
@@ -32,20 +32,24 @@ import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import {opciones} from "@/views/Dashboard"
+import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+console.log(emailGlobal, rolGlobal)
+console.log(opciones)
 
 export default {
   name: 'Dashboard',
   data() {
         return {
-            opcion: ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Consultar estado de una solicutud'],
-            username: "Maria",
+            opcion: opciones,
+            username: usernameGlobal,
         }
     },
   props: {
 
         rol :  {
             type: String,
-            default: "Notaria"
+            default: rolGlobal
         }
   },
   components: {
@@ -70,6 +74,12 @@ export default {
     width: 60em;
     margin-left: 34%;
     margin-top: 2%;
+}
+.right {
+    margin-right: 10px;
+    float: right;
+    width: 100%;
+    height: auto;
 }
 
 .titleButton{

@@ -20,13 +20,13 @@
           <tbody>
             <tr>
               <th scope="row">1</th>
-              <th scope="row">Admin</th>
+              <th scope="row">ADMIN</th>
               <th scope="row">Mario2020</th>
               <th scope="row">20.000.000-k</th>
               <th scope="row">mariocopper@prendas.cl</th>
               <th scope="row">Mario</th>
               <th scope="row">Copper</th>
-              <th scope="row">Admin</th>
+              <th scope="row">ADMIN</th>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
                   <button type="button" class="btn btn-secondary" style="background-color:green">Editar</button>
@@ -56,29 +56,14 @@ export default {
         },
         rol :  {
             type: String,
-            default: "Admin"
+            default: "ADMIN"
         }
   },
   components: {
     Menu,
     Navbar
   },
-  mounted() {
-      if (this.rol == "Admin"){
-        this.opcion = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
 
-      }
-      else{
-        this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Solicitud de rectificación contraro de prendas', 'Consultar estado de una solicutud', 'Emision de certificados']
-
-           //this.opcion = ['Prendas vigentes','Asignación de solicitudes','Solicitudes rechazadas', 'Informes']
-           //this.opcion = ['Mis solicitudes','Buscar solicitudes']
-           //this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Buscador']
-           //this.opcion = ['Pagos pendientes','Resumen de Pagos']
-           //this.opcion = ['Mis solicitudes']
-           //this.opcion = ['Usuarios', 'Parametros', 'Tipo de contratante', 'Funcionarios Examinadores', 'Causales de rechazo', 'Tipo de modificaciones', 'Valor Arancel', 'Plazos']
-      }
-  }
   
 }
 

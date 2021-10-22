@@ -8,7 +8,7 @@
   
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-
+var opciones;
 export default {
   name: 'Dashboard',
   props: {
@@ -19,7 +19,7 @@ export default {
         },
         rol :  {
             type: String,
-            default: "Admin"
+            default: "ADMIN"
         }
   },
   components: {
@@ -39,35 +39,38 @@ export default {
 		5 -> JEFEDESERVICIO
 		6 -> FUNCIONARIOOFICINA
 		7 -> RECEPTOR
-*/
+*/    
       switch (this.rol){
         case "ADMIN":
-          this.opcion = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
+          opciones = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
           break
         case "FUNCIONARIONOTARIA":
-          this.opcion = ['Mis Solicitudes','Inscripción de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
+          opciones = ['Mis Solicitudes','Inscripcion de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
           break
         case "NOTARIO":
-          this.opcion = ['Mis Solicitudes','Buscador']
+          opciones = ['Mis Solicitudes','Buscador']
           break
         case "PAGADOR":
-          this.opcion = ['Pagos Pendientes','Resumen de Pagos']
+          opciones = ['Pagos Pendientes','Resumen de Pagos']
           break
         case "REVISOR":
-          this.opcion = ['Tareas','Buscador'] 
+          opciones = ['Tareas','Buscador'] 
           break
         case "JEFEDESERVICIO":
-          this.opcion = ['Tareas','Buscador', 'Informes']
+          opciones = ['Tareas','Buscador', 'Informes']
           break
         case "FUNCIONARIOOFICINA":
-          this.opcion = ['Mis Solicitudes','Inscripción de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
+          opciones = ['Mis Solicitudes','Inscripcion de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
           break
         case "RECEPTOR":
-          this.opcion = ['Tareas', 'Recepcion Solicitudes', 'Busqueda']
+          opciones = ['Tareas', 'Recepcion Solicitudes', 'Busqueda']
           break
 
       }
-  }
-  
+      
+      this.opcion = opciones
+  },
 }
+export {opciones}
+localStorage.setItem("opciones", opciones)
 </script>
