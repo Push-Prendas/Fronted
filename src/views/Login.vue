@@ -41,7 +41,12 @@
 </template>
 
 <script>
-import axios from "axios";
+import {auth, db} from "@/main";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
+
+
+
 export default {
   name: 'App',
   components: {
@@ -60,32 +65,58 @@ export default {
     
     methods: {
         Login() {
+            var username = this.username;
+            var password = this.password;
             if(this.username=="" || this.password==""){
                 this.error = true
                 this.error_msg="Debe llenar todos los campos"
             }else{
-                //console.log(this.rol)
-                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
-            }
-            const path = 'http://127.0.0.1:8000/api-token-auth/'
-            console.log(this.user,this.password)
-            let json = {
-                "username" : this.username,
-                "password" : this.password
-            }
-            console.log(json)
-            
-           axios.post(path,json).then( data => {// comentar esta linea para correr localmente
-               //this.rol = "Admin" // descomentar para correr local
-               this.rol= data.data.first_name//comentar para correr local
-                
-                
-                //console.log(data.data.first_name)
-                localStorage.setItem('name', this.username)
-            
-            
+                signInWithEmailAndPassword(auth, username, password).then((error) => {
+                    console.log("aqui deberia ir el error:")
+                    console.log(error)
+                    getDocs(collection(db, "Usuario")).then((docs)=>
+                    docs.forEach((doc) => {
+                            const user = doc.data();
+                            if(user.mail == username){
+                                //Usuario:{abogado_activo,mail,nombre,rol}
+                                //TEST SAVE
+                                localStorage.setItem('user_rol', user.rol)
+                                localStorage.setItem('user_loged', user.mail)
+                                //TEST LOAD
+                                const rol_load = localStorage.getItem('user_rol')
+                                console.log(rol_load)
+                                this.username=user.nombre
+                                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
 
-            })//comentar para correr local
+                                //loginForm.reset();
+                                //Logeado
+                                
+                            }
+                        }));
+                    
+                   
+                }).catch((err) => {
+                    this.error = true
+                    var msg;
+                    switch (err.message){
+                        case "Firebase: Error (auth/invalid-email).":
+                            msg ="Email Invalido"
+                            break
+                        case "Firebase: Error (auth/user-not-found).":
+                            msg ="Email Invalido"
+                            break
+                        case "Firebase: Error (auth/wrong-password).":
+                            msg = "Contraseña Invalida"
+                            break
+                        case "Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests).":
+                            msg = "Tu cuenta ha sido bloqueada temporalmente por muchos intentos de ingreso fallidos."
+                            break
+                    }
+                    console.log(msg)
+                    this.error_msg= msg
+                });}
+            
+            
 
 
             //console.log(this.rol)
