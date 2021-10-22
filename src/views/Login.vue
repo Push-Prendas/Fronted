@@ -71,15 +71,15 @@ export default {
                 this.error = true
                 this.error_msg="Debe llenar todos los campos"
             }else{
-                signInWithEmailAndPassword(auth, username, password).then((error) => {
-                    console.log("aqui deberia ir el error:")
-                    console.log(error)
+                signInWithEmailAndPassword(auth, username, password).then(() => {
                     getDocs(collection(db, "Usuario")).then((docs)=>
                     docs.forEach((doc) => {
                             const user = doc.data();
                             if(user.mail == username){
                                 //Usuario:{abogado_activo,mail,nombre,rol}
                                 //TEST SAVE
+                                this.username = user.username
+                                this.rol = user.rol
                                 localStorage.setItem('user_rol', user.rol)
                                 localStorage.setItem('user_loged', user.mail)
                                 //TEST LOAD

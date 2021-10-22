@@ -29,20 +29,43 @@ export default {
   mounted() {
       console.log("Entro")
       console.log(this.rol)
-      if (this.rol == "Admin"){
-        
-        this.opcion = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
+      /*
+	TIPOS DE USUARIO/ROL
+		0 -> ADMIN
+		1 -> FUNCIONARIONOTARIA
+		2 -> NOTARIO
+		3 -> PAGADOR
+		4 -> REVISOR
+		5 -> JEFEDESERVICIO
+		6 -> FUNCIONARIOOFICINA
+		7 -> RECEPTOR
+*/
+      switch (this.rol){
+        case "ADMIN":
+          this.opcion = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
+          break
+        case "FUNCIONARIONOTARIA":
+          this.opcion = ['Mis Solicitudes','Inscripción de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
+          break
+        case "NOTARIO":
+          this.opcion = ['Mis Solicitudes','Buscador']
+          break
+        case "PAGADOR":
+          this.opcion = ['Pagos Pendientes','Resumen de Pagos']
+          break
+        case "REVISOR":
+          this.opcion = ['Tareas','Buscador'] 
+          break
+        case "JEFEDESERVICIO":
+          this.opcion = ['Tareas','Buscador', 'Informes']
+          break
+        case "FUNCIONARIOOFICINA":
+          this.opcion = ['Mis Solicitudes','Inscripción de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
+          break
+        case "RECEPTOR":
+          this.opcion = ['Tareas', 'Recepcion Solicitudes', 'Busqueda']
+          break
 
-      }
-      else{
-        this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Solicitud de rectificación contraro de prendas', 'Consultar estado de una solicutud', 'Emision de certificados']
-
-           //this.opcion = ['Prendas vigentes','Asignación de solicitudes','Solicitudes rechazadas', 'Informes']
-           //this.opcion = ['Mis solicitudes','Buscar solicitudes']
-           //this.opcion = ['Mis solicitudes','Solicitud de inscripción de contrato de prendas', 'Solicitud de modificación de contrato de prendas', 'Solicitud de alzamiento de contrato de prendas', 'Buscador']
-           //this.opcion = ['Pagos pendientes','Resumen de Pagos']
-           //this.opcion = ['Mis solicitudes']
-           //this.opcion = ['Usuarios', 'Parametros', 'Tipo de contratante', 'Funcionarios Examinadores', 'Causales de rechazo', 'Tipo de modificaciones', 'Valor Arancel', 'Plazos']
       }
   }
   

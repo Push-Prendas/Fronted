@@ -10,8 +10,7 @@ import VueAxios from 'vue-axios'
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-//import { doc, setDoc } from "firebase/firestore";
-//import {  createUserWithEmailAndPassword } from "firebase/auth";
+
 library.add(faDoorOpen)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -31,10 +30,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+     /*
+	TIPOS DE USUARIO/ROL
+		0 -> ADMIN
+		1 -> FUNCIONARIONOTARIA
+		2 -> NOTARIO
+		3 -> PAGADOR
+		4 -> REVISOR
+		5 -> JEFEDESERVICIO
+		6 -> FUNCIONARIOOFICINA
+		7 -> RECEPTOR
+*/
 /*
-async function create_user2(email="notario@notario.cl", password="notario",nombre_usuario="NOTARIO-001",
-rol_usuario="NOTARIO"){
+import { doc, setDoc } from "firebase/firestore";
+import {  createUserWithEmailAndPassword } from "firebase/auth";
+async function create_user2(email="receptor@receptor.cl", password="receptor",nombre_usuario="RECEPTOR-001",
+rol_usuario="RECEPTOR"){
     var user;
     createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         user = userCredential.user
