@@ -2,9 +2,9 @@
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
-        <div>
+        <div id="contenedor">
             <AntecedentesFormulario :rol="rolGlobal" />
-            <RequirenteFormulario  v-if="rol == 'Oficina'"/>
+            <RequirenteFormulario  v-if="rol == rolGlobal"/>
             <VehiculosFormulario :tipoSolicitud="Alzamiento" />
             <ContratoFormulario />
             <AnexosFormulario/>

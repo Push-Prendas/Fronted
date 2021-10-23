@@ -7,7 +7,7 @@
                     TIPO DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDeDocumento" class="form-select" @change ="changeOption()">
+                    <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc" @change ="changeOption()">
                         <option selected value="publico">Público</option>
                         <option value="privado">Privado</option>
                     </select>
@@ -20,7 +20,7 @@
                     FECHA DE OTORGAMIENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date">
+                    <input type="date" v-model="FOtorgamiento" placeholder="FOtorgamiento">
                 </div>
             </div>
             <div class="col row" v-if="option == 'publico'">
@@ -28,7 +28,7 @@
                     FECHA DE SUSCRIPCIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date">
+                    <input type="date" v-model="FSuscripcion" placeholder="FSuscripcion">
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                     FECHA DE AUTORIZACIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date">
+                    <input type="date" v-model="FAutorizacion" placeholder="FAutorizacion">
                 </div>
             </div>
             <div class="col row" v-if="option == 'privado'">
@@ -47,7 +47,7 @@
                     FECHA DE PROTOCOLIZACIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date">
+                    <input type="date" v-model="FProtocolizacion" placeholder="FProtocolizacion">
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     N DE REPERTORIO DE NOTARIA
                 </div>
                 <div class="d-flex justify-content-start">
-                    <input type="text" class="nrepertorioleft" placeholder="N de Notaria">-<input type="text" class="nrepertorioright" placeholder="Año">
+                    <input type="text" class="nrepertorioleft" placeholder="RepNotaria" v-model="RepNotaria">-<input type="text" class="nrepertorioright" placeholder="anioRepNotaria" v-model="anioRepNotaria">
                     
                 </div>
             </div>
@@ -66,7 +66,7 @@
         <div class="row">
             <div class="col row Space">
                 <div class="form-check ">
-                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"  v-model="ProhibGravEnajenar">
                     <label class="form-check-label d-flex align-items-start" for="defaultCheck1">
                         PROHIBICIÓN DE GRAVAR O ENAJENAR
                     </label>
@@ -98,18 +98,44 @@
 </template>
 
 <script>
+import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+console.log(emailGlobal, rolGlobal,usernameGlobal)
+var rolito;
+switch(rolGlobal){
+    case "FUNCIONARIONOTARIA":
+        rolito= 'Notaria'
+        break;
+    case "NOTARIO":
+        rolito= 'Notaria'
+        break;
+    case "PAGADOR":
+        rolito= 'Notaria'
+        break;
+    case "FUNCIONARIOOFICINA":
+        rolito= 'Oficina'
+        break;
+    
+}
 export default {
   name: 'AntecedentesFormularios',
   data() {
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
-            option:'publico'
+            option:'publico',
+            tipoDoc:'publico',
+            FOtorgamiento: '',
+            FSuscripcion: '',
+            FAutorizacion: '',
+            FProtocolizacion: '',
+            RepNotaria: '',
+            anioRepNotaria: '',
+            ProhibGravEnajenar: '',
         }
     },
     props:{
         rol: {
             type: String,
-            default: 'Notaria'
+            default: rolito,
         }
     },
 
@@ -121,6 +147,7 @@ export default {
     }
 
 }
+//export{tipoDoc,FOtorgamiento, FSuscripcion, FAutorizacion, FProtocolizacion, RepNotaria, anioRepNotaria, ProhibGravEnajenar}
 
 </script>
 
