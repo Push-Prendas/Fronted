@@ -9,6 +9,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import {getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 library.add(faDoorOpen)
@@ -30,6 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage();
      /*
 	TIPOS DE USUARIO/ROL
 		0 -> ADMIN
@@ -68,7 +70,7 @@ rol_usuario="RECEPTOR"){
 }
 create_user2()
 */
-export {auth, db}
+export {auth, db, storage}
 
 new Vue({
   router,

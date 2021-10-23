@@ -20,7 +20,7 @@
                     FECHA DE OTORGAMIENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FOtorgamiento" placeholder="FOtorgamiento">
+                    <input type="date" v-model="FOtorgamiento">
                 </div>
             </div>
             <div class="col row" v-if="option == 'publico'">
@@ -57,7 +57,7 @@
                     N DE REPERTORIO DE NOTARIA
                 </div>
                 <div class="d-flex justify-content-start">
-                    <input type="text" class="nrepertorioleft" placeholder="RepNotaria" v-model="RepNotaria">-<input type="text" class="nrepertorioright" placeholder="anioRepNotaria" v-model="anioRepNotaria">
+                    <input type="text" class="nrepertorioleft" placeholder="Folio" v-model="RepNotaria">-<input type="text" class="nrepertorioright" placeholder="Ano" v-model="anioRepNotaria">
                     
                 </div>
             </div>
@@ -117,6 +117,7 @@ switch(rolGlobal){
     
 }
 export default {
+
   name: 'AntecedentesFormularios',
   data() {
         return {
@@ -129,7 +130,7 @@ export default {
             FProtocolizacion: '',
             RepNotaria: '',
             anioRepNotaria: '',
-            ProhibGravEnajenar: '',
+            ProhibGravEnajenar: null,
         }
     },
     props:{
@@ -143,12 +144,21 @@ export default {
         changeOption(){
             var selectBox = document.getElementById("tipoDeDocumento");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
+        },
+        setData(){
+            this.$emit("gettipoDoc",this.tipoDoc.toString());
+            this.$emit("getFOtorgamiento",this.FOtorgamiento.toString());
+            this.$emit("getFSuscripcion",this.FSuscripcion.toString());
+            this.$emit("getFAutorizacion",this.FAutorizacion.toString());
+            this.$emit("getFProtocolizacion",this.FProtocolizacion.toString());
+            this.$emit("getRepNotaria",this.RepNotaria.toString());
+            this.$emit("getanioRepNotaria",this.anioRepNotaria.toString());
+            this.$emit("getProhibGravEnajenar",this.ProhibGravEnajenar.toString());
         }
     }
 
 }
 //export{tipoDoc,FOtorgamiento, FSuscripcion, FAutorizacion, FProtocolizacion, RepNotaria, anioRepNotaria, ProhibGravEnajenar}
-
 </script>
 
 

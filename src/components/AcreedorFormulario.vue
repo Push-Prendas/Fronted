@@ -7,7 +7,7 @@
                     TIPO DE PERSONA
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDePersona" class="form-select" @change ="changeOption()">
+                    <select id="tipoDePersona" class="form-select" v-model="tipoPersona" @change ="changeOption()">
                         <option selected value="natural">Natural</option>
                         <option value="juridico">Juridica</option>
                         <option value="extranjero">Extranjero</option>
@@ -21,7 +21,7 @@
                     RUN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="run">
                 </div>
             </div>
             <div class="col row" v-if="option == 'extranjero'">
@@ -29,7 +29,7 @@
                     ID
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="id">
                 </div>
             </div>
             <div class="col row" v-if="option == 'extranjero'">
@@ -37,7 +37,7 @@
                     PAÍS
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="pais" class="form-select" @change ="changeOption()" >
+                    <select id="pais" class="form-select" v-model="pais" @change ="changeOption()" >
                         
                         <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
@@ -49,7 +49,7 @@
                     RUT
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="rut">
                 </div>
             </div>
             <div class="col row" v-if="option == 'juridico'">
@@ -57,7 +57,7 @@
                    RAZÓN SOCIAL
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="razonsocial">
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                     APELLIDO PATERNO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="Apaterno">
                 </div>
             </div>
             <div class="col row">
@@ -76,7 +76,7 @@
                     APELLIDO MATERNO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="Amaterno">
                 </div>
             </div>
             <div class="col row">
@@ -84,7 +84,7 @@
                     NOMBRES
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="nombres">
                 </div>
             </div>
         </div>
@@ -103,7 +103,16 @@ export default {
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
             option:'natural',
-            countries
+            countries,
+            tipoPersona:'Natural',
+            run: '',
+            id: '',
+            pais: '',
+            rut: '',
+            razonsocial: '',
+            Apaterno: '',
+            Amaterno: '',
+            nombres: '',
             
         }
     },
@@ -113,6 +122,17 @@ export default {
             var selectBox = document.getElementById("tipoDePersona");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
             console.log(this.option);
+        },
+        setData(){
+            this.$emit("gettipoPersona",this.tipoPersona.toString());
+            this.$emit("getrun",this.run.toString());
+            this.$emit("getid",this.id.toString());
+            this.$emit("getpais",this.pais.toString());
+            this.$emit("getrut",this.rut.toString());
+            this.$emit("getrazonsocial",this.razonsocial.toString());
+            this.$emit("getApaterno",this.Apaterno.toString());
+            this.$emit("getAmaterno",this.Amaterno.toString());
+            this.$emit("getnombres",this.nombres.toString());
         }
     }
 
