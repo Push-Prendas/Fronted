@@ -4,7 +4,9 @@
         <Navbar :username= username />
         <div class ="right">
           <TablaRevisor />
+          <AnexosFormulario/>
         </div>
+
     </div>
 </template>
 <script>
@@ -12,6 +14,8 @@
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import TablaRevisor from '../components/TablaRevisor.vue'
+import AnexosFormulario from '../components/AnexosFormulario.vue'
+
 var opciones;
 export default {
   name: 'Dashboard',
@@ -29,7 +33,8 @@ export default {
   components: {
     Menu,
     Navbar,
-    TablaRevisor
+    TablaRevisor,
+    AnexosFormulario
   },
   mounted() {
       console.log("Entro")
