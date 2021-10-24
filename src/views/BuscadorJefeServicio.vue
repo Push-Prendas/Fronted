@@ -1,12 +1,9 @@
-  <template>
+<template>
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class ="right">
-          <TablaRevisor v-if="rol == 'REVISOR'"/>
-          <TablaRevisor2 v-if="rol == 'REVISOR'"/>
-          <TablaJefeServicioRechazadas v-if="rol == 'JEFEDESERVICIO'" />
-          <TablaJefeServicio2 v-if="rol == 'JEFEDESERVICIO'"/>
+          <BuscadorJefeDeServicios v-if="rol == 'JEFEDESERVICIO'"/>
         </div>
 
     </div>
@@ -20,7 +17,7 @@ import TablaRevisor2 from '../components/TablaRevisor2.vue'
 import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
 import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
-
+import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
 var opciones;
 export default {
   name: 'Dashboard',
@@ -28,11 +25,11 @@ export default {
         opcion:Array,
         username:{
             type: String,
-            default: 'Hola!'
+            default: usernameGlobal
         },
         rol :  {
             type: String,
-            default: "ADMIN"
+            default: rolGlobal
         }
   },
   components: {

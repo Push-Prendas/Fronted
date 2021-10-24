@@ -1,7 +1,7 @@
 <template>
     <div id="TablaRevisor">
         
-        <h1 class="title" style="color:#514BD5">Solicitudes</h1>
+        
 
         <div style="padding:50px; margin-left:300px">
         <table class="table table-sm table-hover zui-table-rounded" >
