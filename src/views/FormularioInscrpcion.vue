@@ -77,7 +77,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false
 	){
 	//Manejar estado de solicitud primario y secundario"
-	console.log("loading")
+	//console.log("loading")
 	//VALIDACION DE DATOS
 	var validate = true;
 	vehiculos.forEach((v) => {

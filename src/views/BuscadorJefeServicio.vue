@@ -18,6 +18,7 @@ import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazad
 import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+console.log(emailGlobal)
 var opciones;
 export default {
   name: 'Dashboard',
@@ -42,8 +43,8 @@ export default {
     BuscadorJefeDeServicios
   },
   mounted() {
-      console.log("Entro")
-      console.log(this.rol)
+      //console.log("Entro")
+      //console.log(this.rol)
       /*
 	TIPOS DE USUARIO/ROL
 		0 -> ADMIN

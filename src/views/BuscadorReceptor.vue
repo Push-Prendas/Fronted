@@ -14,6 +14,7 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import RepcionDocumentosBuscador from '../components/RecepcionDocumentosBuscador.vue'
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+console.log(emailGlobal)
 var opciones;
 export default {
   name: 'Dashboard',
@@ -34,8 +35,8 @@ export default {
     RepcionDocumentosBuscador
   },
   mounted() {
-      console.log("Entro")
-      console.log(this.rol)
+      //console.log("Entro")
+      //console.log(this.rol)
       /*
 	TIPOS DE USUARIO/ROL
 		0 -> ADMIN

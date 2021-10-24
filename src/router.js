@@ -70,19 +70,19 @@ const routes = [
   },
   {
     path: "/Dashboard/:rol/:username/Buscador",
-    name: "Modificaciondecontratodeprendas",
+    name: "ModificaciondecontratodeprendasBuscador",
     component: BuscadorJefeServicio,
     props: true
   },
   {
     path: "/Dashboard/:rol/:username/Tareas",
-    name: "Modificaciondecontratodeprendas",
+    name: "ModificaciondecontratodeprendasTareas",
     component: ComprobanteSolicutud,
     props: true
   },
   {
     path: "/Dashboard/:rol/:username/Busqueda",
-    name: "Modificaciondecontratodeprendas",
+    name: "ModificaciondecontratodeprendasBusqueda",
     component: RecepcionDocBuscador,
     props: true
   },{

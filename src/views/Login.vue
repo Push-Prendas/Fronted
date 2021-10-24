@@ -88,8 +88,8 @@ export default {
                                 localStorage.setItem('usernameGlobal', usernameGlobal)
                                 localStorage.setItem('rolGlobal', rolGlobal)
                                 //TEST LOAD
-                                const rol_load = localStorage.getItem('user_rol')
-                                console.log(rol_load)
+                                //const rol_load = localStorage.getItem('user_rol')
+                                //console.log(rol_load)
                                 this.username=user.nombre
                                 this.$router.push({path: `/Dashboard/${rolGlobal}/${usernameGlobal}`, params: {username: usernameGlobal, rol: rolGlobal}})
 
@@ -117,7 +117,7 @@ export default {
                             msg = "Tu cuenta ha sido bloqueada temporalmente por muchos intentos de ingreso fallidos."
                             break
                     }
-                    console.log(msg)
+                    //console.log(msg)
                     this.error_msg= msg
                 });}
             

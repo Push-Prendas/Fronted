@@ -121,7 +121,7 @@ export default {
         changeOption(){
             var selectBox = document.getElementById("tipoDePersona");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
-            console.log(this.option);
+            //console.log(this.option);
         },
         setData(){
             this.$emit("gettipoPersona",this.tipoPersona.toString());
