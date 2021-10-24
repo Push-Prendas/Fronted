@@ -10,8 +10,6 @@
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignada</th>
-              <th scope="col">Apellido</th>
-              <th scope="col">Rol</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -20,8 +18,12 @@
               <th scope="row">1</th>
               <th scope="row">Oficina L</th>
               <th scope="row">10</th>
-              <th scope="row">19/08/2021</th>  
-              <th class="rounded-pill" style="background-color:grey">Esperando Pago</th>
+              <th scope="row">19/08/2021</th>
+              <td> 
+                  <div class="btn-group" role = "group" aria-label="Basic example">
+                      <th class="rounded-pill" style="background-color:grey">Esperando Pago</th>
+                  </div>
+              </td>
             </tr>
           </tbody>
         </table>
