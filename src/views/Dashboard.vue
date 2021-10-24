@@ -5,6 +5,9 @@
         <div class ="right">
           <TablaRevisor v-if="rol == 'REVISOR'"/>
           <TablaRevisor2 v-if="rol == 'REVISOR'"/>
+          <TablaJefeServicioRechazadas v-if="rol == 'JEFEDESERVICIO'" />
+          
+          <TablaJefeServicio2 v-if="rol == 'JEFEDESERVICIO'"/>
           <BuscadorJefeDeServicios v-if="rol == 'JEFEDESERVICIO'"/>
         </div>
 

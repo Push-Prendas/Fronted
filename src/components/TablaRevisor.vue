@@ -26,10 +26,10 @@
               </td>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
+                      <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
                       <th></th>
                       <th></th>
-                      <th class="rounded-circle" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
+                      <th class="rounded-circle" type="button" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
                   </div>
               </td>
             </tr>
@@ -45,10 +45,10 @@
               </td>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
+                      <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
                       <th></th>
                       <th></th>
-                      <th class="rounded-circle" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
+                      <th class="rounded-circle" type="button" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
                   </div>
               </td>
             </tr>

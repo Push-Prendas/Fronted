@@ -13,8 +13,8 @@
             <DeudoresFormulario />
             <RequirenteFormulario  v-if="rol == 'Oficina'"/>
             <VehiculosFormulario />
-            <ContratoFormulario />
-            <AnexosFormulario/>
+            <ContratoFormulario  v-if="rol == 'Oficina'"/>
+            <AnexosFormulario  v-if="rol == 'Oficina'"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton" >Guardar</button>

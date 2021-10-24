@@ -7,7 +7,7 @@
                     TIPO DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc" @change ="changeOption()">
+                    <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc" @change ="setData()">
                         <option selected value="publico">Público</option>
                         <option value="privado">Privado</option>
                     </select>
@@ -20,7 +20,7 @@
                     FECHA DE OTORGAMIENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FOtorgamiento">
+                    <input type="date" v-model="FOtorgamiento" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'publico'">
@@ -28,7 +28,7 @@
                     FECHA DE SUSCRIPCIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FSuscripcion" placeholder="FSuscripcion">
+                    <input type="date" v-model="FSuscripcion" placeholder="FSuscripcion" @change ="setData()">
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                     FECHA DE AUTORIZACIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FAutorizacion" placeholder="FAutorizacion">
+                    <input type="date" v-model="FAutorizacion" placeholder="FAutorizacion" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'privado'">
@@ -47,7 +47,7 @@
                     FECHA DE PROTOCOLIZACIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FProtocolizacion" placeholder="FProtocolizacion">
+                    <input type="date" v-model="FProtocolizacion" placeholder="FProtocolizacion" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
                     BIENES PRENDADOS
                 </div>
                 <div class="form-check" v-for="(opciones,index) in listBienesPrendados" :key="index" >
-                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <input class="form-check-input" type="checkbox" :value="opciones" id="defaultCheck1">
                     <label class="form-check-label d-flex justify-content-start" for="defaultCheck1">
                         {{opciones}}
                     </label>
@@ -116,6 +116,7 @@ switch(rolGlobal){
         break;
     
 }
+
 export default {
 
   name: 'AntecedentesFormularios',
@@ -144,9 +145,11 @@ export default {
         changeOption(){
             var selectBox = document.getElementById("tipoDeDocumento");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
+            console.log(document.getElementById("defaultCheck1").options)
         },
         setData(){
-            this.$emit("gettipoDoc",this.tipoDoc.toString());
+            var selectBox = document.getElementById("tipoDeDocumento");
+            this.$emit("gettipoDoc", selectBox.options[selectBox.selectedIndex].value);
             this.$emit("getFOtorgamiento",this.FOtorgamiento.toString());
             this.$emit("getFSuscripcion",this.FSuscripcion.toString());
             this.$emit("getFAutorizacion",this.FAutorizacion.toString());

@@ -20,10 +20,10 @@
               <th scope="row">27/03/2021</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey">Revisar</th>
+                      <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Revisar</th>
                       <th></th>
                       <th></th>
-                      <th class="rounded-pill" style="padding-left: 10px; padding-right: 10px; background-color:grey">Liberar</th>
+                      <th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey">Liberar</th>
                   </div>
               </td>
             </tr>
