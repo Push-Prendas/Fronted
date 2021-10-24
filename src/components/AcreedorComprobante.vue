@@ -8,7 +8,7 @@
             <div class="titleFormulario">Acreedor</div>
             <div class="row">
                 <div class="col row">
-                    <div class="titles d-flex justify-content-end">
+                    <div class="titles d-flex justify-content-center">
                         Nombre
                     </div>
                 </div>
@@ -22,13 +22,13 @@
 
             <div class="row">
                 <div class="col row">
-                    <div class="titles d-flex justify-content-start">
+                    <div class="titles d-flex justify-content-center">
                         Tipo 
                     </div>
                 </div>
 
                 <div class="col row">
-                    <div class="titles d-flex justify-content-start">
+                    <div class="titles d-flex justify-content-center">
                         Tipo de Documento
                     </div>
                 </div>
@@ -36,13 +36,13 @@
 
             <div class="row">
                 <div class="col row">
-                    <div class="titles d-flex justify-content-start">
+                    <div class="titles d-flex justify-content-center">
                         N° Documento
                     </div>
                 </div>
 
                 <div class="col row">
-                    <div class="titles d-flex justify-content-start">
+                    <div class="titles d-flex justify-content-center">
                         Numero
                     </div>
                 </div>
