@@ -12,7 +12,7 @@
                             TIPO DE PERSONA
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select id="tipoDePersonaDeudor" class="form-select" @change ="changeOption()">
+                            <select id="tipoDePersonaDeudor" class="form-select" @change ="changeOption(), setData(), clean()">
                                 <option selected value="natural">Natural</option>
                                 <option value="juridico">Juridica</option>
                                 <option value="extranjero">Extranjero</option>
@@ -52,7 +52,7 @@
                             </div>
                     </div>
                 </div>
-                <b-button id="ADDDeudor" @click="add()">Agregar Deudor</b-button>
+                <b-button id="ADDDeudor" @click="add(), setData(), clean()">Agregar Deudor</b-button>
             </b-modal>    
         </div>
         
@@ -67,7 +67,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
+            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
                 <td>{{item.Tipo}}</td>
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>
@@ -102,6 +102,13 @@ export default {
                 "Id": this.idDocumento,
                 "Name": this.nombrePersona}
             this.items.push(item);
+        },
+        clean(){
+            console.log("limpiar campos aqui")
+
+        },
+        setData(){
+            this.$emit("getDeudores",this.items);
         }
     }
 

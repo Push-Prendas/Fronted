@@ -3,18 +3,20 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
-            <AntecedentesFormulario :rol="rolGlobal" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
+            
+            <AntecedentesFormulario :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
-            @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"/>
+            @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
+            @getBienes="getBienes"/>
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <ConstituyentesFormulario />
-            <DeudoresFormulario />
-            <RequirenteFormulario  v-if="rol == 'Oficina'"/>
+            <ConstituyentesFormulario @getConstituyentes="getConstituyentes" />
+            <DeudoresFormulario @getDeudores="getDeudores"/>
+            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'"/>
             <VehiculosFormulario />
-            <ContratoFormulario  v-if="rol == 'Oficina'"/>
-            <AnexosFormulario  v-if="rol == 'Oficina'"/>
+            <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'"/>
+            <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton" >Guardar</button>
@@ -29,7 +31,6 @@ import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
-//import {tipoDoc,FOtorgamiento, FSuscripcion, FAutorizacion, FProtocolizacion, RepNotaria, anioRepNotaria, ProhibGravEnajenar} from '../components/AntecedentesFormulario.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
 import ConstituyentesFormulario from '../components/ConstituyentesFormulario.vue'
 import DeudoresFormulario from '../components/DeudoresFormulario.vue'
@@ -339,6 +340,9 @@ export default {
             Apaterno: '',
             Amaterno: '',
             nombres: '',
+            Bienes: [],
+            constituyentes: [{}],
+            deudores: [{}],
         }
     },
   props: {
@@ -400,6 +404,17 @@ export default {
         getnombres(data) {
         this.nombres = data
         },
+        getBienes(data) {
+        this.Bienes = data
+        },
+        getConstituyentes(data) {
+        this.constituyentes = data
+        console.log("Constituyentes:"+this.constituyentes)
+        },
+        getDeudores(data) {
+        this.deudores = data
+        console.log("Deudores:"+this.deudores)
+        },
         crearInscripcion(){
             enviar_solicitud_de_inscripcion_prenda({
                 tipo_documento: this.tipoDoc.toString(),
@@ -421,7 +436,7 @@ export default {
                 monto_total: 100, 
                 send_flag: true, 
                 tipo_persona_acreedor: this.tipoPersona.toString(), 
-                run_acreedor: this.run.toString(), 
+                run_acreedor: this.run.toString(), //id , rut y run
                 apellido_materno_acreedor: this.Amaterno.toString(), 
                 apellido_paterno_acreedor: this.Apaterno.toString(), 
                 nombres_acreedor: this.nombres.toString(), 

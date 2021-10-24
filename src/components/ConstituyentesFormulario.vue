@@ -13,7 +13,7 @@
                             TIPO DE PERSONA
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select id="tipoDePersonaConstituyente" class="form-select" @change ="changeOption()">
+                            <select id="tipoDePersonaConstituyente" class="form-select" @change ="changeOption(), setData(), clean()">
                                 <option selected value="natural">Natural</option>
                                 <option value="juridico">Juridica</option>
                                 <option value="extranjero">Extranjero</option>
@@ -25,7 +25,7 @@
                             RUN
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento">
+                            <input type="text" v-model="idDocumento" id="run">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'extranjero'">
@@ -33,7 +33,7 @@
                             ID
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento">
+                            <input type="text" v-model="idDocumento" id="id">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'juridico'">
@@ -41,7 +41,7 @@
                             RUT
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" >
+                            <input type="text" v-model="idDocumento" id="rut">
                         </div>
                     </div>
                     <div class="row">
@@ -49,11 +49,11 @@
                                 NOMBRE
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="textNombre" type="text" v-model="nombrePersona">
+                                <input id="nombre" type="text" v-model="nombrePersona">
                             </div>
                     </div>
                 </div>
-                <b-button id="ADDConstituyente" @click="add()">Agregar Constituyente</b-button>
+                <b-button id="ADDConstituyente" @click="add(), setData(), clean()">Agregar Constituyente</b-button>
                 
             </b-modal>    
         </div>
@@ -69,7 +69,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
+            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
                 <td>{{item.Tipo}}</td>
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>
@@ -97,7 +97,7 @@ export default {
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaConstituyente");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
-            console.log(this.option);
+            //console.log(this.option);
         },
         add() {
             let item = {
@@ -105,6 +105,13 @@ export default {
                 "Id": this.idDocumento,
                 "Name": this.nombrePersona}
             this.items.push(item);
+        },
+        clean(){
+            console.log("limpiar campos aqui")
+
+        },
+        setData(){
+            this.$emit("getConstituyentes",this.items);
         }
     }
 

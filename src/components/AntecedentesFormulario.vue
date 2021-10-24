@@ -7,7 +7,7 @@
                     TIPO DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc" @change ="setData()">
+                    <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc"  @change ="changeOption(), setData()">
                         <option selected value="publico">Público</option>
                         <option value="privado">Privado</option>
                     </select>
@@ -57,7 +57,7 @@
                     N DE REPERTORIO DE NOTARIA
                 </div>
                 <div class="d-flex justify-content-start">
-                    <input type="text" class="nrepertorioleft" placeholder="Folio" v-model="RepNotaria">-<input type="text" class="nrepertorioright" placeholder="Ano" v-model="anioRepNotaria">
+                    <input type="text" class="nrepertorioleft" placeholder="Folio" @change =" setData()" v-model="RepNotaria">-<input type="text" class="nrepertorioright" placeholder="Ano" @change =" setData()" v-model="anioRepNotaria">
                     
                 </div>
             </div>
@@ -66,56 +66,42 @@
         <div class="row">
             <div class="col row Space">
                 <div class="form-check ">
-                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"  v-model="ProhibGravEnajenar">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"  @change =" setData()" v-model="ProhibGravEnajenar">
                     <label class="form-check-label d-flex align-items-start" for="defaultCheck1">
                         PROHIBICIÓN DE GRAVAR O ENAJENAR
                     </label>
                 </div>
             </div>
-            <div class="col row" v-if="rol == 'Notaria'">
+            <div class="col row" v-if="rol == 'FUNCIONARIONOTARIA'">
                 <div class="titles d-flex justify-content-start">
                     BIENES PRENDADOS
                 </div>
                 <div class="form-check" v-for="(opciones,index) in listBienesPrendados" :key="index" >
-                    <input class="form-check-input" type="checkbox" :value="opciones" id="defaultCheck1">
-                    <label class="form-check-label d-flex justify-content-start" for="defaultCheck1">
+                    <input class="form-check-input" type="checkbox" :value="opciones"  @change =" setData()" :id="index">
+                    <label class="form-check-label d-flex justify-content-start" :for="index">
                         {{opciones}}
                     </label>
                 </div>
             </div>
-            <div class="col row" v-if="rol == 'Oficina'">
+            <div class="col row" v-if="rol == 'FUNCIONARIOOFICINA'">
                 <div class="titles d-flex justify-content-start">
                     NOTARIAS
                 </div>
-                <select id="pais" class="form-select" @change ="changeOption()" >
+                <select id="pais" class="form-select" v-model="pais"  @change ="changeOption(), setData()" >
                         
                     <option :value="notaria.name" v-for="(notaria,index) in notarias" :key="index">{{notaria.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
                 </select>
             </div>
         </div>
+
+       
     </div>
 </template>
 
 <script>
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal,usernameGlobal)
-var rolito;
-switch(rolGlobal){
-    case "FUNCIONARIONOTARIA":
-        rolito= 'Notaria'
-        break;
-    case "NOTARIO":
-        rolito= 'Notaria'
-        break;
-    case "PAGADOR":
-        rolito= 'Notaria'
-        break;
-    case "FUNCIONARIOOFICINA":
-        rolito= 'Oficina'
-        break;
-    
-}
 
 export default {
 
@@ -131,13 +117,13 @@ export default {
             FProtocolizacion: '',
             RepNotaria: '',
             anioRepNotaria: '',
-            ProhibGravEnajenar: null,
+            ProhibGravEnajenar: false,
         }
     },
     props:{
         rol: {
             type: String,
-            default: rolito,
+            default: "FUNCIONARIONOTARIA",
         }
     },
 
@@ -145,23 +131,25 @@ export default {
         changeOption(){
             var selectBox = document.getElementById("tipoDeDocumento");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
-            console.log(document.getElementById("defaultCheck1").options)
+
         },
         setData(){
-            var selectBox = document.getElementById("tipoDeDocumento");
-            this.$emit("gettipoDoc", selectBox.options[selectBox.selectedIndex].value);
-            this.$emit("getFOtorgamiento",this.FOtorgamiento.toString());
-            this.$emit("getFSuscripcion",this.FSuscripcion.toString());
-            this.$emit("getFAutorizacion",this.FAutorizacion.toString());
-            this.$emit("getFProtocolizacion",this.FProtocolizacion.toString());
-            this.$emit("getRepNotaria",this.RepNotaria.toString());
-            this.$emit("getanioRepNotaria",this.anioRepNotaria.toString());
-            this.$emit("getProhibGravEnajenar",this.ProhibGravEnajenar.toString());
+            this.$emit("gettipoDoc",this.tipoDoc);
+            this.$emit("getFOtorgamiento",this.FOtorgamiento);
+            this.$emit("getFSuscripcion",this.FSuscripcion);
+            this.$emit("getFAutorizacion",this.FAutorizacion);
+            this.$emit("getFProtocolizacion",this.FProtocolizacion);
+            this.$emit("getRepNotaria",this.RepNotaria);
+            this.$emit("getanioRepNotaria",this.anioRepNotaria);
+            this.$emit("getProhibGravEnajenar",this.ProhibGravEnajenar);
+            this.$emit("getBienes", [document.getElementById("0").checked, document.getElementById("1").checked, 
+            document.getElementById("2").checked, document.getElementById("3").checked])
         }
     }
 
 }
 //export{tipoDoc,FOtorgamiento, FSuscripcion, FAutorizacion, FProtocolizacion, RepNotaria, anioRepNotaria, ProhibGravEnajenar}
+
 </script>
 
 
