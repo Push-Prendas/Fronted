@@ -2,7 +2,9 @@
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
-        <TablaRevisor />
+        <div class ="right">
+          <TablaRevisor />
+        </div>
     </div>
 </template>
 <script>
@@ -77,3 +79,15 @@ export default {
 export {opciones}
 localStorage.setItem("opciones", opciones)
 </script>
+
+
+<style scoped>
+
+.right {
+    margin-right: 10px;
+    float: right;
+    width: 100%;
+    height: auto;
+}
+
+</style>
