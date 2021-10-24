@@ -26,7 +26,8 @@ export default {
   },
   components: {
     Menu,
-    Navbar
+    Navbar,
+    TablaRevisor
   },
   mounted() {
       console.log("Entro")
