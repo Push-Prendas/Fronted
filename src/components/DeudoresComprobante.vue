@@ -8,13 +8,13 @@
             <div class="titleFormulario">Deudores</div>
             <div class="row">
                 <div class="col row">
-                    <div class="titles d-flex justify-content-start">
+                    <div class="titles d-flex justify-content-center">
                         Nombre
                     </div>
                 </div>
 
                 <div class="col row">
-                    <div class="titles d-flex justify-content-start">
+                    <div class="titles d-flex justify-content-center">
                         Nombre y Apellido
                     </div>
                 </div>
@@ -62,6 +62,71 @@ export default {
 .nNotaria{
     margin-left: 1em;
     width:5em
+}
+
+:root {
+    --blueOscuro: #514BD5;
+}
+#contenedor{
+    width: 60em;
+    margin-left: 34%;
+    margin-top: 2%;
+}
+
+.titleFormulario{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    width: 10em;
+    margin-bottom: 2em;
+}
+.titleModal{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    margin-bottom: 2em;
+}
+.tamanoTipoDocumento{
+    width: 10em;
+}
+
+.titles{
+    margin-bottom: 0.5em;
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+.encabezadoTabla{
+    background:#CEF1FF;
+    color: #514BD5;
+    border-top-left-radius: 5em;
+    border-radius: 15em 0em 0em 15em;
+}
+
+.bodyTabla{
+    background: #E5E5E5;
+}
+
+
+.buttonAdd{
+    background: #514BD5;
+    color: white;
+    border-radius: 15em;
+    width: 1em;
+    padding: 0em;
+    margin-left: 10em;
+    margin-right: 30em;
+    height: 2em;
+}
+#ADDDeudor{
+    background: #514BD5;
+    color: white;
+    border-radius: 15em;
+    margin-top: 2em;
 }
 
 </style>
