@@ -1,12 +1,11 @@
-<template>
+  <template>
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class ="right">
           <TablaRevisor v-if="rol == 'REVISOR'"/>
           <TablaRevisor2 v-if="rol == 'REVISOR'"/>
-          <TablaJefeServicio v-if="rol == 'JEFEDESERVICIO'"/>
-          <TablaJefeServicio2 v-if="rol == 'JEFEDESERVICIO'"/>
+          <BuscadorJefeDeServicios v-if="rol == 'JEFEDESERVICIO'"/>
         </div>
 
     </div>
@@ -17,8 +16,9 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import TablaRevisor from '../components/TablaRevisor.vue'
 import TablaRevisor2 from '../components/TablaRevisor2.vue'
-import TablaJefeServicio from '../components/TablaJefeServicio.vue'
+import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
 import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
+import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 
 var opciones;
 export default {
@@ -39,8 +39,9 @@ export default {
     Navbar,
     TablaRevisor,
     TablaRevisor2,
-    TablaJefeServicio,
-    TablaJefeServicio2
+    TablaJefeServicioRechazadas,
+    TablaJefeServicio2,
+    BuscadorJefeDeServicios
   },
   mounted() {
       console.log("Entro")
