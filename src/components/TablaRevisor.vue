@@ -20,12 +20,8 @@
               <th scope="row">1</th>
               <th scope="row">Oficina L</th>
               <th scope="row">10</th>
-              <th scope="row">19/08/2021</th>
-              <td> 
-                  <div class="btn-group" role = "group" aria-label="Basic example">
-                      <button type="button" class="rounded-pill" style="background-color:grey">Esperando Pago</button>
-                  </div>
-              </td>
+              <th scope="row">19/08/2021</th>  
+              <th class="rounded-pill" style="background-color:grey">Esperando Pago</th>
             </tr>
           </tbody>
         </table>
