@@ -2,12 +2,14 @@
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
+        <TablaRevisor />
     </div>
 </template>
 <script>
   
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import TablaRevisor from '../components/TablaRevisor.vue'
 var opciones;
 export default {
   name: 'Dashboard',
