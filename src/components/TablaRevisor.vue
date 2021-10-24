@@ -1,5 +1,6 @@
 <template>
     <div id="TablaRevisor">
+        <h1 class="title" style="color:#514BD5">Solicitudes No Asignadas</h1>
         <div style="padding:50px; margin-left:300px">
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;">
@@ -10,7 +11,6 @@
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignada</th>
-              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -21,7 +21,34 @@
               <th scope="row">19/08/2021</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="background-color:grey">Esperando Pago</th>
+                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey">Esperando Pago</th>
+                  </div>
+              </td>
+              <td> 
+                  <div class="btn-group" role = "group" aria-label="Basic example">
+                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
+                      <th></th>
+                      <th></th>
+                      <th class="rounded-circle" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
+                  </div>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">15</th>
+              <th scope="row">Oficina SS</th>
+              <th scope="row">100</th>
+              <th scope="row">03/02/2020</th>
+              <td> 
+                  <div class="btn-group" role = "group" aria-label="Basic example">
+                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:#23B928">Pagado</th>
+                  </div>
+              </td>
+              <td> 
+                  <div class="btn-group" role = "group" aria-label="Basic example">
+                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
+                      <th></th>
+                      <th></th>
+                      <th class="rounded-circle" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
                   </div>
               </td>
             </tr>
@@ -64,4 +91,5 @@ export default {
 .zui-table-rounded tbody tr:last-child td:last-child {
     border-radius: 0 0 10px 0;
 }
+
 </style>
