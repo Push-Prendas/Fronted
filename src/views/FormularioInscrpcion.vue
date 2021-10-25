@@ -74,7 +74,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	numero_repertorio_notario, numero_repertorio_contrato_prenda, repertorio_notaria_year, prohibicion_gravar_enajenar, notaria, nombre_requirente,
 	run_requiriente, activo_fijo, bienes_agropecuarios, derechos_intangibles, prenda_vehiculo, monto_total, send_flag,
 	tipo_persona_acreedor=0, run_acreedor="", apellido_materno_acreedor="", apellido_paterno_acreedor="", nombres_acreedor="", razon_social = "", pais_persona="",
-	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false
+	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, user_id, correo_requiriente, fecha_requiriente
 	){
 	//Manejar estado de solicitud primario y secundario"
 	//console.log("loading")
@@ -183,6 +183,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				nombre_notaria: notaria,
 				nombreRequiriente: nombre_requirente,
 				runRequiriente: run_requiriente,
+				correoRequiriente: correo_requiriente,
+				fechaRequiriente: fecha_requiriente,
 				activoFijo: activo_fijo,
 				bienesAgropecuarios: bienes_agropecuarios,
 				derechosIntangibles: derechos_intangibles,
@@ -190,8 +192,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				montoTotal: monto_total,
 				estadoPrimario: estado_inicial,
 				estadoSecundario: 0,
-				usuarioCreador: localStorage.getItem("user_loged"),
-				firma: false
+				usuarioCreador: user_id,
+				firma: false,
 			}).then(() => {
 				//TABLAS RELACIONADAS
 				getDocs(collection(db, "Patente_por_Inscripcion")).then((pat_data) => {
