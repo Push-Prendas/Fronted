@@ -22,7 +22,8 @@ import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazad
 import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 import TablaRecepcionDocumento from '../components/RecepcionDocumentosTabla.vue'
-export{BuscadorJefeDeServicios}
+import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
+
 var opciones;
 export default {
   name: 'Dashboard',
@@ -30,11 +31,11 @@ export default {
         opcion:Array,
         username:{
             type: String,
-            default: 'Hola!'
+            default: usernameGlobal
         },
         rol :  {
             type: String,
-            default: "ADMIN"
+            default: rolGlobal
         }
   },
   components: {

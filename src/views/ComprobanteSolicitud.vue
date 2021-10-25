@@ -17,12 +17,15 @@
     </div>
 </template>
 <script scoped>
+import Menu from '../components/Menu.vue'
+import Navbar from '../components/Navbar.vue'
 import AntecedentesComprobante from '../components/AntecedentesComprobante.vue'
 import AcreedorComprobante from '../components/AcreedorComprobante.vue'
 import ConstituyentesComprobante from '../components/ConstituyentesComprobante.vue'
 import DeudoresComprobante from '../components/DeudoresComprobante.vue'
 import RequirientesComprobante from '../components/RequirentesComprobante.vue'
-
+import {opciones} from "@/views/Dashboard"
+import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
 
 
 export default {
@@ -34,11 +37,13 @@ export default {
         }
     },
   components: {
-    AntecedentesComprobante,
-    AcreedorComprobante,
-    ConstituyentesComprobante,
-    DeudoresComprobante,
-    RequirientesComprobante
+      Menu,
+      Navbar,
+      AntecedentesComprobante,
+      AcreedorComprobante,
+      ConstituyentesComprobante,
+      DeudoresComprobante,
+      RequirientesComprobante
   },
   
 }

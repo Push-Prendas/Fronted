@@ -75,15 +75,21 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/:rol/:username/Tareas",
+    path: "/Dashboard/REVISOR/:username/Tareas",
     name: "ModificaciondecontratodeprendasTareas",
-    component: ComprobanteSolicutud,
+    component: ComprobanteSolicutud, //No va comprobante
     props: true
   },
   {
     path: "/Dashboard/:rol/:username/Busqueda",
     name: "ModificaciondecontratodeprendasBusqueda",
     component: RecepcionDocBuscador,
+    props: true
+  },
+  {
+    path: "/Dashboard/JEFEDESERVICIO/:username/Tareas",
+    name: "ModificaciondecontratodeprendasTareas",
+    component: Dashboard,
     props: true
   },{
     path: '*',

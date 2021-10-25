@@ -14,73 +14,24 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import RepcionDocumentosBuscador from '../components/RecepcionDocumentosBuscador.vue'
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import {opciones} from "@/views/Dashboard"
 console.log(emailGlobal)
-var opciones;
 export default {
-  name: 'Dashboard',
-  props: {
-        opcion:Array,
-        username:{
-            type: String,
-            default: usernameGlobal
-        },
-        rol :  {
-            type: String,
-            default: rolGlobal
+  name: 'BuscadorReceptor',
+  data() {
+        return {
+            opcion: opciones,
+            username: usernameGlobal,
+            rol: rolGlobal
         }
-  },
+    },
   components: {
     Menu,
     Navbar,
     RepcionDocumentosBuscador
   },
-  mounted() {
-      //console.log("Entro")
-      //console.log(this.rol)
-      /*
-	TIPOS DE USUARIO/ROL
-		0 -> ADMIN
-		1 -> FUNCIONARIONOTARIA
-		2 -> NOTARIO
-		3 -> PAGADOR
-		4 -> REVISOR
-		5 -> JEFEDESERVICIO
-		6 -> FUNCIONARIOOFICINA
-		7 -> RECEPTOR
-*/    
-      switch (this.rol){
-        case "ADMIN":
-          opciones = ['Usuarios','Notarias', 'Oficinas', 'Parametros']
-          break
-        case "FUNCIONARIONOTARIA":
-          opciones = ['Mis Solicitudes','Inscripcion de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
-          break
-        case "NOTARIO":
-          opciones = ['Mis Solicitudes','Buscador']
-          break
-        case "PAGADOR":
-          opciones = ['Pagos Pendientes','Resumen de Pagos']
-          break
-        case "REVISOR":
-          opciones = ['Tareas','Buscador'] 
-          break
-        case "JEFEDESERVICIO":
-          opciones = ['Tareas','Buscador', 'Informes']
-          break
-        case "FUNCIONARIOOFICINA":
-          opciones = ['Mis Solicitudes','Inscripcion de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
-          break
-        case "RECEPTOR":
-          opciones = ['Tareas', 'Recepcion Solicitudes', 'Busqueda']
-          break
-
-      }
-      
-      this.opcion = opciones
-  },
+  
 }
-export {opciones}
-localStorage.setItem("opciones", opciones)
 </script>
 
 
