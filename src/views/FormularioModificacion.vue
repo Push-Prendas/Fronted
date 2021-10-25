@@ -19,6 +19,7 @@
     </div>
 </template>
 <script scoped>
+
 import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
 import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
@@ -31,6 +32,7 @@ import {opciones} from "@/views/Dashboard"
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal)
 console.log(opciones)
+
 
 
 export default {

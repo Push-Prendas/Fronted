@@ -12,13 +12,14 @@
   
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import TablaRevisor from '../components/TablaRevisor.vue'
-import TablaRevisor2 from '../components/TablaRevisor2.vue'
-import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
-import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
+//import TablaRevisor from '../components/TablaRevisor.vue'
+//import TablaRevisor2 from '../components/TablaRevisor2.vue'
+//import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
+//import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
+console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 
 
 export default {
@@ -33,10 +34,10 @@ export default {
   components: {
     Menu,
     Navbar,
-    TablaRevisor,
-    TablaRevisor2,
-    TablaJefeServicioRechazadas,
-    TablaJefeServicio2,
+    //TablaRevisor,
+    //TablaRevisor2,
+    //TablaJefeServicioRechazadas,
+    //TablaJefeServicio2,
     BuscadorJefeDeServicios
   }
 }

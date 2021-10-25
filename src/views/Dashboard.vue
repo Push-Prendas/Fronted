@@ -22,12 +22,12 @@ import TablaRevisor from '../components/TablaRevisor.vue'
 import TablaRevisor2 from '../components/TablaRevisor2.vue'
 import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
 import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
-import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
+//import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 import TablaRecepcionDocumento from '../components/RecepcionDocumentosTabla.vue'
 import MisSolicitudesNotario from '../components/MisSolicitudesNotario.vue'
 import PagosPendientes from '../components/PagosPendientes.vue'
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-
+console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var opciones;
 export default {
   name: 'Dashboard',

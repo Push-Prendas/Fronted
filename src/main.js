@@ -32,6 +32,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage();
+export {auth, db, storage}
      /*
 	TIPOS DE USUARIO/ROL
 		0 -> ADMIN
@@ -70,7 +71,7 @@ rol_usuario="RECEPTOR"){
 }
 create_user2()
 */
-export {auth, db, storage}
+
 
 new Vue({
   router,

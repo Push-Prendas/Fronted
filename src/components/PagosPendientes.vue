@@ -36,7 +36,9 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
+console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
+
 export default {
   name: 'PagosPendientes',
   data() {

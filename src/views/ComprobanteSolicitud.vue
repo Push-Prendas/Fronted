@@ -25,7 +25,8 @@ import ConstituyentesComprobante from '../components/ConstituyentesComprobante.v
 import DeudoresComprobante from '../components/DeudoresComprobante.vue'
 import RequirientesComprobante from '../components/RequirentesComprobante.vue'
 import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
+console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 
 
 export default {

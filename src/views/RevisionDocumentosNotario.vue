@@ -21,7 +21,7 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import { usernameGlobal, rolGlobal}  from "@/views/Login"
 
 
 export default {
