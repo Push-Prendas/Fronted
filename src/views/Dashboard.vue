@@ -8,6 +8,8 @@
           <TablaJefeServicioRechazadas v-if="rol == 'JEFEDESERVICIO'" />
           <TablaJefeServicio2 v-if="rol == 'JEFEDESERVICIO'"/>
           <TablaRecepcionDocumento v-if="rol == 'RECEPTOR'"/>
+          <MisSolicitudesNotario v-if = "rol == 'NOTARIO'"/>
+          <PagosPendientes v-if = "rol == 'PAGADOR'"/>
         </div>
 
     </div>
@@ -22,22 +24,21 @@ import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazad
 import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 import TablaRecepcionDocumento from '../components/RecepcionDocumentosTabla.vue'
+import MisSolicitudesNotario from '../components/MisSolicitudesNotario.vue'
+import PagosPendientes from '../components/PagosPendientes.vue'
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 
 var opciones;
 export default {
   name: 'Dashboard',
-  props: {
-        opcion:Array,
-        username:{
-            type: String,
-            default: usernameGlobal
-        },
-        rol :  {
-            type: String,
-            default: rolGlobal
+  data() {
+        return {
+            opcion: opciones,
+            username: usernameGlobal,
+            rol: rolGlobal
         }
-  },
+    },
+
   components: {
     Menu,
     Navbar,
@@ -45,7 +46,9 @@ export default {
     TablaRevisor2,
     TablaJefeServicioRechazadas,
     TablaJefeServicio2,
-    TablaRecepcionDocumento
+    TablaRecepcionDocumento,
+    MisSolicitudesNotario,
+    PagosPendientes
   },
   mounted() {
       //console.log("Entro")

@@ -13,6 +13,8 @@ import FormularioModificacion from "./views/FormularioModificacion.vue"
 import BuscadorJefeServicio from './views/BuscadorJefeServicio.vue'
 import ComprobanteSolicutud from './views/ComprobanteSolicitud.vue'
 import RecepcionDocBuscador from './views/BuscadorReceptor.vue'
+import RevisionDocumentoNotario from './views/RevisionDocumentosNotario.vue'
+
 
 const routes = [
     {
@@ -89,6 +91,24 @@ const routes = [
   {
     path: "/Dashboard/JEFEDESERVICIO/:username/Tareas",
     name: "ModificaciondecontratodeprendasTareas",
+    component: Dashboard,
+    props: true
+  },
+  {
+    path: "/Dashboard/NOTARIO/:username/MisSolicitudes",
+    name: "MisSolicitudesNotario",
+    component: Dashboard,
+    props: true
+  },
+  {
+    path: "/Dashboard/NOTARIO/:username/RevisionDoc",
+    name: "RevisionDocumentoNotario",
+    component: RevisionDocumentoNotario,
+    props: true
+  },
+  {
+    path: "/Dashboard/PAGADOR/:username/PagosPendientes",
+    name: "PagosPendientes",
     component: Dashboard,
     props: true
   },{

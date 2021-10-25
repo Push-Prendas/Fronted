@@ -3,6 +3,7 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div id="contenedor">
+            
             <AntecedentesFormulario :rol="rolGlobal" />
             <RequirenteFormulario  v-if="rol == rolGlobal"/>
             <VehiculosFormulario :tipoSolicitud="Alzamiento" />

@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from "./router";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faDoorOpen } from '@fortawesome/free-solid-svg-icons';
+import { faDoorOpen, faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -12,7 +12,7 @@ import { getFirestore } from "firebase/firestore";
 import {getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
-library.add(faDoorOpen)
+library.add(faDoorOpen, faFileDownload)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
