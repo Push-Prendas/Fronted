@@ -300,7 +300,7 @@ export default {
             correoRequirente: '',
             fechaRequirente: '',
             Bienes: [],
-            constituyentes: [{}],
+            constituyentes: [],
             deudores: [{}],
 			vehiculos: [{}],
 			contrato: null,
