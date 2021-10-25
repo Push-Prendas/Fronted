@@ -61,9 +61,9 @@ function validate_number(inputNumber){
 
 function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcion, fecha_otorgamiento_escritura, fecha_protocolizacion_contrato_privado, fecha_autorizada,
 	numero_repertorio_notario, prohibicion_gravar_enajenar, notaria, nombre_requirente,
-	run_requiriente, activo_fijo, bienes_agropecuarios, derechos_intangibles, prenda_vehiculo, monto_total, send_flag,
+	run_requiriente,correo_requiriente, fecha_requiriente, activo_fijo, bienes_agropecuarios, derechos_intangibles, prenda_vehiculo, monto_total, send_flag,
 	tipo_persona_acreedor=0, run_acreedor="", nombres_acreedor="",  pais_persona="",
-	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, Oficina
+	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, Oficina, userid
 	){
 
 	//Manejar estado de solicitud primario y secundario"
@@ -136,6 +136,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				nombre_notaria: notaria,
 				nombreRequiriente: nombre_requirente,
 				runRequiriente: run_requiriente,
+				correoRequiriente: correo_requiriente,
+				fechaRequiriente: fecha_requiriente,
 				activoFijo: activo_fijo,
 				bienesAgropecuarios: bienes_agropecuarios,
 				derechosIntangibles: derechos_intangibles,
@@ -143,7 +145,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				montoTotal: monto_total,
 				estadoPrimario: estado_inicial,
 				estadoSecundario: 0,
-				usuarioCreador: localStorage.getItem("user_loged"),
+				usuarioCreador: userid,
 				oficina: Oficina,
 				firma: false
 			}).then(() => {
@@ -421,6 +423,8 @@ export default {
                 "mi notaria", 
                 this.nombreRequirente, 
                 this.nDocRequirente, 
+				this.correoRequirente,
+				this.fechaRequirente,
                 this.Bienes[0],
                 this.Bienes[1], 
                 this.Bienes[2], 
@@ -437,7 +441,8 @@ export default {
                 [].push(this.contrato), 
                 this.anexos, 
                 esOFICINAGlobal,
-				"mi oficina"
+				"mi oficina",
+				emailGlobal
                 )
         }
   },
