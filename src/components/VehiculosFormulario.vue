@@ -53,8 +53,13 @@
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
                 <td>{{item.patente}}</td>
-                <td>{{item.rvm}}</td>
-                <td>{{item.GoE}}</td>
+                <td>{{item.rvm}} {{item.GoE}}</td>
+                
+                <td >
+                    <div v-if="item.GoE == true">GRAVAR</div>
+                    <div v-if="item.GoE == false">NO</div>
+                </td>
+                
             </tbody>
  
         </table> 
@@ -86,7 +91,11 @@ export default {
                 "patente": this.patente,
                 "rvm": this.rvm,
                 "GoE": this.GoE}
+
             this.items.push(item);
+            this.patente ="";
+            this.rvm ="";
+            this.GoE=false;
         },
         clean(){
             console.log("limpiar campos aqui")

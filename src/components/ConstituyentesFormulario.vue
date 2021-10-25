@@ -105,7 +105,9 @@ export default {
                 "Id": this.idDocumento,
                 "Name": this.nombrePersona}
             this.items.push(item);
-            //console.log(item[0])
+            this.option = "natural";
+            this.idDocumento="";
+            this.nombrePersona="";
         },
         clean(){
             console.log("limpiar campos aqui")
