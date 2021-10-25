@@ -68,7 +68,7 @@ export default {
   data() {
         return {
             option:'natural',
-            items: [{}],
+            items: [],
             patente:"",
             GoE:false,
             rvm:""

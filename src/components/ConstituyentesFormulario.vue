@@ -87,7 +87,7 @@ export default {
         return {
             option:'natural',
             headers: ['Tipo', 'Id', 'Name'],
-            items: [{}],
+            items: [],
             idDocumento:"",
             nombrePersona: "",
         }
@@ -105,6 +105,7 @@ export default {
                 "Id": this.idDocumento,
                 "Name": this.nombrePersona}
             this.items.push(item);
+            //console.log(item[0])
         },
         clean(){
             console.log("limpiar campos aqui")

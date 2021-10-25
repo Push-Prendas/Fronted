@@ -4,26 +4,10 @@
         <div class="row">
             <div class="col row">
                 <div class="titles d-flex justify-content-start" >
-                    APELLIDO PATERNO
+                    NOMBRE COMPLETO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
-                </div>
-            </div>
-            <div class="col row">
-                <div class="titles d-flex justify-content-start" >
-                    APELLIDO MATERNO
-                </div>
-                <div class="tamanoTipoDocumento">
-                    <input type="text">
-                </div>
-            </div>
-            <div class="col row">
-                <div class="titles d-flex justify-content-start" >
-                    NOMBRES
-                </div>
-                <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="nombreCompleto" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -34,7 +18,7 @@
                     N DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="NdeDocumento" @change ="setData()">
                 </div>
             </div>
             
@@ -43,7 +27,7 @@
                     CORREO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="text" v-model="correo" @change ="setData()">
                 </div>
             </div>
             <div class="col row">
@@ -51,7 +35,7 @@
                    FECHA
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text">
+                    <input type="date" v-model="fecha" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -70,7 +54,12 @@ export default {
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
             option:'natural',
-            countries
+            countries,
+            nombreCompleto: "",
+            NdeDocumento: "",
+            correo: "",
+            fecha: "",
+
             
         }
     },
@@ -80,6 +69,12 @@ export default {
             var selectBox = document.getElementById("tipoDePersona");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
             //console.log(this.option);
+        },
+        setData(){
+            this.$emit("getnombreRequirente",this.nombreCompleto.toString());
+            this.$emit("getrutRequirente",this.NdeDocumento.toString());
+            this.$emit("getCorreoRequirente",this.correo.toString());
+            this.$emit("getFechaRequirente",this.fecha.toString());
         }
     }
 

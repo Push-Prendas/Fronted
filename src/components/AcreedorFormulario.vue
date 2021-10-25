@@ -7,7 +7,7 @@
                     TIPO DE PERSONA
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDePersona" class="form-select" v-model="tipoPersona" @change ="changeOption()">
+                    <select id="tipoDePersona" class="form-select" v-model="tipoPersona" @change ="changeOption(), setData()">
                         <option selected value="natural">Natural</option>
                         <option value="juridico">Juridica</option>
                         <option value="extranjero">Extranjero</option>
@@ -21,7 +21,7 @@
                     RUN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="run">
+                    <input type="text" v-model="run" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'extranjero'">
@@ -29,7 +29,7 @@
                     ID
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="id">
+                    <input type="text" v-model="id" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'extranjero'">
@@ -37,7 +37,7 @@
                     PAÍS
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="pais" class="form-select" v-model="pais" @change ="changeOption()" >
+                    <select id="pais" class="form-select" v-model="pais" @change ="changeOption(), getData()" >
                         
                         <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
@@ -49,7 +49,7 @@
                     RUT
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="rut">
+                    <input type="text" v-model="rut" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'juridico'">
@@ -57,7 +57,7 @@
                    RAZÓN SOCIAL
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="razonsocial">
+                    <input type="text" v-model="razonsocial" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                     APELLIDO PATERNO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="Apaterno">
+                    <input type="text" v-model="Apaterno" @change ="setData()">
                 </div>
             </div>
             <div class="col row">
@@ -76,7 +76,7 @@
                     APELLIDO MATERNO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="Amaterno">
+                    <input type="text" v-model="Amaterno" @change ="setData()">
                 </div>
             </div>
             <div class="col row">
@@ -84,7 +84,7 @@
                     NOMBRES
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombres">
+                    <input type="text" v-model="nombres" @change ="setData()">
                 </div>
             </div>
         </div>

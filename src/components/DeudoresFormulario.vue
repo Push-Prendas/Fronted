@@ -85,7 +85,7 @@ export default {
         return {
             option:'natural',
             headers: ['Tipo', 'Id', 'Name'],
-            items: [{}],
+            items: [],
             idDocumento:"",
             nombrePersona: "",
         }

@@ -48,6 +48,7 @@ import { collection, getDocs } from "firebase/firestore";
 var usernameGlobal;
 var emailGlobal;
 var rolGlobal;
+var esOFICINAGlobal;
 export default {
   name: 'App',
   components: {
@@ -81,9 +82,27 @@ export default {
                                 //TEST SAVE
                                 this.username = user.username
                                 this.rol = user.rol
-                                emailGlobal = user.email
+                                emailGlobal = user.mail
                                 usernameGlobal = user.nombre
                                 rolGlobal = user.rol
+                                switch(rolGlobal){
+                                    case "FUNCIONARIONOTARIA":
+                                        esOFICINAGlobal= false
+                                        break;
+                                    case "NOTARIO":
+                                        esOFICINAGlobal= false
+                                        break;
+                                    case "PAGADOR":
+                                        esOFICINAGlobal= false
+                                        break;
+                                    case "FUNCIONARIOOFICINA":
+                                        esOFICINAGlobal= true
+                                        break;
+                                    default:
+                                        esOFICINAGlobal= false
+                                        break;
+                                 }
+                                esOFICINAGlobal 
                                 localStorage.setItem('emailGlobal', emailGlobal)
                                 localStorage.setItem('usernameGlobal', usernameGlobal)
                                 localStorage.setItem('rolGlobal', rolGlobal)
@@ -130,7 +149,7 @@ export default {
     }
     
 }
-export{ usernameGlobal, emailGlobal, rolGlobal}
+export{ usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}
 </script>
 
 <style scoped>

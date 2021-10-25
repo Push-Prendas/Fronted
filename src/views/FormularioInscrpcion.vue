@@ -13,14 +13,16 @@
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
             <ConstituyentesFormulario @getConstituyentes="getConstituyentes" />
             <DeudoresFormulario @getDeudores="getDeudores"/>
-            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'"/>
+            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
+			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
+			@getFechaRequirente="getFechaRequirente"/>
             <VehiculosFormulario @getVehiculos="getVehiculos"/>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton" >Guardar</button>
-                <button class="col-2 titleButton" @click="crearInscripcion">Enviar</button>
+                <button class="col-2 titleButton" @click="crearInscripcion(false)">Guardar</button>
+                <button class="col-2 titleButton" @click="crearInscripcion(true)">Enviar</button>
             </div>
         </div>
         
@@ -42,9 +44,10 @@ import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal)
 console.log(opciones)
+
 function validate_number(inputNumber){
         if(!inputNumber.includes("-")) return false;
         inputNumber = inputNumber.split("-");
@@ -55,33 +58,25 @@ function validate_number(inputNumber){
         if(year>curYear || isNaN(year) || year.length < 4) return false;
         return true;
 }
-function validate_run(rut, digit){
-	rut = rut.split("");
-	rut.reverse();
-	var counter = 2;
-	var suma = 0;
-	for(var num of rut){
-		if(counter == 8) counter = 2;
-		suma += num * counter;
-		counter ++;
-	}
-	var trunc = Math.trunc(suma/11);
-	var resto = suma - trunc * 11;
-	var final = 11 -resto;
-	return final == digit;
-}
-function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcion, fecha_otorgamiento_escritura, fecha_protocolizacion_contrato_privado, fecha_privada,
-	numero_repertorio_notario, numero_repertorio_contrato_prenda, repertorio_notaria_year, prohibicion_gravar_enajenar, notaria, nombre_requirente,
+
+function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcion, fecha_otorgamiento_escritura, fecha_protocolizacion_contrato_privado, fecha_autorizada,
+	numero_repertorio_notario, prohibicion_gravar_enajenar, notaria, nombre_requirente,
 	run_requiriente, activo_fijo, bienes_agropecuarios, derechos_intangibles, prenda_vehiculo, monto_total, send_flag,
-	tipo_persona_acreedor=0, run_acreedor="", apellido_materno_acreedor="", apellido_paterno_acreedor="", nombres_acreedor="", razon_social = "", pais_persona="",
-	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false
+	tipo_persona_acreedor=0, run_acreedor="", nombres_acreedor="",  pais_persona="",
+	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, Oficina
 	){
+
 	//Manejar estado de solicitud primario y secundario"
-	//console.log("loading")
+	console.log("loading")
 	//VALIDACION DE DATOS
 	var validate = true;
+	///Personas es una lista de listas, cada sublista se compone de
+	///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
+	///3->pais persona
+	///[["Natural","20000000-K","Juanito Perez","Chile"],["Juridico","50000000-K","Empresa","Chile"]]
+
 	vehiculos.forEach((v) => {
-		if(v[1]){
+		if(v[0]){
 			console.log("VALIDANDO PATENTES")
 			//INVOCAR SERVICIO DEL PATENTE
 
@@ -94,62 +89,21 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		prenda_vehiculo = true;
 	}
 
-	//if(numero_repertorio_notario.length != 9 && !validate_number(numero_repertorio_notario)){
+	//NUMERO REPERTORIO NOTARIO: FOLIO-YEAR
+	console.log(numero_repertorio_notario)
+	if((numero_repertorio_notario).length != 9 || !validate_number(numero_repertorio_notario)){
 
-		//validate = false
-		//console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
-		//FRONTEND => MOSTRAR ERROR
-
-		//////////////////////////
-	//}
-
-	if(numero_repertorio_contrato_prenda.length != 9 && !validate_number(numero_repertorio_contrato_prenda)){
 		validate = false
-		console.log("NUMERO REPERTORIO CONTRATO PRENDA FORMATO INCORRECTO")
+		console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
 		//FRONTEND => MOSTRAR ERROR
 
 		//////////////////////////
 	}
 
-	var run_req_code = run_requiriente.split("-");
-	if(!validate_run(run_req_code[0],run_req_code[1])){
+	if(!rol_oficina && contratos.length == 0){
 		validate = false
-		console.log("RUN REQUIRIENTE INVALIDO")
-		//FRONTEND => MOSTRAR ERROR
-
-		//////////////////////////
+		console.log("NO HAY CONTRATO")
 	}
-
-	var run_acc_code = run_acreedor.split("-");
-	if(!validate_run(run_acc_code[0],run_acc_code[1])){
-		validate = false
-		console.log("RUN ACREEDOR INVALIDO")
-		//FRONTEND => MOSTRAR ERROR
-
-		//////////////////////////
-	}
-
-	constituyentes.forEach((consts) => {
-		var run_const_code = consts[1].split("-");
-		if(!validate_run(run_const_code[0],run_const_code[1])){
-			validate = false
-			console.log("RUN CONSTITUYENTE INVALIDO")
-			//FRONTEND => MOSTRAR ERROR
-	
-			//////////////////////////
-		}
-	});
-
-	deudores.forEach((deu) => {
-		var run_deudor_code = deu[1].split("-");
-		if(!validate_run(run_deudor_code[0],run_deudor_code[1])){
-			validate = false
-			console.log("RUN DEUDOR INVALIDO")
-			//FRONTEND => MOSTRAR ERROR
-	
-			//////////////////////////
-		}
-	});
 
 	//ADEMAS DE VER TODAS LAS VALIDACIONES DE TIPO VER CON GRUPO DE SERVICIOS LO DE VERIFICADOR DE PATENTES
 
@@ -167,7 +121,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		//Contar elementos en la lista para dar una ID
 		//En este caso funciona porque nosotros NUNCA borramos algo de la base de datos REALMENTE
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
-			var id = sol_data.docs.length;
+			var id = sol_data.docs.length + 1;
 			console.log(id)
 			//INSCRIPCION
 			setDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),id.toString()), {
@@ -175,10 +129,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				fechaSuscripcion: fecha_suscripcion,
 				fechaOtorgamientoEscritura: fecha_otorgamiento_escritura,
 				fechaProtocolizacionContratoPrivado: fecha_protocolizacion_contrato_privado,
-				fechaAutorizacionContratoPrivado: fecha_privada,
+				fechaAutorizacionContratoPrivado: fecha_autorizada,
 				numeroRepertorioNotario: numero_repertorio_notario,
-				numeroRepertorioContratoPrenda: numero_repertorio_contrato_prenda,
-				repertorioNotariaYear: repertorio_notaria_year,
+				numeroRepertorioContratoPrenda: -1,
 				prohibicionGravarEnajenar: prohibicion_gravar_enajenar,
 				nombre_notaria: notaria,
 				nombreRequiriente: nombre_requirente,
@@ -191,19 +144,20 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				estadoPrimario: estado_inicial,
 				estadoSecundario: 0,
 				usuarioCreador: localStorage.getItem("user_loged"),
+				oficina: Oficina,
 				firma: false
 			}).then(() => {
 				//TABLAS RELACIONADAS
 				getDocs(collection(db, "Patente_por_Inscripcion")).then((pat_data) => {
-					var patente_id = pat_data.docs.length;
+					var patente_id = pat_data.docs.length + 1;
 					console.log(patente_id)
 					vehiculos.forEach((ve) => {
 						///Vehiculos es una lista de listas que guarda vehiculos
 						///cada indice de la sublista es 0->PPU, 1->InscripcionPrendaRVM, 2->Prohibicion, 3->alzamiento
 						setDoc(doc(collection(db, "Patente_por_Inscripcion"),id.toString()),{
-							patente: ve[0],
-							inscripcionPrendaRVM: ve[1],
-							inscripcionProhibicionGravarEnajenar: ve[2],
+							patente: ve["patente"],
+							inscripcionPrendaRVM: ve["rvm"],
+							inscripcionProhibicionGravarEnajenar: ve["GoE"],
 							alzamiento: false,
 							idInscripcion: id
 						});
@@ -212,45 +166,42 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					
 				});
 				getDocs(collection(db, "Persona_Solicitud")).then((per_data) => {
-					var persona_id = per_data.docs.length;
+					var persona_id = per_data.docs.length + 1;
 					console.log(persona_id)
 					setDoc(doc(collection(db, "Persona_Solicitud"),id.toString()),{
 						tipoContratante: 0, //Acreedor
 						tipoAcreedor: tipo_persona_acreedor,
 						runPersona: run_acreedor,
-						nombrePersona: nombres_acreedor + " " + apellido_paterno_acreedor + " " + apellido_materno_acreedor,
+						nombrePersona: nombres_acreedor,
 						idInscripcion: id,
-						razonSocial: razon_social,
 						paisPersona: pais_persona
 					});
 					persona_id+=1;
 					constituyentes.forEach((con) => {
 						setDoc(doc(collection(db, "Persona_Solicitud"),id.toString()),{
 							///Constituyentes es una lista de listas, cada sublista se compone de
-							///0->tipo_contratante, 1->run o rut de persona, 2,3,4-> nombre apellido paterno y materno resp
-							///5->razon social, 6->pais persona
+							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
+							///3->pais persona
 							tipoContratante: 1, //Constituyente
-							tipoAcreedor: con[0],
-							runPersona: con[1],
-							nombrePersona: con[2] + " " + con[3] + " " + con[4],
+							tipoAcreedor: con["Tipo"],
+							runPersona: con["Id"],
+							nombrePersona: con["Name"],
 							idInscripcion: id,
-							razonSocial: con[5],
-							paisPersona: ""
+							paisPersona: "Chile"
 						});
 						persona_id+=1;
 					})
 					deudores.forEach((de) => {
 						setDoc(doc(collection(db, "Persona_Solicitud"),id.toString()),{
-							///Constituyentes es una lista de listas, cada sublista se compone de
-							///0->tipo_contratante, 1->run o rut de persona, 2,3,4-> nombre apellido paterno y materno resp
-							///5->razon social, 6->pais persona
+							///Deudores es una lista de listas, cada sublista se compone de
+							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
+							///3->pais persona
 							tipoContratante: 2, //Deudores
-							tipoAcreedor: de[0],
-							runPersona: de[1],
-							nombrePersona: de[2] + " " + de[3] + " " + de[4],
+							tipoAcreedor: de["Tipo"],
+							runPersona: de["Id"],
+							nombrePersona: de["Name"],
 							idInscripcion: id,
-							razonSocial: de[5],
-							paisPersona: ""
+							paisPersona: "Chile"
 						});
 						persona_id+=1;
 					})
@@ -269,17 +220,18 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				getDocs(collection(db, "Document_RPsD")).then(async(doc_data) => {
 					var document_id = doc_data.docs.length
 					console.log("Entro")
-					//const storageRef = ref(storage); 					
+					const storageRef = ref(storage); 	
+					console.log(storageRef.id)				
 					for(var i = 0; i<contratos.length; i++){
 						const fileRef = ref(storage,contratos[i].name);
 						await uploadBytes(fileRef,contratos[i]);
 						const url_file = await getDownloadURL(fileRef)
 						setDoc(doc(collection(db, "Document_RPsD"),id.toString()),{
 							id_alzamiento: "",
-                            id_modificacion: document_id.toString(),
-                            idInscripcion: id,
-                            año_repertorio_del_contrato: new Date().getFullYear(),
-                            numero_repertorio_RPsD: repertorio + 1,
+							id_modificacion: document_id.toString(),
+							idInscripcion: id,
+							año_repertorio_del_contrato: new Date().getFullYear(),
+							numero_repertorio_RPsD: repertorio + 1,
 							url: url_file,
 							contrato: true
 						});
@@ -292,9 +244,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						setDoc(doc(collection(db, "Document_RPsD"),id.toString()),{
 							idInscripcion: id,
 							id_alzamiento: "",
-                            id_modificacion: document_id.toString(),
-                            año_repertorio_del_contrato: new Date().getFullYear(),
-                            numero_repertorio_RPsD: repertorio + 1,
+							id_modificacion: document_id.toString(),
+							año_repertorio_del_contrato: new Date().getFullYear(),
+							numero_repertorio_RPsD: repertorio + 1,
 							url: url_file,
 							contrato: false
 						});
@@ -340,6 +292,10 @@ export default {
             Apaterno: '',
             Amaterno: '',
             nombres: '',
+			nombreRequirente: '',
+            nDocRequirente: '',
+            correoRequirente: '',
+            fechaRequirente: '',
             Bienes: [],
             constituyentes: [{}],
             deudores: [{}],
@@ -404,6 +360,18 @@ export default {
         getAmaterno(data) {
         this.Amaterno = data
         },
+		getnombreRequirente(data) {
+        this.nombreRequirente = data
+        },
+        getrutRequirente(data) {
+        this.nDocRequirente = data
+        },
+        getCorreoRequirente(data) {
+        this.correoRequirente = data
+        },
+        getFechaRequirente(data) {
+        this.fechaRequirente = data
+        },
         getnombres(data) {
         this.nombres = data
         },
@@ -420,7 +388,7 @@ export default {
         },
 		getVehiculos(data) {
         this.vehiculos = data
-        console.log("Vehiculos:"+this.vehiculos)
+        //console.log("Vehiculos:"+this.vehiculos[0]["patente"],)
         },
 		getContrato(data) {
         this.contrato = data
@@ -430,40 +398,47 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        crearInscripcion(){
-            enviar_solicitud_de_inscripcion_prenda({
-                tipo_documento: this.tipoDoc.toString(),
-                fecha_suscripcion: this.FSuscripcion.toString(),
-                fecha_otorgamiento_escritura: this.FOtorgamiento.toString(),
-                fecha_protocolizacion_contrato_privado: this.FProtocolizacion.toString(),
-                fecha_privada: this.FAutorizacion.toString(), 
-                numero_repertorio_notario: (this.RepNotaria+"-"+this.anioRepNotaria).toString(),
-                numero_repertorio_contrato_prenda: "0000-2021".toString(),
-                repertorio_notaria_year: this.anioRepNotaria.toString(),
-                prohibicion_gravar_enajenar: this.ProhibGravEnajenar.toString(),
-                notaria: "mi notaria", 
-                nombre_requirente: "cristoan", 
-                run_requiriente: "19635636-3", 
-                activo_fijo: true,
-                bienes_agropecuarios: false, 
-                derechos_intangibles: false, 
-                prenda_vehiculo: false, 
-                monto_total: 100, 
-                send_flag: true, 
-                tipo_persona_acreedor: this.tipoPersona.toString(), 
-                run_acreedor: this.run.toString(), //id , rut y run
-                apellido_materno_acreedor: this.Amaterno.toString(), 
-                apellido_paterno_acreedor: this.Apaterno.toString(), 
-                nombres_acreedor: this.nombres.toString(), 
-                razon_social: null, 
-                pais_persona: null, 
-                constituyentes: [], 
-                deudores: [], 
-                vehiculos: [], 
-                contratos: [], 
-                archivos: [], 
-                rol_oficina: true
-                 })
+        crearInscripcion(flags){
+			var runacreedor;
+			var nombreacreedor;
+			if(this.tipoPersona == "Natural"){
+				runacreedor = this.run
+				nombreacreedor = this.nombres
+			}else if(this.tipoPersona == "Juridica"){
+				runacreedor = this.rut
+				nombreacreedor = this.razonsocial
+			}else{
+				runacreedor = this.id
+				nombreacreedor = this.nombres
+			}
+            enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
+				this.FSuscripcion.toString(),
+                this.FOtorgamiento.toString(),
+                this.FProtocolizacion.toString(),
+                this.FAutorizacion.toString(), 
+                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),
+                this.ProhibGravEnajenar,
+                "mi notaria", 
+                this.nombreRequirente, 
+                this.nDocRequirente, 
+                this.Bienes[0],
+                this.Bienes[1], 
+                this.Bienes[2], 
+                this.Bienes[3], 
+                100, 
+				flags, 
+				this.tipoPersona, 
+                runacreedor.toString(), //id , rut y run
+                nombreacreedor, 
+                this.pais, 
+				this.constituyentes, 
+                this.deudores, 
+                this.vehiculos, 
+                [].push(this.contrato), 
+                this.anexos, 
+                esOFICINAGlobal,
+				"mi oficina"
+                )
         }
   },
   components: {
