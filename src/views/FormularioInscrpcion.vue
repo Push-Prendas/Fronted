@@ -14,9 +14,9 @@
             <ConstituyentesFormulario @getConstituyentes="getConstituyentes" />
             <DeudoresFormulario @getDeudores="getDeudores"/>
             <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'"/>
-            <VehiculosFormulario />
-            <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'"/>
-            <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'"/>
+            <VehiculosFormulario @getVehiculos="getVehiculos"/>
+            <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
+            <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton" >Guardar</button>
@@ -343,6 +343,9 @@ export default {
             Bienes: [],
             constituyentes: [{}],
             deudores: [{}],
+			vehiculos: [{}],
+			contrato: null,
+			anexos: null,
         }
     },
   props: {
@@ -414,6 +417,18 @@ export default {
         getDeudores(data) {
         this.deudores = data
         console.log("Deudores:"+this.deudores)
+        },
+		getVehiculos(data) {
+        this.vehiculos = data
+        console.log("Vehiculos:"+this.vehiculos)
+        },
+		getContrato(data) {
+        this.contrato = data
+        console.log("Contrato:"+this.contrato)
+        },
+		getAnexos(data) {
+        this.anexos = data
+        console.log("Anexos:"+this.anexos)
         },
         crearInscripcion(){
             enviar_solicitud_de_inscripcion_prenda({

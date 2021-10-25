@@ -1,9 +1,9 @@
 <template>
     <div id="contenedor" class="row">
         <div class="row">
-            <div class="titleFormulario col">Anexos</div> 
-            <div class="input-group mb-3 ">
-                <label class="input-group-text " for="inputGroupFile02">Upload</label><input type="file" multiple="multiple" class="form-control" id="inputGroupFile02">
+            <div class="titleFormulario col" @change ="setData()">Anexos</div> 
+            <div class="input-group mb-3 " @change ="setData()">
+                <label  for="anexos"></label><input type="file" multiple class="form-control" id="anexos" @change ="setData()">
                 
             </div>
             
@@ -26,13 +26,8 @@ export default {
     },
 
     methods:{
-        changeOption(){
-            var selectBox = document.getElementById("tipoDePersona");
-            this.option = selectBox.options[selectBox.selectedIndex].value; 
-            //console.log(this.option);
-        },
-        add(item) {
-            this.items.push(item);
+        setData(){
+            this.$emit("getAnexos", document.getElementById("anexos").files)
         }
     }
 

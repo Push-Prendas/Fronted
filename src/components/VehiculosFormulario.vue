@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 
-                <b-button id="ADDVEHICULO" @click="add()">Agregar Vehículo</b-button>
+                <b-button id="ADDVEHICULO" @click="add(), setData()">Agregar Vehículo</b-button>
             </b-modal>   
         </div>
         
@@ -87,6 +87,13 @@ export default {
                 "rvm": this.rvm,
                 "GoE": this.GoE}
             this.items.push(item);
+        },
+        clean(){
+            console.log("limpiar campos aqui")
+
+        },
+        setData(){
+            this.$emit("getVehiculos",this.items);
         }
     }
 
