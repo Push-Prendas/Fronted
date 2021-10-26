@@ -45,6 +45,8 @@ import Navbar from '../components/Navbar.vue'
 import {opciones} from "@/views/Dashboard"
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal)
+
+
 function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_constituyente){
 	//DEVUELVE EL ID DE LA SOLICITUD QUE CUMPLA CON LOS REQUISITOS ANTES MENCIONADOS
 
@@ -76,15 +78,21 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 										var my_doc = m.id;
 										modificaciones_hechas.push(my_doc)
 									})
-								})
+								
                                 if(modificaciones_hechas.length>0){
+
+                                    console.log("1")
                 
                                     return modificaciones_hechas.pop()
 
                                 }else{
-
+                                    console.log("2")
                                     return persona.idInscripcion
                                 }
+                                
+                                
+                                })
+
 								//MODIFICACIONES HECHAS
 								///////////////////////////////////////////////
 							}
@@ -95,8 +103,10 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 			}			
 		})
 	}).then(()=>{
+        console.log("3")
         return -1
     })
+    
     
 }
 var id_sol;
@@ -112,16 +122,74 @@ export default {
         }
     },
     methods:{
+        async loadUsers(folio,anio, id) {
+        //const response = await fetch("https://reqres.in/api/users")
+        const promise1Result = await buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id);
+        setTimeout(() => { 
+
+        console.log("await");
+        console.log(promise1Result);
+
+        },1000)
+
+        async function f2() {
+        const thenable = {
+            then: function(resolve, _reject) {
+            resolve(buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id))
+            }
+        };
+        console.log(await thenable); // resolved!
+        }
+
+        f2();
+
+            },
+
         busqueda(){
-            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+
+            
+            //buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+           
+            const asyncFunction = async () => {
+            console.log("await");
+            const promise1Result = await buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id);
+            console.log("await");
+            console.log(promise1Result);
+                }
+            //id_sol = await  buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+            
+            //this.loadUsers(this.folio,this.anio, this.id)
+            console.log(asyncFunction)
+
+
+                        
+
+            console.log("DATA")
+            console.log(this.folio)
+            console.log(this.anio)
+            console.log(this.id)
+
+            console.log(id_sol)
+
+            setTimeout(() => { 
+            console.log("TIMEOUT")
+            console.log(id_sol)
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
                 this.$router.push({path:"/Dashboard/:rol/:username/ModifContPrendas", params: {username: usernameGlobal, rol: rolGlobal}})
 
 
+
             }
-        }
+            },1000)
+
+
+
+
+
+        },
+
     },
     components: {
         Menu,

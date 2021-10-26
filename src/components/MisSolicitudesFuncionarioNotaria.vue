@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row" v-on:="" >     
         <table class="table" >
-            <thead class="encabezadoTabla" @dblclick="rellenarTabla()">
+            <thead class="encabezadoTabla"   > 
                 <tr>
                 <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
                 <th scope="col"></th>
@@ -99,6 +99,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 		}).then(() => {
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(inscripciones_encontradasGlobal)
+            return
 			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
 			
 			///////
@@ -119,6 +120,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 		}).then(() => {
 			console.log("MODIFICACIONES ENCONTRADAS")
 			console.log(modificaciones_encontradasGlobal)
+            return
 			//UNA VEZ LOS MODIFICACIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
 
 			///////
@@ -139,6 +141,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 		}).then(() => {
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(alzamientos_encontradosGlobal)
+            return
 			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
 
 			///////
@@ -151,7 +154,11 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 }
 
 export default {
-  name: 'MisSolicitudesFuncionarioNotaria',
+    mounted() {
+      this.rellenarTabla()
+
+    },
+  name: 'MisSolicitudesNotario',
     data() {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
@@ -163,10 +170,29 @@ export default {
         }
     },
     methods:{
-        rellenarTabla() {
-            console.log("relleno tabla")
+
+
+        rellenarTabla(){
+             buscador_solicitud(1,0,"T","funcionarionotaria@funcionarionotaria.cl")
+
+             if(this.items > 0){
+                 this.items = []
+             }
+
+
+             setTimeout(() => { 
+
+
+                            console.log("relleno tabla")
+
+
+
+ 
             
-            buscador_solicitud(1,0,"T", -1)
+           
+
+            
+
             if(this.inscripciones_encontradas.length>0){
                 console.log(this.inscripciones_encontradas);
                 var estad;
@@ -222,14 +248,32 @@ export default {
 
                 }
             //this.items=i
+            console.log("MY ITEMS")
             console.log(this.items)
-            
-            },
-        firmardoc(){
-            firmarDocumento()
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              }, 1000);
+
             
         },
+        firmardoc(){
+            firmarDocumento()
+        },
+            
+        },
+
     /*created(){
         //this.items=[]
         this.rellenarTabla()

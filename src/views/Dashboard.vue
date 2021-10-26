@@ -10,6 +10,7 @@
           <TablaRecepcionDocumento v-if="rol == 'RECEPTOR'"/>
           <MisSolicitudesNotario v-if = "rol == 'NOTARIO'"/>
           <PagosPendientes v-if = "rol == 'PAGADOR'"/>
+          <MisSolicitudesFuncionarioNotaria v-if = "rol == 'FUNCIONARIONOTARIA'"/>
         </div>
 
     </div>
@@ -17,6 +18,7 @@
 <script>
   
 import Menu from '../components/Menu.vue'
+import MisSolicitudesFuncionarioNotaria from '../components/MisSolicitudesFuncionarioNotaria.vue'
 import Navbar from '../components/Navbar.vue'
 import TablaRevisor from '../components/TablaRevisor.vue'
 import TablaRevisor2 from '../components/TablaRevisor2.vue'
@@ -47,7 +49,8 @@ export default {
     TablaJefeServicio2,
     TablaRecepcionDocumento,
     MisSolicitudesNotario,
-    PagosPendientes
+    PagosPendientes,
+    MisSolicitudesFuncionarioNotaria
   },
   mounted() {
       //console.log("Entro")
