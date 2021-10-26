@@ -170,7 +170,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				getDocs(collection(db, "Persona_Solicitud")).then((per_data) => {
 					var persona_id = per_data.docs.length + 1;
 					console.log(persona_id)
-					setDoc(doc(collection(db, "Persona_Solicitud"),id.toString()),{
+					setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 						tipoContratante: 0, //Acreedor
 						tipoAcreedor: tipo_persona_acreedor,
 						runPersona: run_acreedor,
@@ -180,7 +180,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					});
 					persona_id+=1;
 					constituyentes.forEach((con) => {
-						setDoc(doc(collection(db, "Persona_Solicitud"),id.toString()),{
+						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 							///Constituyentes es una lista de listas, cada sublista se compone de
 							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
 							///3->pais persona
@@ -194,7 +194,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						persona_id+=1;
 					})
 					deudores.forEach((de) => {
-						setDoc(doc(collection(db, "Persona_Solicitud"),id.toString()),{
+						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 							///Deudores es una lista de listas, cada sublista se compone de
 							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
 							///3->pais persona
