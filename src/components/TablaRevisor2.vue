@@ -18,7 +18,7 @@
               <th >{{item.Rep}}</th>
               <th >Oficina FS</th>
               <th >32</th>
-              <th ><th >{{item.Fecha}}</th></th>
+              <th >{{item.Fecha}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
                       <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Revisar</th>

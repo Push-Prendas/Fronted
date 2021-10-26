@@ -46,7 +46,7 @@
                     </div>
                     <div class="row">
                             <div class="titles d-flex justify-content-start" >
-                                NOMBRE
+                                NOMBRE COMPLETO
                             </div>
                             <div class="tamanoTipoDocumento">
                                 <input id="nombre" type="text" v-model="nombrePersona">

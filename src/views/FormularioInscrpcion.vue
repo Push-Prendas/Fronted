@@ -3,20 +3,19 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
-            
+            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
+			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
+			@getFechaRequirente="getFechaRequirente"/>
             <AntecedentesFormulario :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
-            @getBienes="getBienes"/>
+            @getBienes="getBienes" @getNotaria="getNotaria"/>
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
             <ConstituyentesFormulario @getConstituyentes="getConstituyentes" />
             <DeudoresFormulario @getDeudores="getDeudores"/>
-            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
-			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
-			@getFechaRequirente="getFechaRequirente"/>
-            <VehiculosFormulario @getVehiculos="getVehiculos"/>
+			<VehiculosFormulario @getVehiculos="getVehiculos"/>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
@@ -62,7 +61,7 @@ function validate_number(inputNumber){
 function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcion, fecha_otorgamiento_escritura, fecha_protocolizacion_contrato_privado, fecha_autorizada,
 	numero_repertorio_notario, prohibicion_gravar_enajenar, notaria, nombre_requirente,
 	run_requiriente,correo_requiriente, fecha_requiriente, activo_fijo, bienes_agropecuarios, derechos_intangibles, prenda_vehiculo, monto_total, send_flag,
-	tipo_persona_acreedor=0, run_acreedor="", nombres_acreedor="",  pais_persona="",
+	tipo_persona_acreedor, run_acreedor, nombres_acreedor,  pais_persona,
 	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, Oficina, userid
 	){
 
@@ -301,10 +300,11 @@ export default {
             fechaRequirente: '',
             Bienes: [],
             constituyentes: [],
-            deudores: [{}],
-			vehiculos: [{}],
+            deudores: [],
+			vehiculos: [],
 			contrato: null,
 			anexos: null,
+			notaria:''
         }
     },
   props: {
@@ -315,6 +315,9 @@ export default {
         }
   },
   methods: {
+		getNotaria(data){
+		this.notaria=data
+		},
         gettipoDoc(data) { 
         this.tipoDoc = data
         },
@@ -379,7 +382,9 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-        this.Bienes = data
+			console.log("HOLAAAAAAAA-=-=-=-")
+			console.log(this.Bienes)
+			this.Bienes = data        
         },
         getConstituyentes(data) {
         this.constituyentes = data
@@ -414,6 +419,7 @@ export default {
 				runacreedor = this.id
 				nombreacreedor = this.nombres
 			}
+			console.log(this.Bienes)
             enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
 				this.FSuscripcion.toString(),
                 this.FOtorgamiento.toString(),
@@ -421,7 +427,7 @@ export default {
                 this.FAutorizacion.toString(), 
                 (this.RepNotaria+"-"+this.anioRepNotaria).toString(),
                 this.ProhibGravEnajenar,
-                "mi notaria", 
+                this.notaria, 
                 this.nombreRequirente, 
                 this.nDocRequirente, 
 				this.correoRequirente,

@@ -65,23 +65,7 @@
         <div class="row">
             <div class="col row">
                 <div class="titles d-flex justify-content-start" >
-                    APELLIDO PATERNO
-                </div>
-                <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="Apaterno" @change ="setData()">
-                </div>
-            </div>
-            <div class="col row">
-                <div class="titles d-flex justify-content-start" >
-                    APELLIDO MATERNO
-                </div>
-                <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="Amaterno" @change ="setData()">
-                </div>
-            </div>
-            <div class="col row">
-                <div class="titles d-flex justify-content-start" >
-                    NOMBRES
+                    NOMBRE COMPLETO
                 </div>
                 <div class="tamanoTipoDocumento">
                     <input type="text" v-model="nombres" @change ="setData()">

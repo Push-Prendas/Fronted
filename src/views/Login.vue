@@ -28,7 +28,7 @@
             <form v-on:submit.prevent="Login">
                 <input type="text" id="username" class="fadeIn second" name="login" placeholder="Usuario" v-model="username">
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
-                <input type="submit" class="fadeIn fourth" value="Entrar" >
+                <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias()">
             </form>              
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
@@ -49,6 +49,7 @@ var usernameGlobal;
 var emailGlobal;
 var rolGlobal;
 var esOFICINAGlobal;
+var notarias = [];
 export default {
   name: 'App',
   components: {
@@ -145,11 +146,27 @@ export default {
 
             //console.log(this.rol)
             //return this.rol
+        },
+        getNotarias(){
+            getDocs(collection(db, "Notarias")).then((users_data) => {
+            var data = users_data.docs
+            data.forEach((doc) => {
+                    var not = doc.data();
+                    let item = {
+                        "direccion": not["direccion"],
+                        "id_comuna": not["id_comuna"],
+                        "notario": not["nombre_notario"],
+                        "rut": not["rut_notario"],
+                        "organizacion": not["nombre_organizacion"]
+                    }
+                    notarias.push(item)
+                })
+            })
         }
     }
     
 }
-export{ usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}
+export{ usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal, notarias}
 </script>
 
 <style scoped>

@@ -87,9 +87,9 @@
                 <div class="titles d-flex justify-content-start">
                     NOTARIAS
                 </div>
-                <select id="pais" class="form-select" v-model="pais"  @change ="changeOption(), setData()" >
+                <select id="notaria" class="form-select" v-model="notaria"  @change ="changeOption(), setData()" >
                         
-                    <option :value="notaria.name" v-for="(notaria,index) in notarias" :key="index">{{notaria.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
+                    <option :value="notaria.organizacion" v-for="(notaria,index) in notariasP" :key="index">{{notaria.organizacion}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
                 </select>
             </div>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
+import { usernameGlobal, emailGlobal, rolGlobal, notarias}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal,usernameGlobal)
 
 export default {
@@ -110,21 +110,54 @@ export default {
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
             option:'publico',
-            tipoDoc:'publico',
-            FOtorgamiento: '',
-            FSuscripcion: '',
-            FAutorizacion: '',
-            FProtocolizacion: '',
-            RepNotaria: '',
-            anioRepNotaria: '',
-            ProhibGravEnajenar: false,
+            
         }
     },
     props:{
         rol: {
             type: String,
             default: "FUNCIONARIONOTARIA",
-        }
+        },
+        notariasP:{
+            type: Array,
+            default: notarias
+        },
+        tipoDoc:{
+            type: String,
+            default: 'Público'
+        },
+        FOtorgamiento:{
+            type: String,
+            default: ''
+        },
+        FSuscripcion:{
+            type: String,
+            default: ''
+        },
+        FAutorizacion:{
+            type: String,
+            default: ''
+        },
+        FProtocolizacion:{
+            type: String,
+            default: ''
+        },
+        RepNotaria:{
+            type: String,
+            default: ''
+        },
+        anioRepNotaria:{
+            type: String,
+            default: ''
+        },
+        ProhibGravEnajenar:{
+            type: Boolean,
+            default: false
+        },
+        notaria:{
+            type: String,
+            default: ''
+        },
     },
 
     methods:{
@@ -134,6 +167,7 @@ export default {
 
         },
         setData(){
+            this.$emit("getNotaria",this.notaria);
             this.$emit("gettipoDoc",this.tipoDoc);
             this.$emit("getFOtorgamiento",this.FOtorgamiento);
             this.$emit("getFSuscripcion",this.FSuscripcion);

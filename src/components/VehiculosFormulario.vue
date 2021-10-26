@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">
         <div class="row">
-            <div class="titleFormulario col">Vehiculos </div> 
+            <div class="titleFormulario col">Vehiculos  @click="getPatentes()"</div> 
             <b-button v-b-modal.modal-2 class="col buttonAdd">+</b-button>
 
             <b-modal id="modal-2"  hide-footer>
@@ -17,16 +17,17 @@
                                 <input id="textPatente" type="text" v-model="patente">
                             </div>
                         </div>
-                        <div class="col row">
-                            <div class="titles d-flex justify-content-start" >
-                                RVM
-                            </div>
-                            <div class="tamanoTipoDocumento">
-                                <input id="textRVM" type="text" v-model="rvm">
+                        <div class="d-flex justify-content-center SpaceItems">
+                            <div class="form-check ">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheckrvm" v-model="rvm">
+                                <label class="form-check-label d-flex align-items-start" for="defaultCheckrvm">
+                                    RVM
+                                </label>
                             </div>
                         </div>
+                        
                     </div>
-                    <div class="d-flex justify-content-center SpaceItems">
+                    <div class="d-flex justify-content-center SpaceItems" v-if="this.rvm">
                         <div class="form-check ">
                             <input class="form-check-input" type="checkbox" value="" id="defaultCheckGE" v-model="GoE">
                             <label class="form-check-label d-flex align-items-start" for="defaultCheckGE">
@@ -39,9 +40,9 @@
                 <b-button id="ADDVEHICULO" @click="add(), setData()">Agregar Vehículo</b-button>
             </b-modal>   
         </div>
-        
-        <table class="table">
-            <thead class="encabezadoTabla">
+        <button @click="getPatentes()">Patentes</button>
+        <table class="table" @click="getPatentes()">
+            <thead class="encabezadoTabla" @click="getPatentes()">
                 <tr>
                 <th scope="col">PATENTE</th>
                 <th scope="col">RVM</th>
@@ -68,19 +69,186 @@
 </template>
 
 <script>
+import {db} from "@/main";
+import { collection, getDocs, query, where} from "firebase/firestore";
+//import {id_sol} from "@/views/BusquedaAlzamiento"
+function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
+	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
+	///CON TODAS SUS DEPENDEDNCIAS
+	var solicitud_relacionada;
+	var acreedores_relacionados = []
+	var constituyentes_relacionados = []
+	var deudores_relacionados = []
+	var contratos_relacionados = []
+	var archivos_relacionados = []
+	var patentes_relacionadas = []
+    console.log("ENTREEEEEEEE")
+	if(tipo_de_solicitud == "I"){
+		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();					
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONAS")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						console.log(deudores_relacionados)
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
+
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("INSCRIPCION")
+			console.log(solicitud_relacionada)
+			///INSCRIPCION ENCONTRADA
+			///FRONTEND -> MODIFICAR ACA
+
+
+
+
+			///
+
+		})
+	}
+	else if(tipo_de_solicitud == "M"){
+		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+
+
+				}
+			})
+		}).then(() => {
+			console.log("MODIFICACION")
+			console.log(solicitud_relacionada)
+			///MODIFICACION ENCONTRADA
+			///FRONTEND MODIFICAR ACA
+
+
+
+			///
+
+		})
+		
+	}
+	else if (tipo_de_solicitud == "A"){
+		//VER COMO ESTA CONSTITUIDO ALZAMIENTO
+		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("ALZAMIENTO")
+			console.log(solicitud_relacionada)
+
+			///ALZAMIENTO ENCONTRADO
+			///FRONTEND MODIFICAR DE ACA
+
+
+			//////////////////////
+		})
+	}
+}
 export default {
   name: 'AcreedorFormularios',
   data() {
         return {
             option:'natural',
-            items: [],
             patente:"",
             GoE:false,
-            rvm:""
+            rvm:false
         }
-    },
+    },props:{
+         items:{
+            type: Array,
+            default: new Array
+        },
 
+    },
     methods:{
+        getPatentes(){
+            buscador_especifico_solicitud(12,'I')
+            //this.items=patentes_relacionadas
+        
+        },
         changeOption(){
             var selectBox = document.getElementById("tipoDePersona");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
@@ -94,7 +262,7 @@ export default {
 
             this.items.push(item);
             this.patente ="";
-            this.rvm ="";
+            this.rvm =false;
             this.GoE=false;
         },
         clean(){

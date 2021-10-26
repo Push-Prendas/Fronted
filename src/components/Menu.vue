@@ -46,7 +46,7 @@ props: {
             if (!this.answered && this.selectedIndex === index)
             {
                 answerClass = 'selected'
-                this.$router.push({path: `/Dashboard/${rolGlobal}/${usernameGlobal}/${op}`, params: {username: usernameGlobal, rol: rolGlobal, opciones: op}})
+                this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/${op}`, params: {username: usernameGlobal, rol: rolGlobal, opciones: op}})
 
             }
             else if (this.answered && this.correctIndex === index)

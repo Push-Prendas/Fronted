@@ -3,20 +3,15 @@
         <Navbar :username= username />
         <Menu :opciones= opcion />
         <div  class="d-flex justify-content-center contenedor right row">
-        <h1 class="title">Solicitud de alzamiento de contrato de prendas</h1>
+        <h1 class="title">Solicitud de ALZAMIENTO de Contrato de Prendas</h1>
         <div class="row d-flex justify-content-center item">
             <div class="col-2">
-                <div class="titles d-flex justify-content-center">
-                    Folio REPERTORIO DE PRENDA
-                </div>
-                <div class="d-flex justify-content-center">
+                    FOLIO REP. PRENDA
                     <input type="text"  placeholder="Folio" v-model="folio">
-                    
-                </div>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 <div class="titles d-flex justify-content-center">
-                    Año REPERTORIO
+                    AÑO REPERTORIO
                 </div>
                 <div class="d-flex justify-content-center">
                     <input type="text" placeholder="Año" v-model="anio">
@@ -25,7 +20,7 @@
             </div>
         </div>
         <div class="row d-flex justify-content-center item">
-            <div class="col-4">
+            <div class="col-3">
                 <div class="titles d-flex justify-content-center">
                     IDENTIFICADOR DE ALGUN CONSTITUYENTE
                 </div>
@@ -62,7 +57,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 			//console.log(my_data.numeroRepertorioContratoPrenda + "|" + repertorio_prenda + "-" + year)
 			if(my_data.numeroRepertorioContratoPrenda == repertorio_prenda){
 				var my_data_id = d.id;
-				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", my_data_id))).then((per_data) => {
+				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(my_data_id)))).then((per_data) => {
 
 					var my_person_data = per_data.docs;
 					var ver = false
@@ -83,8 +78,11 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 									})
 								})
                                 if(modificaciones_hechas.length>0){
+                
                                     return modificaciones_hechas.pop()
+
                                 }else{
+
                                     return persona.idInscripcion
                                 }
 								//MODIFICACIONES HECHAS
@@ -96,8 +94,10 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 				})
 			}			
 		})
-	})
-    return -1
+	}).then(()=>{
+        return -1
+    })
+    
 }
 var id_sol;
 export default {
@@ -113,11 +113,13 @@ export default {
     },
     methods:{
         busqueda(){
-            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id).toString()
-            if(id_sol=='-1'){
+            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+            if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
-                this.$router.push({path: `/SolicitudAlzamientoario`})
+                this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/solicitudAlzamiento`, params: {username: usernameGlobal, rol: rolGlobal}})
+
+
             }
         }
     },
@@ -144,7 +146,7 @@ export{id_sol}
 }
 
 .item{
-    margin-top: 5em;
+    margin-top: 2em;
     margin-bottom: 0em;
     font-family: Roboto;
     font-weight: bold;
