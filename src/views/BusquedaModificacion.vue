@@ -54,12 +54,19 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 	getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 		var data = sol_data.docs;
 		data.forEach((d) => {
-			var my_data = d.data();			
+			var my_data = d.data();	
+
+            		
 			//console.log(my_data_id)
 			//console.log(my_data.numeroRepertorioContratoPrenda + "|" + repertorio_prenda + "-" + year)
 			if(my_data.numeroRepertorioContratoPrenda == repertorio_prenda){
 				var my_data_id = d.id;
+                console.log(my_data_id)
 				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(my_data_id)))).then((per_data) => {
+
+                    
+
+                    console.log(per_data.docs)
 
 					var my_person_data = per_data.docs;
 					var ver = false
@@ -72,22 +79,24 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 								///FRONTEND PUEDE GUARDAR EL ID DE LA SOLICITUD Y USARLO PARA LLAMAR
 								//buscador_especifico_solicitud(persona.idInscripcion,"I")
 								var modificaciones_hechas = []
-								getDocs(query(collection(db, "Solicitud_Modificacion_Prenda"), where("numero_repertorio_RPsD", "==", repertorio_prenda))).then((mod_data) => {
+								getDocs(query(collection(db, "Solicitud_Modificacion_Prenda"), where("numero_repertorio_notaria", "==", repertorio_prenda))).then((mod_data) => {
 									var my_mod_data = mod_data.docs;
 									my_mod_data.forEach((m) => {
 										var my_doc = m.id;
 										modificaciones_hechas.push(my_doc)
 									})
+                                
 								
                                 if(modificaciones_hechas.length>0){
 
                                     console.log("1")
-                
-                                    return modificaciones_hechas.pop()
+                                    id_sol = modificaciones_hechas.pop()
+                                    return 
 
                                 }else{
                                     console.log("2")
-                                    return persona.idInscripcion
+                                    id_sol = persona.idInscripcion
+                                    return
                                 }
                                 
                                 
@@ -104,7 +113,8 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 		})
 	}).then(()=>{
         console.log("3")
-        return -1
+        id_sol = -1
+        //return -1
     })
     
     
@@ -122,44 +132,13 @@ export default {
         }
     },
     methods:{
-        async loadUsers(folio,anio, id) {
-        //const response = await fetch("https://reqres.in/api/users")
-        const promise1Result = await buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id);
-        setTimeout(() => { 
-
-        console.log("await");
-        console.log(promise1Result);
-
-        },1000)
-
-        async function f2() {
-        const thenable = {
-            then: function(resolve, _reject) {
-            resolve(buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id))
-            }
-        };
-        console.log(await thenable); // resolved!
-        }
-
-        f2();
-
-            },
-
         busqueda(){
 
             
-            //buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
-           
-            const asyncFunction = async () => {
-            console.log("await");
-            const promise1Result = await buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id);
-            console.log("await");
-            console.log(promise1Result);
-                }
-            //id_sol = await  buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
             
             //this.loadUsers(this.folio,this.anio, this.id)
-            console.log(asyncFunction)
+
 
 
                         
@@ -169,7 +148,7 @@ export default {
             console.log(this.anio)
             console.log(this.id)
 
-            console.log(id_sol)
+            //console.log(id_sol)
 
             setTimeout(() => { 
             console.log("TIMEOUT")
@@ -182,7 +161,7 @@ export default {
 
 
             }
-            },1000)
+            },5000)
 
 
 
