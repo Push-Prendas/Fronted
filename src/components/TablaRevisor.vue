@@ -30,7 +30,7 @@
                       <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
                       <th></th>
                       <th></th>
-                      <th class="rounded-circle" type="button" style="padding-left: 10px; padding-right: 10px; background-color:yellow">+</th>
+                      <th class="rounded-circle" type="button" style="padding-left: 10px; padding-right: 10px; background-color:yellow" @click="AsignarSolicitud(index)">+</th>
                   </div>
               </td>
             </tr>
@@ -45,7 +45,7 @@
 <script>
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
@@ -144,6 +144,48 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 	}
 }
 
+function asignar_solicitud(id_solicitud, tipo_solicitud, user_id){
+	if(tipo_solicitud == "I"){
+		getDocs(collection(db, "Inspeccion_inscripcion")).then((hist_data) => {
+			var id = hist_data.docs.length;
+			setDoc(doc(collection(db, "Inspeccion_inscripcion"),id.toString()), {
+				solicitudId: id_solicitud,
+				userId: user_id,
+				comment: "",
+				fechaRevision: ""
+			})
+		})
+	}
+	else if (tipo_solicitud == "M"){
+		getDocs(collection(db, "Inspeccion_modificacion")).then((hist_data) => {
+			var id = hist_data.docs.length;
+			setDoc(doc(collection(db, "Inspeccion_modificacion"),id.toString()), {
+				solicitudId: id_solicitud,
+				userId: user_id,
+				comment: "",
+				fechaRevision: ""
+			})
+		})
+
+	}
+	else if (tipo_solicitud == "A"){
+		getDocs(collection(db, "Inspeccion_alzamiento")).then((hist_data) => {
+			var id = hist_data.docs.length;
+			setDoc(doc(collection(db, "Inspeccion_alzamiento"),id.toString()), {
+				solicitudId: id_solicitud,
+				userId: user_id,
+				comment: "",
+				fechaRevision: ""
+			}
+            
+            )
+		})
+
+	}
+    
+
+}
+
 export default {
   name: 'TablaRevisor',
   data() {
@@ -153,15 +195,16 @@ export default {
             username: usernameGlobal,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
-            alzamientos_encontrados : alzamientos_encontradosGlobal
+            alzamientos_encontrados : alzamientos_encontradosGlobal,
+            emailUser: emailGlobal
         }
     },
     methods:{
         rellenarTabla() {
             console.log("relleno tabla")
+            //this.items.length = 0;
             
             buscador_solicitud(4,1,"T",-1)
-            
             if(this.inscripciones_encontradas.length>0){
                 console.log(this.inscripciones_encontradas);
                 var estad;
@@ -172,10 +215,12 @@ export default {
                         estad="Pagado"
                     }
                     let item = {
+                            "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "Tipo": "I"}
                     console.log(item)
                     console.log(this.items)
                     this.items.push(item)
@@ -190,10 +235,12 @@ export default {
                         estad="Pagado"
                     }
                     let item = {
+                            "id": insc[0],
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "Tipo": "M"}
 
                     this.items.push(item)
                     });
@@ -207,10 +254,12 @@ export default {
                         estad="Pagado"
                     }
                     let item = {
+                            "id": insc[0],
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "Tipo": "A"}
 
                     this.items.push(item)
                     });
@@ -220,13 +269,14 @@ export default {
             console.log(this.items)
             
             }
-            
+        ,
+        AsignarSolicitud(index) {
+            var item = this.items[index];
+            asignar_solicitud(item.id, item.Tipo, this.emailUser);
+            this.items.splice(index,1);
+        }
     },
-    /*created(){
-        //this.items=[]
-        this.rellenarTabla()
-        
-    }*/
+    
 }
 
 </script>

@@ -152,7 +152,7 @@ export default {
                 console.log(this.inscripciones_encontradas);
                 var estad;
                 this.inscripciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estado_primario"]==1){
+                    if(insc[1]["estadoPrimario"]==1){
                         estad="Por Firmar"
                     }else{
                         estad="Notif. Rechazo"
@@ -170,7 +170,7 @@ export default {
                 }
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estado_primario"]==1){
+                    if(insc[1]["estadoPrimario"]==1){
                         estad="Por Firmar"
                     }else{
                         estad="Notif. Rechazo"
@@ -187,7 +187,7 @@ export default {
                 }
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estado_primario"]==1){
+                    if(insc[1]["estadoPrimario"]==1){
                         estad="Por Firmar"
                     }else{
                         estad="Notif. Rechazo"

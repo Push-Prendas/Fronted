@@ -18,13 +18,11 @@
               <th >{{item.Rep}}</th>
               <th >Oficina FS</th>
               <th >32</th>
-              <th ><th >{{item.Fecha}}</th></th>
+              <th ><th >{{item.Fecha}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Revisar</th>
-                      <th></th>
-                      <th></th>
-                      <th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey">Liberar</th>
+                      <a class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" :href="'/Dashboard/REVISOR/'+username+'/RevisionDoc'">Revisar</a>
+                      <th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey" @click="LiberarSolicitud(index)">Liberar</th>
                   </div>
               </td>
             </tr>
@@ -39,12 +37,13 @@
 
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, query, where, getDoc, doc, updateDoc} from "firebase/firestore";
 console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
-async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
+
+/*async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
 
 	///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
 	///ESTEN EN UN ESTADO ESPECIFICO, LOS PARAMETROS SE OCUPAN DE LA SIGUIENTE FORMA
@@ -136,6 +135,106 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			///////
 		})
 	}
+
+}*/
+
+async function buscar_asignaciones(user_id){
+	var id_inscripciones_asociadas = []
+	var id_modificaciones_asociadas = []
+	var id_alzamientos_asociados = []
+
+	console.log("lol")
+
+	getDocs(query(collection(db, "Inspeccion_inscripcion"), where("userId", "==", user_id))).then((hist_data) => {
+		var my_data = hist_data.docs;
+		my_data.forEach((d) => {
+			id_inscripciones_asociadas.push(d.id)
+		})
+	}).then(() => {
+		id_inscripciones_asociadas.forEach((i) => {
+      
+			getDoc(doc(db, "Solicitud_Inscripcion_Prenda",i)).then((my_data) => {
+        var my_data2 = my_data.data();
+        var data = [i,my_data2]
+                inscripciones_encontradasGlobal.push(data)
+                console.log(my_data2)
+            });
+      console.log("aja")
+		})
+	})
+	getDocs(query(collection(db, "Inspeccion_modificacion"), where("userId", "==", user_id))).then((hist_data) => {
+		var my_data = hist_data.docs;
+		my_data.forEach((d) => {
+			id_modificaciones_asociadas.push(d.id)
+		})
+	}).then(() => {
+		id_modificaciones_asociadas.forEach((i) => {
+      getDoc(doc(db, "Solicitud_Modificacion_Prenda",i)).then((my_data) => {
+        var my_data2 = my_data.data();
+        var data = [i,my_data2]
+                modificaciones_encontradasGlobal.push(data)
+                console.log(my_data2)
+            });
+		})
+	})
+	getDocs(query(collection(db, "Inspeccion_alzamiento"), where("userId", "==", user_id))).then((hist_data) => {
+		var my_data = hist_data.docs;
+		my_data.forEach((d) => {
+			id_alzamientos_asociados.push(d.id)
+		})
+	}).then(() => {
+		id_alzamientos_asociados.forEach((i) => {
+      getDoc(doc(db, "Solicitud_Alzamiento_Prenda",i)).then((my_data) => {
+        var my_data2 = my_data.data();
+        var data = [i,my_data2]
+                alzamientos_encontradosGlobal.push(data)
+                console.log(my_data2)
+            });
+		})
+	})
+}
+
+function liberar_asignaciones(id_solicitud, tipos_solicitud, user_id){
+	if(tipos_solicitud == "I"){
+		getDocs(query(collection(db, "Inspeccion_inscripcion"), where("userId", "==", user_id))).then((hist_data) => {
+			var my_data = hist_data.docs;
+			my_data.forEach((d) => {
+				var data = d.data();
+				if(data.solicitudId == id_solicitud && data.userId == user_id){
+					updateDoc(doc(doc(db, "Inspeccion_inscripcion",d.id)), {
+						userId: -1
+					})
+				}
+			})
+		})
+	}
+	else if (tipos_solicitud == "M"){
+		getDocs(query(collection(db, "Inspeccion_modificacion"), where("userId", "==", user_id))).then((hist_data) => {
+			var my_data = hist_data.docs;
+			my_data.forEach((d) => {
+				var data = d.data();
+				if(data.solicitudId == id_solicitud && data.userId == user_id){
+					updateDoc(doc(doc(db, "Inspeccion_modificacion",d.id)), {
+						userId: -1
+					})
+				}
+			})
+		})
+
+	}
+	else if (tipos_solicitud == "A"){
+		getDocs(query(collection(db, "Inspeccion_alzamiento"), where("userId", "==", user_id))).then((hist_data) => {
+			var my_data = hist_data.docs;
+			my_data.forEach((d) => {
+				var data = d.data();
+				if(data.solicitudId == id_solicitud && data.userId == user_id){
+					updateDoc(doc(doc(db, "Inspeccion_alzamiento",d.id)), {
+						userId: -1
+					})
+				}
+			})
+		})
+	}	
 }
 export default {
   name: 'TablaRevisor',
@@ -146,29 +245,35 @@ export default {
             username: usernameGlobal,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
-            alzamientos_encontrados : alzamientos_encontradosGlobal
+            alzamientos_encontrados : alzamientos_encontradosGlobal,
+            emailUser: emailGlobal 
         }
     },
     methods:{
         rellenarTabla() {
             console.log("relleno tabla")
             
-            buscador_solicitud(4,1,"T",1)
-            //buscador_solicitud(1,0,"T", -1)
-            if(this.inscripciones_encontradas.length>0){
+            buscar_asignaciones(this.emailUser).then(() =>
+              {
+              console.log("esto es lo que busco")
+              console.log(this.inscripciones_encontradas.length);
+              if(this.inscripciones_encontradas.length>0){
+              console.log("shdasjd");
                 console.log(this.inscripciones_encontradas);
                 var estad;
                 this.inscripciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estado_secundario"]!=2){
+                    if(insc[1]["estadoSecundario"]!=2){
                         estad="Por pagar"
                     }else{
                         estad="Pagado"
                     }
                     let item = {
+                      "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "Tipo": "I"}
                     console.log(item)
                     console.log(this.items)
                     this.items.push(item)
@@ -177,16 +282,18 @@ export default {
                 }
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estado_secundario"]!=2){
+                    if(insc[1]["estadoSecundario"]!=2){
                         estad="Por pagar"
                     }else{
                         estad="Pagado"
                     }
                     let item = {
+                      "id": insc[0],
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "Tipo": "M"}
 
                     this.items.push(item)
                     });
@@ -194,16 +301,18 @@ export default {
                 }
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estado_secundario"]!=2){
+                    if(insc[1]["estadoSecundario"]!=2){
                         estad="Por pagar"
                     }else{
                         estad="Pagado"
                     }
                     let item = {
+                            "id": insc[0],
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "Tipo": "A"}
 
                     this.items.push(item)
                     });
@@ -211,8 +320,18 @@ export default {
                 }
             //this.items=i
             console.log(this.items)
+            })
+            //buscador_solicitud(4,1,"T",this.emailUser)
+            //buscador_solicitud(1,0,"T", -1)
             
-            }
+            
+            
+            },
+        LiberarSolicitud(index){
+          var item = this.items[index];
+            liberar_asignaciones(item.id, item.Tipo, this.emailUser);
+            this.items.splice(index,1);
+        }
             
     },
     /*created(){
