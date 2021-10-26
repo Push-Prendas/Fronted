@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">     
         <table class="table">
-            <thead class="encabezadoTabla">
+            <thead class="encabezadoTabla" @dblclick="rellenarTabla()">
                 <tr>
                 <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
                 <th scope="col"></th>
@@ -11,24 +11,23 @@
                 <td>No data</td>
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
-                <td>{{item.documento}}</td>
-                <td>{{item.nNotaria}}</td>
-                <td>{{item.funcionario}}</td>
-                <td>{{item.fecha}}</td>
-                <td>${{item.monto}}</td>
-                <td >
-                    <p class="titleFormulario">{item.estado}} </p>
+                <td>{{item.Rep}}</td>
+                <td>{{item.Notaria}}</td>
+                <td>{{item.Fecha}}</td>
+                <td>{{item.Monto}}</td>
+                <td class="d-flex justify-content-center">
+                    <p class="titleFormulario">{{item.Estado}} </p>
                 </td>
                 <td>
                     <div class="form-check ">
-                            <input class="form-check-input" type="checkbox" value="" id="ChecbboxPagos" >
+                            <input class="form-check-input" type="checkbox" value="" :id="index" >
                     </div>
                 </td>
             </tbody>
  
         </table>
         <div class="d-flex justify-content-end">
-            <p> $MONTO </p> <button class="col-2 titleButton ">Pagar</button> 
+            <p> ${{monto}} </p> <button class="col-2 titleButton " @click="pagar()">Pagar</button> 
         </div>
         
          
@@ -38,14 +37,176 @@
 <script>
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
+import {db} from "@/main";
+import { collection, getDocs,doc, updateDoc,setDoc} from "firebase/firestore";
+console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
+var inscripciones_encontradasGlobal = []
+var modificaciones_encontradasGlobal = []
+var alzamientos_encontradosGlobal = []
+async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
 
+	///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
+	///ESTEN EN UN ESTADO ESPECIFICO, LOS PARAMETROS SE OCUPAN DE LA SIGUIENTE FORMA
+
+	///ESTADO PRIMARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO PRIMARIO ESPECIFICO
+	///0 -> EN EDICION
+	///1 -> ENVIADO a NOTARIO
+	///2 -> RECHAZO DE NOTARIO
+	///3 -> ADJUNTAR DOCUMENTOS DE OFICINA
+	///4 -> EN REVISION
+	///5 -> ACEPTADO
+	///6 -> RECHAZO POR REVISOR
+	///7 -> RECHAZO POR JEFE DE UNIDAD DE PRENDA
+	///8 -> RECHAZO NOTIFICADO
+
+	///ESTADO SECUNDARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO SECUNDARIO EN ESPECIFICO
+	///0 -> NO PAGADO
+	///1 ->	HUBO INTENCION DE PAGAR PERO NO ESTA CONFIRMADO
+	///2 -> PAGADO
+
+	///TIPO DE SOLICITUD: BUSCA ALGUNA CLASE DE SOLICITUD EN ESPECIFICA
+	///I -> INSCRIPCION
+	///M -> MODIFICACION
+	///A -> ALZAMIENTO
+	///T -> TODAS
+
+	///USER ID: BUSCA LAS SOLICITUDES CREADAS POR EL USER ID, SI NO SE QUIERE BUSCAR POR USER ID Y SE QUIERE SOLO CON
+	///			LOS CRITERIOS ANTERIORES EL ARGUMENTO ES -1
+
+	
+
+	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "I"){
+		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				var insc_data = doc.data();
+				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
+					if(insc_data.usuarioCreador == user_id || user_id == -1){		
+						inscripciones_encontradasGlobal.push([doc.id, insc_data])
+
+					}
+				}
+			})
+		}).then(() => {
+			console.log("INSCRIPCIONES ENCONTRADAS")
+			console.log(inscripciones_encontradasGlobal)
+			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
+			
+			///////
+		})
+
+	}
+	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "M"){
+		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				var insc_data = doc.data();
+				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
+					if(insc_data.usuarioCreador == user_id || user_id == -1){		
+						modificaciones_encontradasGlobal.push([doc.id, insc_data])
+					}
+				}
+			})
+		}).then(() => {
+			console.log("MODIFICACIONES ENCONTRADAS")
+			console.log(modificaciones_encontradasGlobal)
+			//UNA VEZ LOS MODIFICACIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
+
+			///////
+		})
+
+	}
+	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "A"){
+		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				var insc_data = doc.data();
+				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
+					if(insc_data.usuarioCreador == user_id || user_id == -1){		
+						alzamientos_encontradosGlobal.push([doc.id, insc_data])
+					}
+				}
+			})
+		}).then(() => {
+			console.log("INSCRIPCIONES ENCONTRADAS")
+			console.log(alzamientos_encontradosGlobal)
+			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
+
+			///////
+		})
+	}
+
+    
+
+
+}
+
+function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
+	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
+
+	////////OJO: REVISAR NUMERO REPERTORIO DE PRENDA/////////////////
+	///GUARDAR EN UNA TABLA APARTE O EN ALGO EL NUMERO DE REPEROTRIO DE PRENDA ACTUAL Y ASIGNAR
+	var change_message = ["El pago no se realizo", "Hubo intencion de pagar", "Pagado"]
+	if (tipo_de_solicitud == "I"){
+		updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+			estadoSecundario: estado_secundario,
+			numeroRepertorioContratoPrenda: id_solicitud
+
+		}).then(() => {
+			console.log("ACTUALIZADO")
+		})
+
+	}
+	else if (tipo_de_solicitud == "M"){
+		updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+			estadoSecundario: estado_secundario,
+			numeroRepertorioContratoPrenda: id_solicitud
+		});
+	}
+	else if (tipo_de_solicitud == "A"){
+		updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+			estadoSecundario: estado_secundario,
+			numeroRepertorioContratoPrenda: id_solicitud
+		});
+	}
+	var today = new Date();
+	getDocs(collection(db, "Bitacora")).then((bit_data) => {
+		var id_bit = bit_data.docs.length;
+		var id_insc = ""
+		var id_mod = ""
+		var id_alz = ""
+		if(tipo_de_solicitud == "I"){
+			id_insc = id_solicitud
+		}
+		else if(tipo_de_solicitud == "M"){
+			id_mod = id_solicitud
+		}
+		else if(tipo_de_solicitud == "A"){
+			id_alz = id_solicitud
+		}
+		setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+			idInscripcion: id_insc,
+			idModificacion: id_mod,
+			idAlzamiento: id_alz,
+			idUser: user_id,
+			comment: change_message[estado_secundario],
+			fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+		})
+	})
+	
+}
 export default {
   name: 'PagosPendientes',
   data() {
         return {
-            items: [{}],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            thread : ['N° Documento','Notaria', 'N° Notaria', 'Fecha','Monto', 'Estado'],
-            username: usernameGlobal
+            items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
+            thread : ['N° Documento','Notaria', 'Fecha','Monto', 'Estado'],
+            username: usernameGlobal,
+            inscripciones_encontradas: inscripciones_encontradasGlobal,
+            modificaciones_encontradas : modificaciones_encontradasGlobal,
+            alzamientos_encontrados : alzamientos_encontradosGlobal,
+            monto:0,
+            emailUser: emailGlobal
         }
     },
     props: {
@@ -54,8 +215,112 @@ export default {
             type: String,
             default: 'Modificacion'
         },
+    
         
   },
+  methods:{
+      rellenarTabla() {
+            console.log("relleno tabla")
+            
+            buscador_solicitud(4,0,"T", -1)
+            //buscador_solicitud(1,0,"T", -1)
+            if(this.inscripciones_encontradas.length>0){
+                console.log(this.inscripciones_encontradas);
+                var estad;
+                this.inscripciones_encontradas.forEach((insc)=>{
+                    if(insc[1]["estadoSecundario"]==0){
+                        estad="Por pagar"
+                    }else{
+                        estad="Pagado"
+                    }
+                    if (insc[1]["nombre_notaria"] != ""){
+                        let item = {
+                            "id": insc[0],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Monto": insc[1]["montoTotal"],
+                            "Notaria": insc[1]["nombre_notaria"],
+                            "Estado": estad,
+                            "Tipo":"I"}
+                        this.items.push(item)
+                        this.monto+= parseFloat(insc[1]["montoTotal"]);
+                    }
+                                        
+                    });
+
+                }
+            if(this.modificaciones_encontradas.length>0){
+                this.modificaciones_encontradas.forEach((insc)=>{
+                    if(insc[1]["estadoPrimario"]==1){
+                        estad="Por Firmar"
+                    }else{
+                        estad="Notif. Rechazo"
+                    }
+                    if (insc[1]["nombre_notaria"] != ""){
+                        let item = {
+                            "id": insc[0],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Monto": insc[1]["montoTotal"],
+                            "Notaria": insc[1]["nombre_notaria"],
+                            "Estado": estad,
+                            "Tipo":"M"}
+                        this.items.push(item)
+                    }
+                    });
+
+                }
+            if(this.alzamientos_encontrados.length>0){
+                this.alzamientos_encontrados.forEach((insc)=>{
+                    if(insc[1]["estadoPrimario"]==1){
+                        estad="Por Firmar"
+                    }else{
+                        estad="Notif. Rechazo"
+                    }
+                    if (insc[1]["nombre_notaria"] != ""){
+                        let item = {
+                            "id": insc[0],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Monto": insc[1]["montoTotal"],
+                            "Notaria": insc[1]["nombre_notaria"],
+                            "Estado": estad,
+                            "Tipo":"A"}
+                        this.items.push(item)
+                    }
+                    });
+
+                }
+            //this.items=i
+            console.log(this.items)
+            
+            },
+    pagar(){
+        var i = 0;
+        var indexCheck = []
+        while (i<this.items.length)
+        {
+            if (document.getElementById(i).checked == true)
+            {
+                indexCheck.push(i)
+            }
+            i++
+            
+        }
+        var w = 0
+        while (w<indexCheck.length){
+            var item = this.items[indexCheck[w]]
+            modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
+            this.items.splice(indexCheck[w],1)
+            w++
+        }
+        
+        
+    }
+  }
 
 }
 
