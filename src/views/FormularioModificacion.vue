@@ -6,7 +6,7 @@
             <AntecedentesFormulario :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
-            @getBienes="getBienes"/> 
+            @getBienes="getBienes" @getNotaria="getNotaria"/> 
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
@@ -16,7 +16,7 @@
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton">Guardar</button>
-                <button class="col-2 titleButton">Enviar</button>
+                <button class="col-2 titleButton" @click="modificar()">Enviar</button>
             </div>
         </div>
         
@@ -24,7 +24,9 @@
     </div>
 </template>
 <script scoped>
-
+import {db, storage} from "@/main";
+import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
 import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
@@ -37,8 +39,210 @@ import {opciones} from "@/views/Dashboard"
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal, esOFICINAGlobal)
 console.log(opciones)
+//VALIDA EL NUMERO DE REPERTORIO
+function validate_number(inputNumber){
+    if(!inputNumber.includes("-")) return false;
+    inputNumber = inputNumber.split("-");
+    let number = inputNumber[0];
+    let year = inputNumber[1];
+    let curYear = new Date().getFullYear();
+    if(isNaN(number) || number.includes("e") || number.length != 4) return false; //e counts as infinity
+    if(year>curYear || isNaN(year) || year.length < 4) return false;
+    return true;
+}
+function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PERMITE GUARDAR LOS ARCHIVOS EN NUESTRA BASE DE DATOS, LO IDEAL ES USARLO PARA OFICINA EN LA VISTA PARA SUBIR SUS ARCHIVOS
+	var repertorio = null
+
+    var INSCRIPCION = ""
+    var MODIFICACION = ""
+    var ALZAMIENTO = ""
+
+    if(tipo == 0){// INSCRIPCION
+        INSCRIPCION = id
+    }
+    else if(tipo == 1){//MODIFICACION
+        MODIFICACION = id
+    }
+    else if(tipo == 2){//ALZAMIENTO
+        ALZAMIENTO = id
+    }
+    
+
+	getDocs(collection(db,"Document_RPsD")).then((pat_data) => {
+		var id_inspeccion = pat_data.docs.length
+		var pt = pat_data.docs[id_inspeccion-1]
+		repertorio = pt.data().numero_repertorio_RPsD
+		
+	}).then(() => {
+
+	getDocs(collection(db, "Document_RPsD")).then(async(doc_data) => {
+		var document_id = doc_data.docs.length
+		console.log("Entro")
+		//const storageRef = ref(storage); 					
+		for(var i = 0; i<contratos.length; i++){
+			const fileRef = ref(storage,contratos[i].name);
+			await uploadBytes(fileRef,contratos[i]);
+			const url_file = await getDownloadURL(fileRef)
+			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
+				id_alzamiento: INSCRIPCION,
+				id_modificacion: MODIFICACION,
+				idInscripcion: ALZAMIENTO,
+				año_repertorio_del_contrato: new Date().getFullYear(),
+				numero_repertorio_RPsD: repertorio + 1,
+				url: url_file,
+				contrato: true
+			});
+			document_id+=1;
+		}
+		for(i = 0; i<archivos.length; i++){
+			const fileRef = ref(storage,archivos[i].name);
+			await uploadBytes(fileRef,archivos[i]);
+			const url_file = await getDownloadURL(fileRef)
+			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
+				idInscripcion: INSCRIPCION,
+				id_alzamiento: MODIFICACION,
+				id_modificacion: ALZAMIENTO,
+				año_repertorio_del_contrato: new Date().getFullYear(),
+				numero_repertorio_RPsD: repertorio + 1,
+				url: url_file,
+				contrato: false
+			});
+			document_id+=1;
+		}
+
+	});
+
+}).then(() => {
+	console.log("EVERYTHING ITS SEND SUCCESFULLY")
+	//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
+	
 
 
+	//
+})
+
+
+
+}
+
+function  inscripcion_modificacion(
+    tipo_de_documento,//
+    fecha_de_suscripcion,//
+    fecha_de_otorgamiento,//
+    fecha_de_protocolizacion,//
+    fecha_de_autorizacion,//
+    notaria="",//
+    numero_repertorio_notaria,//
+    parrafo_modificacion_generica,//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
+    tipo_de_persona,//
+    nombre_acreedor,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+    rut_acreedor,//""
+    nombre_requirente="",//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
+    run_requiriente="",//
+    estadoPrimario,//
+    contratos=[],//
+    archivos=[],//
+    activo_fijo,//
+    bienes_agropecuarios,//
+    derechos_intangibles,//
+    vehiculos,//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
+    GrabarEnagenar,//
+    correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
+    fecha_requirente=""//
+    ){
+
+
+        var validate = true;
+
+
+        //FILTRO
+        //PARA FILTRAR EL AÑO SE PUEDE PONER UN MINIMO Y MAXIMO EN EL INPUT DE FECHAS
+
+
+        console.log(numero_repertorio_notaria)
+        if(numero_repertorio_notaria.length != 9 && !validate_number(numero_repertorio_notaria)){
+
+            validate = false
+            console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
+            //FRONTEND => MOSTRAR ERROR
+    
+            //////////////////////////
+        }
+
+        //console.log("verificar")
+        //console.log(rut_acreedor)
+
+        /*
+
+        var rut_acc_code = rut_acreedor.split('-');
+        if(!validate_run(rut_acc_code[0],rut_acc_code[1])){
+            validate = false
+            console.log("RUN ACREEDOR INVALIDO")
+            //FRONTEND => MOSTRAR ERROR
+    
+            //////////////////////////
+        }
+
+        var run_req_code = run_requiriente.split('-');
+        if(!validate_run(run_req_code[0],run_req_code[1])){
+            validate = false
+            console.log("RUN REQUIRIENTE INVALIDO")
+            //FRONTEND => MOSTRAR ERROR
+    
+            //////////////////////////
+        }*/
+
+
+
+        if(validate){
+
+        //SUBIR O GUARDAR LA SOLICITUD
+        var ids = null
+        getDocs(collection(db,"Solicitud_Modificacion_Prenda")).then((pat_data) => {
+            ids = pat_data.docs.length;
+            console.log(ids)
+            console.log("submit")
+            
+        }).then(() => {
+            setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),ids.toString()),{
+                tipo_de_documento: tipo_de_documento,
+                fecha_de_suscripcion: fecha_de_suscripcion,
+                fecha_de_otorgamiento: fecha_de_otorgamiento,
+                fecha_de_protocolizacion: fecha_de_protocolizacion,
+                fecha_de_autorizacion: fecha_de_autorizacion,
+                numero_repertorio_notaria: numero_repertorio_notaria,
+                parrafo_modificacion_generica: parrafo_modificacion_generica,
+                tipo_de_persona: tipo_de_persona,
+                nombre_acreedor: nombre_acreedor,
+                rut_acreedor: rut_acreedor,
+                nombre_requirente: nombre_requirente,
+                run_requiriente: run_requiriente,
+                estadoPrimario: estadoPrimario,
+                estadoSecundario: 0,
+                activo_fijo: activo_fijo,
+                bienes_agropecuarios: bienes_agropecuarios,
+                derechos_intangibles: derechos_intangibles,
+                vehiculos: vehiculos,
+                notaria: notaria,
+                GrabarEnagenar: GrabarEnagenar,
+                correo_requirente: correo_requirente,
+                fecha_requirente: fecha_requirente,
+                revisorAsignado :-1
+            })//18
+            
+            console.log("entros")
+            if(estadoPrimario == 1){// 1 significa que esta en revision en la notaria
+
+                Subir_archivos_en_oficina(contratos,archivos)
+                console.log("enviado")
+            }
+
+
+
+        
+        })
+    }
+    }
 
 export default {
   name: 'formularioModificacion',
@@ -75,7 +279,21 @@ export default {
 			anexos: null,
         }
     },
-     methods: {
+  components: {
+    AntecedentesFormulario,
+    AcreedorFormulario,
+    VehiculosFormulario,
+    ContratoFormulario,
+    AnexosFormulario,
+    Monto,
+    Menu,
+    Navbar
+  },
+  methods: {
+
+        getNotaria(data){
+		this.notaria=data
+		},
         gettipoDoc(data) { 
         this.tipoDoc = data
         },
@@ -140,7 +358,7 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-        this.Bienes = data
+			this.Bienes = data        
         },
         getConstituyentes(data) {
         this.constituyentes = data
@@ -162,67 +380,34 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        /*
-        crearInscripcion(flags){
-			var runacreedor;
-			var nombreacreedor;
-			if(this.tipoPersona == "Natural"){
-				runacreedor = this.run
-				nombreacreedor = this.nombres
-			}else if(this.tipoPersona == "Juridica"){
-				runacreedor = this.rut
-				nombreacreedor = this.razonsocial
-			}else{
-				runacreedor = this.id
-				nombreacreedor = this.nombres
-			}
-            
-            enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
-				this.FSuscripcion.toString(),
-                this.FOtorgamiento.toString(),
-                this.FProtocolizacion.toString(),
-                this.FAutorizacion.toString(), 
-                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),
-                this.ProhibGravEnajenar,
-                "mi notaria", 
-                this.nombreRequirente, 
-                this.nDocRequirente, 
-				this.correoRequirente,
-				this.fechaRequirente,
+        modificar(){//agregar flags
+            inscripcion_modificacion(
+                this.tipoDoc.toString(),//
+                this.FSuscripcion.toString(),//
+                this.FOtorgamiento.toString(),//
+                this.FProtocolizacion.toString(),//
+                this.FAutorizacion.toString(),//
+                this.notaria,//
+                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
+                "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
+                this.tipoPersona,//
+                this.nombres,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+                this.run,//
+                this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
+                this.nDocRequirente,//
+                [].push(this.contrato),//
+                this.anexos, 
                 this.Bienes[0],
                 this.Bienes[1], 
                 this.Bienes[2], 
-                this.Bienes[3], 
-                100, 
-				flags, 
-				this.tipoPersona, 
-                runacreedor.toString(), //id , rut y run
-                nombreacreedor, 
-                this.pais, 
-				this.constituyentes, 
-                this.deudores, 
-                this.vehiculos, 
-                [].push(this.contrato), 
-                this.anexos, 
-                esOFICINAGlobal,
-				"mi oficina",
-				emailGlobal
-                )
-			
-		}
-        */
-  },
-  components: {
-    AntecedentesFormulario,
-    AcreedorFormulario,
-    VehiculosFormulario,
-    ContratoFormulario,
-    AnexosFormulario,
-    Monto,
-    Menu,
-    Navbar
-  },
+                this.Bienes[3],//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
+                this.ProhibGravEnajenar,//
+                this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
+                this.fechaRequirente//
+            )
+  }
   
+}
 }
 </script>
 

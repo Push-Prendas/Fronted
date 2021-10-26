@@ -118,7 +118,7 @@ export default {
                 alert("No se encontraron Coincidencias")
             }else{
                 this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/solicitudAlzamiento`, params: {username: usernameGlobal, rol: rolGlobal}})
-
+                
 
             }
         }

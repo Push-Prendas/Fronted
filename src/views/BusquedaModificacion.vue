@@ -57,7 +57,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 			//console.log(my_data.numeroRepertorioContratoPrenda + "|" + repertorio_prenda + "-" + year)
 			if(my_data.numeroRepertorioContratoPrenda == repertorio_prenda){
 				var my_data_id = d.id;
-				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", my_data_id))).then((per_data) => {
+				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(my_data_id)))).then((per_data) => {
 
 					var my_person_data = per_data.docs;
 					var ver = false
@@ -78,8 +78,11 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 									})
 								})
                                 if(modificaciones_hechas.length>0){
+                
                                     return modificaciones_hechas.pop()
+
                                 }else{
+
                                     return persona.idInscripcion
                                 }
 								//MODIFICACIONES HECHAS
@@ -91,8 +94,10 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 				})
 			}			
 		})
-	})
-    return -1
+	}).then(()=>{
+        return -1
+    })
+    
 }
 var id_sol;
 export default {
@@ -108,12 +113,13 @@ export default {
     },
     methods:{
         busqueda(){
-            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id).toString()
-            if(id_sol=='-1'){
+            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+            if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
-                this.$$router.push({path:'/Dashboard/${rolGlobal}/${usernameGlobal}/solicitudAlzamiento', params: {username: usernameGlobal, rol: rolGlobal}})
-                this.$router.push({path:"/Dashboard/${rolGlobal}/${usernameGlobal}/solicitudAlzamiento", params: {username: usernameGlobal, rol: rolGlobal}})
+                this.$router.push({path:"/Dashboard/:rol/:username/ModifContPrendas", params: {username: usernameGlobal, rol: rolGlobal}})
+
+
             }
         }
     },

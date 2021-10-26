@@ -388,7 +388,7 @@ export default {
                 this.FAutorizacion.toString(),//
                 this.FProtocolizacion.toString(),//
                 this.notaria,//
-                (this.RepNotaria+"-"+this.anioRepNotari).toString(),////
+                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
                 this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                 this.fechaRequirente,//

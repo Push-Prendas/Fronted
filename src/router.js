@@ -10,6 +10,7 @@ import FormularioInscripcion from "./views/FormularioInscrpcion.vue"
 import BusquedaAlzamiento from "./views/BusquedaAlzamiento.vue"
 import FormularioAlzamiento from "./views/FormularioAlzamiento.vue"
 import FormularioModificacion from "./views/FormularioModificacion.vue"
+import BuscadorModificacion from "./views/BusquedaModificacion.vue"
 import BuscadorJefeServicio from './views/BuscadorJefeServicio.vue'
 import ComprobanteSolicutud from './views/ComprobanteSolicitud.vue'
 import RecepcionDocBuscador from './views/BuscadorReceptor.vue'
@@ -65,9 +66,15 @@ const routes = [
     props: true
   },
   {
+    path: "/Dashboard/:rol/:username/ModifContPrendas",
+    name: "ModifContPrendas",
+    component: FormularioModificacion,
+    props: true
+  },
+  {
     path: "/Dashboard/:rol/:username/Modificaciondecontratodeprendas",
     name: "Modificaciondecontratodeprendas",
-    component: FormularioModificacion,
+    component: BuscadorModificacion,
     props: true
   },
   {
