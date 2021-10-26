@@ -101,7 +101,7 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/NOTARIO/:username/RevisionDoc",
+    path: "/Dashboard/REVISOR/:username/RevisionDoc",
     name: "RevisionDocumentoNotario",
     component: RevisionDocumentoNotario,
     props: true

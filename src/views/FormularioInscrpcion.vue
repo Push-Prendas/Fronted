@@ -227,7 +227,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						const fileRef = ref(storage,contratos[i].name);
 						await uploadBytes(fileRef,contratos[i]);
 						const url_file = await getDownloadURL(fileRef)
-						setDoc(doc(collection(db, "Document_RPsD"),id.toString()),{
+						setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 							id_alzamiento: "",
 							id_modificacion: document_id.toString(),
 							idInscripcion: id,
@@ -242,7 +242,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						const fileRef = ref(storage,archivos[i].name);
 						await uploadBytes(fileRef,archivos[i]);
 						const url_file = await getDownloadURL(fileRef)
-						setDoc(doc(collection(db, "Document_RPsD"),id.toString()),{
+						setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 							idInscripcion: id,
 							id_alzamiento: "",
 							id_modificacion: document_id.toString(),
