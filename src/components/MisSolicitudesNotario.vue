@@ -28,11 +28,30 @@
 <script>
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
 console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
+function firmarDocumento(tipo_de_solicitud, id_solicitud){
+	if (tipo_de_solicitud == "I"){
+		updateDoc(getDoc(collection(db, "Solicitud_Inscripcion_Prenda",id_solicitud)),{
+			firma: true
+		}).then(() => {
+			console.log("FIRMADO")
+		})
+	}
+	else if (tipo_de_solicitud == "M"){
+		updateDoc(getDoc(collection(db, "Solicitud_Modificacion_Prenda",id_solicitud)),{
+			firma: true
+		});
+	}
+	else if (tipo_de_solicitud == "A"){
+		updateDoc(getDoc(collection(db, "Solicitud_Alzamiento_Prenda",id_solicitud)),{
+			firma: true
+		});
+	}
+}
 async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
 
 	///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
@@ -205,7 +224,10 @@ export default {
             //this.items=i
             console.log(this.items)
             
-            }
+            },
+        firmardoc(){
+            firmarDocumento()
+        }
             
         },
     /*created(){

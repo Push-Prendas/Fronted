@@ -298,7 +298,7 @@ export default {
             nDocRequirente: '',
             correoRequirente: '',
             fechaRequirente: '',
-            Bienes: [],
+            Bienes: [false, false, false, false],
             constituyentes: [],
             deudores: [],
 			vehiculos: [],
