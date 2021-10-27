@@ -3,11 +3,11 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
-            <AntecedentesFormulario :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
+            <AntecedentesFormularioALZA :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria"/> 
-            <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
+            <AcreedorFormulario :rol="rol" @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
             <VehiculosFormulario :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
@@ -27,7 +27,7 @@
 import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
+import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
 import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
@@ -288,7 +288,7 @@ export default {
 
     },
   components: {
-    AntecedentesFormulario,
+    AntecedentesFormularioALZA,
     AcreedorFormulario,
     VehiculosFormulario,
     ContratoFormulario,
