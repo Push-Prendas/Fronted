@@ -14,8 +14,8 @@
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton">Guardar</button>
-                <button class="col-2 titleButton" @click="modificar()">Enviar</button>
+                <button class="col-2 titleButton" @click="modificar(false)">Guardar</button>
+                <button class="col-2 titleButton" @click="modificar(true)">Enviar</button>
             </div>
         </div>
         
@@ -95,8 +95,8 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 			const url_file = await getDownloadURL(fileRef)
 			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 				idInscripcion: INSCRIPCION,
-				id_alzamiento: MODIFICACION,
-				id_modificacion: ALZAMIENTO,
+				id_alzamiento: ALZAMIENTO,
+				id_modificacion: MODIFICACION,
 				año_repertorio_del_contrato: new Date().getFullYear(),
 				numero_repertorio_RPsD: repertorio + 1,
 				url: url_file,
@@ -228,7 +228,7 @@ function  inscripcion_modificacion(
             console.log("entros")
             if(estadoPrimario == 1){// 1 significa que esta en revision en la notaria
 
-                Subir_archivos_en_oficina(contratos,archivos)
+                Subir_archivos_en_oficina(contratos,archivos,ids,1)
                 console.log("enviado")
             }
 
@@ -382,7 +382,16 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        modificar(){//agregar flags
+        modificar(flag, oficina=false){//agregar flags
+            var est_p = 0
+                if(flag){
+                    if(oficina){
+                        est_p = 3
+                    } 
+                    else{
+                        est_p = 1
+                    }
+            }
             inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
@@ -397,7 +406,8 @@ export default {
                 this.run,//
                 this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.nDocRequirente,//
-                [].push(this.contrato),//
+                est_p,
+                this.contrato,//
                 this.anexos, 
                 this.Bienes[0],
                 this.Bienes[1], 
