@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">
         <div class="row">
-            <div class="titleFormulario col">Vehiculos  @click="getPatentes()"</div> 
+            <div class="titleFormulario col" @click="getPatentes()" >Vehiculos  </div > 
             <b-button v-b-modal.modal-2 class="col buttonAdd">+</b-button>
 
             <b-modal id="modal-2"  hide-footer>
@@ -40,9 +40,8 @@
                 <b-button id="ADDVEHICULO" @click="add(), setData()">Agregar Vehículo</b-button>
             </b-modal>   
         </div>
-        <button @click="getPatentes()">Patentes</button>
-        <table class="table" @click="getPatentes()">
-            <thead class="encabezadoTabla" @click="getPatentes()">
+        <table class="table" >
+            <thead class="encabezadoTabla">
                 <tr>
                 <th scope="col">PATENTE</th>
                 <th scope="col">RVM</th>
@@ -245,6 +244,7 @@ export default {
     },
     methods:{
         getPatentes(){
+            //console.log("DATA")
             buscador_especifico_solicitud(12,'I')
             //this.items=patentes_relacionadas
         

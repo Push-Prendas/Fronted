@@ -1,11 +1,10 @@
 <template>
     <div id="contenedor" class="row">
-        <div class="titleFormulario">Vehiculos </div> 
+        <div class="titleFormulario" >Vehiculos </div> 
         
         <table class="table">
             <thead class="encabezadoTabla">
                 <tr>
-                <th scope="col">ID</th>
                 <th scope="col">PATENTE</th>
                 <th scope="col">RVM</th>
                 <th scope="col">GRAVAR/ENAJENAR</th>
@@ -18,12 +17,11 @@
                 <td>No data</td>
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
-                <td>{{item.id}}</td>
                 <td>{{item.patente}}</td>
                 <td>{{item.rvm}}</td>
                 <td>{{item.GoE}}</td>
                 <td>{{item.estado}}</td>
-                <td>{{item.costo}}</td>
+                <td>$10000</td>
                 <td v-if="tipoSolicitud == 'Moficacion'"> 
                     <div class="form-check ">
                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck" >
@@ -37,12 +35,199 @@
 </template>
 
 <script>
+
+import {db} from "@/main";
+import { collection, getDocs, query, where} from "firebase/firestore";
+import {id_sol} from "@/views/BusquedaAlzamiento"
+
+function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
+	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
+	///CON TODAS SUS DEPENDEDNCIAS
+	var solicitud_relacionada;
+	var acreedores_relacionados = []
+	var constituyentes_relacionados = []
+	var deudores_relacionados = []
+	var contratos_relacionados = []
+	var archivos_relacionados = []
+	var patentes_relacionadas = []
+    console.log("ENTREEEEEEEE")
+	if(tipo_de_solicitud == "I"){
+		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();					
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONAS")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						console.log(deudores_relacionados)
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
+
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("INSCRIPCION")
+			console.log(patentes_relacionadas)
+
+            patentes_relacionadas.forEach((data) =>{
+                this.add("1","1","1","12")
+            })
+            
+
+
+            //add(patente,rvm,GoE,estado)
+			///INSCRIPCION ENCONTRADA
+			///FRONTEND -> MODIFICAR ACA
+
+
+
+
+			///
+
+		})
+	}
+	else if(tipo_de_solicitud == "M"){
+		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+
+
+				}
+			})
+		}).then(() => {
+			console.log("MODIFICACION")
+			console.log(solicitud_relacionada)
+			///MODIFICACION ENCONTRADA
+			///FRONTEND MODIFICAR ACA
+
+
+
+			///
+
+		})
+		
+	}
+	else if (tipo_de_solicitud == "A"){
+		//VER COMO ESTA CONSTITUIDO ALZAMIENTO
+		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("ALZAMIENTO")
+			console.log(solicitud_relacionada)
+
+			///ALZAMIENTO ENCONTRADO
+			///FRONTEND MODIFICAR DE ACA
+
+
+			//////////////////////
+		})
+	}
+}
+
 export default {
+
+
   name: 'AcreedorFormularios',
   data() {
         return {
-            items: [{}],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
+            items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
+            option:'natural',
+            patente:"",
+            GoE:false,
+            rvm:false,
+            estado:""
         }
+    },
+    mounted() {
+    this.items = []
+    
+      buscador_especifico_solicitud(parseInt(id_sol),'I')
+      this.add("1","1","1","12")
+      console.log(this.items)
+      console.log("cambio")
+      console.log(id_sol)
+      console.log("cambio")
+
     },
     props: {
         opcion:Array,
@@ -50,8 +235,38 @@ export default {
             type: String,
             default: 'Modificacion'
         },
+    },
+    methods:{
+        getPatentes(){
+            console.log("DATA")
+            buscador_especifico_solicitud(12,'I')
+            //this.items=patentes_relacionadas
         
-  },
+        },
+        changeOption(){
+            var selectBox = document.getElementById("tipoDePersona");
+            this.option = selectBox.options[selectBox.selectedIndex].value; 
+            //console.log(this.option);
+        },
+        add(patente,rvm,GoE,estado) {
+            let item = {
+                "patente": patente,
+                "rvm": rvm,
+                "GoE": GoE,
+                "estado": estado}
+
+            this.items.push(item);
+        },
+        clean(){
+            console.log("limpiar campos aqui")
+
+        },
+        setData(){
+            this.$emit("getVehiculos",this.items);
+        }
+    }
+        
+
 
 }
 

@@ -131,11 +131,18 @@ export default {
             id:'',
         }
     },
+    props:{
+    rol: {
+        type: String,
+        default: rolGlobal
+    }
+
+    },
     methods:{
         busqueda(){
 
             
-            id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+            buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
             
             //this.loadUsers(this.folio,this.anio, this.id)
 
@@ -156,12 +163,12 @@ export default {
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
-                this.$router.push({path:"/Dashboard/:rol/:username/ModifContPrendas", params: {username: usernameGlobal, rol: rolGlobal}})
+                this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/ModifContPrendas`, params: {username: usernameGlobal, rol: rolGlobal}})
 
 
 
             }
-            },5000)
+            },1000)
 
 
 
@@ -175,6 +182,15 @@ export default {
         Navbar
     },
 }
+
+setTimeout(() => { 
+
+console.log("ME ID")
+console.log(id_sol)
+console.log("ME ID")
+
+},1000)
+
 export{id_sol}
 </script>
 

@@ -79,11 +79,11 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 								})
                                 if(modificaciones_hechas.length>0){
                 
-                                    return modificaciones_hechas.pop()
+                                    id_sol = modificaciones_hechas.pop()
 
                                 }else{
 
-                                    return persona.idInscripcion
+                                    id_sol = persona.idInscripcion
                                 }
 								//MODIFICACIONES HECHAS
 								///////////////////////////////////////////////
@@ -95,7 +95,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 			}			
 		})
 	}).then(()=>{
-        return -1
+        id_sol = -1
     })
     
 }
@@ -109,18 +109,24 @@ export default {
             folio: '',
             anio: '',
             id:'',
+            id_sol: id_sol
         }
     },
     methods:{
         busqueda(){
             id_sol = buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
+            setTimeout(() => { 
+            console.log("TIMEOUT")
+            console.log(id_sol)
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
                 this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/solicitudAlzamiento`, params: {username: usernameGlobal, rol: rolGlobal}})
-                
+
+
 
             }
+            },1000)
         }
     },
     components: {
@@ -128,6 +134,8 @@ export default {
         Navbar
     },
 }
+//id_sol  = 12
+
 export{id_sol}
 </script>
 

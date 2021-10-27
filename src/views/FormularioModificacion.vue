@@ -279,6 +279,14 @@ export default {
 			anexos: null,
         }
     },
+
+  props:{
+      rol: {
+          type: String,
+          default: rolGlobal
+      }
+
+    },
   components: {
     AntecedentesFormulario,
     AcreedorFormulario,
