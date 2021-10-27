@@ -40,6 +40,19 @@ import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import {id_sol} from "@/views/BusquedaAlzamiento"
 
+var total_items = []
+
+
+function add(patente,rvm,GoE,estado) {
+        let item = {
+            "patente": patente,
+            "rvm": rvm,
+            "GoE": GoE,
+            "estado": estado}
+
+        total_items.push(item);
+    }
+
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
@@ -103,6 +116,15 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					}).then(() => {
 						console.log("PATENTES")
 						console.log(patentes_relacionadas)
+
+                        patentes_relacionadas.forEach((data) =>{
+                                console.log(data.patente)
+                                console.log(data.inscripcionPrendaRVM)
+                                console.log(data.inscripcionProhibicionGravarEnajenar)
+                                console.log(data.alzamiento)
+                                add(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                                //this.option
+                            })
 					})
 				}
 			})
@@ -110,9 +132,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			console.log("INSCRIPCION")
 			console.log(patentes_relacionadas)
 
-            patentes_relacionadas.forEach((data) =>{
-                this.add("1","1","1","12")
-            })
+
             
 
 
@@ -222,7 +242,9 @@ export default {
     this.items = []
     
       buscador_especifico_solicitud(parseInt(id_sol),'I')
-      this.add("1","1","1","12")
+      //add("1","1","1","12")
+
+      this.items = total_items
       console.log(this.items)
       console.log("cambio")
       console.log(id_sol)
@@ -248,15 +270,7 @@ export default {
             this.option = selectBox.options[selectBox.selectedIndex].value; 
             //console.log(this.option);
         },
-        add(patente,rvm,GoE,estado) {
-            let item = {
-                "patente": patente,
-                "rvm": rvm,
-                "GoE": GoE,
-                "estado": estado}
 
-            this.items.push(item);
-        },
         clean(){
             console.log("limpiar campos aqui")
 
