@@ -18,35 +18,35 @@ import RevisionDocumentoNotario from './views/RevisionDocumentosNotario.vue'
 
 
 const routes = [
-  {
-    path: "/",
-    name: "Login",
-    component: Login
-  },
-  {
-    path: "/Dashboard/:rol/:username",
-    name: "Dashboard",
-    component: Dashboard,
-    props: true
-  },
-  {
-    path: "/Dashboard/:rol/:username/Usuarios",
-    name: "usuariosAdmin",
-    component: usuariosAdmin,
-    props: true
-  },
-  {
-    path: "/Dashboard/:rol/:username/Notarias",
-    name: "notariasAdmin",
-    component: notariasAdmin,
-    props: true
-  },
-  {
-    path: "/Dashboard/:rol/:username/Oficinas",
-    name: "oficinasAdmin",
-    component: oficinasAdmin,
-    props: true
-  },
+    {
+      path: "/",
+      name: "Login",
+      component: Login
+    },
+    {
+      path: "/Dashboard/:rol/:username",
+      name: "Dashboard",
+      component: Dashboard,
+      props: true
+    },
+    {
+      path: "/Dashboard/:rol/:username/Usuarios",
+      name: "usuariosAdmin",
+      component: usuariosAdmin,
+      props: true
+    },
+    {
+      path: "/Dashboard/:rol/:username/Notarias",
+      name: "notariasAdmin",
+      component: notariasAdmin,
+      props: true
+    },
+    {
+      path: "/Dashboard/:rol/:username/Oficinas",
+      name: "oficinasAdmin",
+      component: oficinasAdmin,
+      props: true
+    },
    {
     path: "/Dashboard/:rol/:username/Inscripciondecontratodeprendas",
     name: "Inscripciondecontratodeprendas",
@@ -108,7 +108,7 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/:rol/:username/RevisionDoc",
+    path: "/Dashboard/REVISOR/:username/RevisionDoc",
     name: "RevisionDocumentoNotario",
     component: RevisionDocumentoNotario,
     props: true
@@ -118,13 +118,12 @@ const routes = [
     name: "PagosPendientes",
     component: Dashboard,
     props: true
-  },
-  {
+  },{
     path: '*',
     name: 'catchAll',
     component: Login
-  }
-];
+ }
+  ];
 
 
 
