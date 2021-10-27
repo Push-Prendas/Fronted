@@ -50,6 +50,7 @@ var emailGlobal;
 var rolGlobal;
 var esOFICINAGlobal;
 var notarias = [];
+var notariaGlobal;
 export default {
   name: 'App',
   components: {
@@ -86,6 +87,7 @@ export default {
                                 emailGlobal = user.mail
                                 usernameGlobal = user.nombre
                                 rolGlobal = user.rol
+                                notariaGlobal = user.NotariaID
                                 switch(rolGlobal){
                                     case "FUNCIONARIONOTARIA":
                                         esOFICINAGlobal= false
@@ -107,6 +109,8 @@ export default {
                                 localStorage.setItem('emailGlobal', emailGlobal)
                                 localStorage.setItem('usernameGlobal', usernameGlobal)
                                 localStorage.setItem('rolGlobal', rolGlobal)
+
+                                localStorage.notaria = notariaGlobal
                                 //TEST LOAD
                                 //const rol_load = localStorage.getItem('user_rol')
                                 //console.log(rol_load)

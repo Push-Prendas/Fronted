@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row" v-on:="" >     
         <table class="table" >
-            <thead class="encabezadoTabla" @dblclick="rellenarTabla()">
+            <thead class="encabezadoTabla" >
                 <tr>
                 <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
                 <th scope="col"></th>
@@ -33,6 +33,7 @@ console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
+var funcionarios_notaria_encontradosGlobal = []
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
 		updateDoc(getDoc(collection(db, "Solicitud_Inscripcion_Prenda",id_solicitud)),{
@@ -52,6 +53,36 @@ function firmarDocumento(tipo_de_solicitud, id_solicitud){
 		});
 	}
 }
+
+
+function buscar_usuario_de_notaria(id_notaria){
+    getDocs(collection(db, "Usuario")).then((sol_data) => {
+
+
+        console.log(sol_data.docs)
+        sol_data.docs.forEach((users) =>{
+
+            var insc_data = users.data();
+
+            if(users.data().NotariaID == id_notaria && users.data().rol == "FUNCIONARIONOTARIA"){
+
+                
+                    funcionarios_notaria_encontradosGlobal.push(users.data().mail.toString())
+
+
+                   
+                    console.log(users.data().mail.toString())
+
+
+ 
+            }
+
+        })
+
+    })
+
+}
+
 async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
 
 	///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
@@ -151,7 +182,12 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 }
 
 export default {
-  name: 'MisSolicitudesFuncionarioNotaria',
+  name: 'MisSolicitudesNotaria',
+  mounted() {
+      this.rellenarTabla()
+      this.clean()
+
+  },
     data() {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
@@ -159,22 +195,63 @@ export default {
             username: usernameGlobal,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
-            alzamientos_encontrados : alzamientos_encontradosGlobal
+            alzamientos_encontrados : alzamientos_encontradosGlobal,
+            funcionarios_notaria: funcionarios_notaria_encontradosGlobal
         }
     },
     methods:{
+        clean(){
+            this.items.length = 0;
+            this.inscripciones_encontradas.length = 0;
+            this.modificaciones_encontradas.length = 0;
+            this.alzamientos_encontrados.length = 0;
+            this.funcionarios_notaria.length = 0;
+        },
         rellenarTabla() {
             console.log("relleno tabla")
+
             
-            buscador_solicitud(1,0,"T", -1)
+
+            setTimeout(() => { 
+                //localStorage.notaria
+                
+                buscar_usuario_de_notaria(localStorage.notaria)
+            },1000)
+
+
+            setTimeout(() => { 
+                //localStorage.notaria
+            this.funcionarios_notaria.forEach((insc)=>{
+                buscador_solicitud(0,0,"T",insc)
+                buscador_solicitud(1,0,"T",insc)
+                buscador_solicitud(2,0,"T",insc)
+            
+            })
+
+
+                
+            },1500)
+            
+
+
+
+            //
+            
+             setTimeout(() => { 
+
+
+        
+
             if(this.inscripciones_encontradas.length>0){
                 console.log(this.inscripciones_encontradas);
                 var estad;
                 this.inscripciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoPrimario"]==1){
                         estad="Por Firmar"
+                    }else if(insc[1]["estadoPrimario"]==0){
+                        estad="Edicion"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Rechazo Notaria"
                     }
                     let item = {
                             "Rep": insc[1]["numeroRepertorioNotario"],
@@ -191,8 +268,10 @@ export default {
                 this.modificaciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoPrimario"]==1){
                         estad="Por Firmar"
+                    }else if(insc[1]["estadoPrimario"]==0){
+                        estad="Edicion"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Rechazo Notaria"
                     }
                     let item = {
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
@@ -208,8 +287,10 @@ export default {
                 this.alzamientos_encontrados.forEach((insc)=>{
                     if(insc[1]["estadoPrimario"]==1){
                         estad="Por Firmar"
+                    }else if(insc[1]["estadoPrimario"]==0){
+                        estad="Edicion"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Rechazo Notaria"
                     }
                     let item = {
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
@@ -223,6 +304,7 @@ export default {
                 }
             //this.items=i
             console.log(this.items)
+             },2000);
             
             },
         firmardoc(){
