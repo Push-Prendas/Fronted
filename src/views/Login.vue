@@ -106,10 +106,9 @@ export default {
                                         break;
                                  }
                                 esOFICINAGlobal 
-                                localStorage.setItem('emailGlobal', emailGlobal)
-                                localStorage.setItem('usernameGlobal', usernameGlobal)
-                                localStorage.setItem('rolGlobal', rolGlobal)
-
+                                localStorage.mail = emailGlobal
+                                localStorage.user = usernameGlobal
+                                localStorage.rol = rolGlobal
                                 localStorage.notaria = notariaGlobal
                                 //TEST LOAD
                                 //const rol_load = localStorage.getItem('user_rol')
@@ -170,6 +169,8 @@ export default {
     }
     
 }
+console.log("LOGEANDO CON:")
+console.log(usernameGlobal)
 export{ usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal, notarias}
 </script>
 

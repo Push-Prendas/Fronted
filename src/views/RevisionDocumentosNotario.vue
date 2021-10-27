@@ -23,14 +23,15 @@ import Navbar from '../components/Navbar.vue'
 import {opciones} from "@/views/Dashboard"
 import { usernameGlobal, rolGlobal}  from "@/views/Login"
 
-
+console.log("MY OPTS")
+console.log(localStorage.my_opts.split(','))
 export default {
   name: 'RevisionDoc',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
-            rol: rolGlobal
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
+            rol: localStorage.rol
         }
     },
   components: {
@@ -41,6 +42,7 @@ export default {
   },
   
 }
+console.log(localStorage.my_opts)
 </script>
 
 <style scoped>

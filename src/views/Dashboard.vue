@@ -35,8 +35,8 @@ export default {
   data() {
         return {
             opcion: opciones,
-            username: usernameGlobal,
-            rol: rolGlobal
+            username: localStorage.user,
+            rol: localStorage.rol
         }
     },
 
@@ -95,10 +95,13 @@ export default {
       }
       
       this.opcion = opciones
+      console.log("MOMENTO")
+      console.log(this.opcion)
+      localStorage.my_opts = this.opcion
   },
 }
 export {opciones}
-localStorage.setItem("opciones", opciones)
+
 </script>
 
 

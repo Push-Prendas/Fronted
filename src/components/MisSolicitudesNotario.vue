@@ -29,7 +29,8 @@
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
 import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
+console.log("USERNAME GLOBAL")
+console.log(localStorage.user)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
@@ -222,9 +223,7 @@ export default {
             setTimeout(() => { 
                 //localStorage.notaria
             this.funcionarios_notaria.forEach((insc)=>{
-                buscador_solicitud(0,0,"T",insc)
                 buscador_solicitud(1,0,"T",insc)
-                buscador_solicitud(2,0,"T",insc)
             
             })
 
