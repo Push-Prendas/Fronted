@@ -54,9 +54,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 	getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 		var data = sol_data.docs;
 		data.forEach((d) => {
-			var my_data = d.data();	
-
-            		
+			var my_data = d.data();
 			//console.log(my_data_id)
 			//console.log(my_data.numeroRepertorioContratoPrenda + "|" + repertorio_prenda + "-" + year)
 			if(my_data.numeroRepertorioContratoPrenda == repertorio_prenda){

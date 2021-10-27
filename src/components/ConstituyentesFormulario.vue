@@ -5,7 +5,6 @@
             <b-button v-b-modal.modal-1 class="col buttonAdd">+</b-button>
 
             <b-modal id="modal-1" hide-footer>
-
                 <div class="row">
                     <div class="d-flex justify-content-center titleModal">CONSTITUYENTE </div> 
                     <div class="col row">
@@ -14,13 +13,13 @@
                         </div>
                         <div class="tamanoTipoDocumento">
                             <select id="tipoDePersonaConstituyente" class="form-select" @change ="changeOption(), setData(), clean()">
-                                <option selected value="natural">Natural</option>
-                                <option value="juridico">Juridica</option>
-                                <option value="extranjero">Extranjero</option>
+                                <option selected value="Natural">Natural</option>
+                                <option value="Juridica">Juridica</option>
+                                <option value="Extranjero">Extranjero</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col row" v-if="option == 'natural'">
+                    <div class="col row" v-if="option == 'Natural'">
                         <div class="titles d-flex justify-content-start" >
                             RUN
                         </div>
@@ -28,7 +27,7 @@
                             <input type="text" v-model="idDocumento" id="run">
                         </div>
                     </div>
-                    <div class="col row" v-if="option == 'extranjero'">
+                    <div class="col row" v-if="option == 'Extranjero'">
                         <div class="titles d-flex justify-content-start" >
                             ID
                         </div>
@@ -36,7 +35,7 @@
                             <input type="text" v-model="idDocumento" id="id">
                         </div>
                     </div>
-                    <div class="col row" v-if="option == 'juridico'">
+                    <div class="col row" v-if="option == 'Juridica'">
                         <div class="titles d-flex justify-content-start" >
                             RUT
                         </div>
@@ -44,13 +43,63 @@
                             <input type="text" v-model="idDocumento" id="rut">
                         </div>
                     </div>
-                    <div class="row">
-                            <div class="titles d-flex justify-content-start" >
-                                NOMBRE COMPLETO
+                    <div class="row" v-if="option == 'Juridica'">
+                        <div class="titles d-flex justify-content-start" >
+                            RAZON SOCIAL
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input type="text" v-model="idDocumento" id="rut">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row" v-if="option == 'Natural'">
+                    <div class="col row" >
+                            <div class="titles d-flex" >
+                                APELLIDO PATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
                                 <input id="nombre" type="text" v-model="nombrePersona">
                             </div>
+                    </div>
+                    <div class="col row">
+                            <div class="titles d-flex " >
+                               APELLIDO MATERNO
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input id="nombre" type="text" v-model="nombrePersona">
+                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="titles d-flex " >
+                            NOMBRES
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="nombre" type="text" v-model="nombrePersona">
+                        </div>
+                    </div>
+                    
+            
+                </div>
+                <div class="row" v-if="option == 'Extranjero'">
+                    <div class="col row">
+                        <div class="titles d-flex " >
+                            NOMBRE COMPLETO
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="nombre" type="text" v-model="nombrePersona">
+                        </div>
+                    </div>
+                    <div class="col row" v-if="option == 'Extranjero'">
+                        <div class="titles d-flex justify-content-start" >
+                            PAÍS
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <select  class="form-select"  v-model="pais" @change ="changeOption(), getData()" >
+                                <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
+                                
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <b-button id="ADDConstituyente" @click="add(), setData(), clean()">Agregar Constituyente</b-button>
@@ -85,7 +134,7 @@ export default {
   name: 'ConstituyenteFormulario',
   data() {
         return {
-            option:'natural',
+            option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
             items: [],
             idDocumento:"",
@@ -105,7 +154,7 @@ export default {
                 "Id": this.idDocumento,
                 "Name": this.nombrePersona}
             this.items.push(item);
-            this.option = "natural";
+            this.option = "Natural";
             this.idDocumento="";
             this.nombrePersona="";
         },

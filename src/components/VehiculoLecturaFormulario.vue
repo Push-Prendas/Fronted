@@ -110,7 +110,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			console.log("INSCRIPCION")
 			console.log(patentes_relacionadas)
 
-            patentes_relacionadas.forEach((data) =>{
+            patentes_relacionadas.forEach(() =>{
                 this.add("1","1","1","12")
             })
             
