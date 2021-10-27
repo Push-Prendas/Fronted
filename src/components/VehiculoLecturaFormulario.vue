@@ -240,6 +240,7 @@ export default {
     },
     mounted() {
     this.items = []
+	total_items = []
     
       buscador_especifico_solicitud(parseInt(id_sol),'I')
       //add("1","1","1","12")

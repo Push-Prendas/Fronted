@@ -53,7 +53,7 @@
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
                 <td>{{item.patente}}</td>
-                <td>{{item.rvm}} {{item.GoE}}</td>
+                <td>{{item.rvm}} </td>
                 
                 <td >
                     <div v-if="item.GoE == true">GRAVAR</div>

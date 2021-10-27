@@ -43,14 +43,55 @@
                         <div class="tamanoTipoDocumento">
                             <input type="text" v-model="idDocumento" id="rut">
                         </div>
+
                     </div>
                     <div class="row">
+                    <div class="col row" v-if="option == 'natural'">
                             <div class="titles d-flex justify-content-start" >
                                 NOMBRE COMPLETO
                             </div>
                             <div class="tamanoTipoDocumento">
                                 <input id="nombre" type="text" v-model="nombrePersona">
                             </div>
+                    </div>
+
+                        <div class="col row" v-if="option == 'juridico'">
+                            <div class="titles d-flex justify-content-start" >
+                                RAZON SOCIAL
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input type="text" v-model="nombrePersona" id="razonsocial">
+                            </div>
+
+
+                        </div>
+
+                        <div class="col row" v-if="option == 'extranjero'">
+                            <div class="titles d-flex justify-content-start" >
+                                NOMBRE COMPLETO
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input type="text" v-model="nombrePersona" id="nombrePersona">
+                            </div>
+
+                            <div class="titles d-flex justify-content-start" >
+                                PAÍS
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <select id="pais" class="form-select" v-model="pais" @change ="changeOption(), getData()" >
+                                    
+                                    <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}       
+                                    </option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
+                                    
+                                </select>
+                            </div>
+
+
+
+                        </div>
+
+
+
                     </div>
                 </div>
                 <b-button id="ADDConstituyente" @click="add(), setData(), clean()">Agregar Constituyente</b-button>
@@ -64,6 +105,7 @@
                 <th scope="col">TIPO DE PERSONA</th>
                 <th scope="col">IDENTIFICADOR</th>
                 <th scope="col">NOMBRE/RAZON</th>
+                <th scope="col">PAIS</th>
                 </tr>
             </thead>
             <tbody class="bodyTabla" v-if="items.length == 0">
@@ -73,6 +115,7 @@
                 <td>{{item.Tipo}}</td>
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>
+                <td>{{item.pais}}</td>
             </tbody>
  
         </table> 
@@ -81,15 +124,21 @@
 </template>
 
 <script>
+
+import * as Countries from '../data/countries.js';
 export default {
   name: 'ConstituyenteFormulario',
   data() {
+      const countries= Countries.default.countries;
         return {
             option:'natural',
-            headers: ['Tipo', 'Id', 'Name'],
+            headers: ['Tipo', 'Id', 'Name','pais'],
             items: [],
             idDocumento:"",
             nombrePersona: "",
+            razonsocial: "",
+            countries,
+            pais:"",
         }
     },
 
@@ -100,16 +149,23 @@ export default {
             //console.log(this.option);
         },
         add() {
+             console.log("MYDATA")
             let item = {
                 "Tipo": this.option,
                 "Id": this.idDocumento,
-                "Name": this.nombrePersona}
+                "Name": this.nombrePersona,
+                "pais": this.pais
+
+                }
+            console.log(selectBox.options[selectBox.selectedIndex].value)
             this.items.push(item);
             this.option = "natural";
             this.idDocumento="";
             this.nombrePersona="";
+            this.pais="";
         },
         clean(){
+            console.log("MYDATA")
             console.log("limpiar campos aqui")
 
         },

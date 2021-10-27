@@ -28,9 +28,9 @@
     </div>
 </template>
 <script scoped>
-import {db, storage} from "@/main";
+import {db,storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
-import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
 import ConstituyentesFormulario from '../components/ConstituyentesFormulario.vue'
@@ -44,8 +44,23 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {opciones} from "@/views/Dashboard"
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
+import { getStorage } from "firebase/storage";
+import { getApp,initializeApp  } from "firebase/app";
 console.log(emailGlobal, rolGlobal)
 console.log(opciones)
+
+  
+//initializeApp()
+
+//const storage2 = getStorage(firebaseApp);
+
+
+  
+//const app = initializeApp(firebaseConfig);
+
+
+
+//const storage2 = getStorage();
 
 function validate_number(inputNumber){
         if(!inputNumber.includes("-")) return false;
@@ -179,20 +194,29 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					});
 					persona_id+=1;
 					constituyentes.forEach((con) => {
+						let pais = con["pais"]
+						if(pais == ""){
+							pais = "Chile"
+						}
 						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 							///Constituyentes es una lista de listas, cada sublista se compone de
 							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
 							///3->pais persona
+							
 							tipoContratante: 1, //Constituyente
 							tipoAcreedor: con["Tipo"],
 							runPersona: con["Id"],
-							nombrePersona: con["Name"],
+							nombrePersona: con["Name"],//EN JURIDICA ES RAZON SOCIAL 
 							idInscripcion: id,
-							paisPersona: "Chile"
+							paisPersona: pais
 						});
 						persona_id+=1;
 					})
 					deudores.forEach((de) => {
+						let pais = de["pais"]
+						if(pais == ""){
+							pais = "Chile"
+						}
 						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 							///Deudores es una lista de listas, cada sublista se compone de
 							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
@@ -202,7 +226,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 							runPersona: de["Id"],
 							nombrePersona: de["Name"],
 							idInscripcion: id,
-							paisPersona: "Chile"
+							paisPersona: pais
 						});
 						persona_id+=1;
 					})
@@ -221,12 +245,24 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				getDocs(collection(db, "Document_RPsD")).then(async(doc_data) => {
 					var document_id = doc_data.docs.length
 					console.log("Entro")
-					const storageRef = ref(storage); 	
-					console.log(storageRef.id)				
+
+					console.log(contratos)
+					console.log(archivos)
+
+
+
+					console.log("---------------------")
+					//const storageRef = ref(storage); 	
+					//console.log(storageRef.id)				
 					for(var i = 0; i<contratos.length; i++){
+
 						const fileRef = ref(storage,contratos[i].name);
 						await uploadBytes(fileRef,contratos[i]);
 						const url_file = await getDownloadURL(fileRef)
+						console.log("MY URL")
+						console.log(url_file)
+						console.log(document_id.toString())
+						console.log("---------------------")
 						setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 							id_alzamiento: "",
 							id_modificacion: document_id.toString(),
@@ -445,7 +481,7 @@ export default {
 				this.constituyentes, 
                 this.deudores, 
                 this.vehiculos, 
-                [].push(this.contrato), 
+                this.contrato, 
                 this.anexos, 
                 esOFICINAGlobal,
 				"mi oficina",

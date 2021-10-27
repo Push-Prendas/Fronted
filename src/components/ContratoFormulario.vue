@@ -28,7 +28,7 @@ export default {
     methods:{
         setData(){
             //console.log(document.getElementById("contrato").value)
-            this.$emit("getContrato", document.getElementById("contrato"))
+            this.$emit("getContrato", document.getElementById("contrato").files)
         }
     }
 

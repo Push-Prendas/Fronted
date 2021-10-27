@@ -91,7 +91,7 @@ export default {
             tipoPersona:'Natural',
             run: '',
             id: '',
-            pais: '',
+            pais: 'Chile',
             rut: '',
             razonsocial: '',
             Apaterno: '',

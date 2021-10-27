@@ -176,9 +176,15 @@ export default {
 
         clean(){
             this.items.length = 0;
-            console.log("ITEMS")
+            this.inscripciones_encontradas.length = 0;
+            this.modificaciones_encontradas.length = 0;
+            this.alzamientos_encontrados.length = 0;
+            console.log("-----------------------------------")
             console.log(this.items)
-            
+            console.log(this.inscripciones_encontradas)
+            console.log(this.modificaciones_encontradas)
+            console.log(this.alzamientos_encontrados)
+            console.log("-----------------------------------")
         },
 
 
