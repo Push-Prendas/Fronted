@@ -31,6 +31,26 @@
             </div>
         </div>
         <button class="d-flex justify-content-center button" @click="busqueda()">Buscar</button>
+        <div v-if="id_sol!==-1">
+            <div class="col row">
+                <div class="titles d-flex justify-content-start">
+                    TIPO DE MODIFICACION
+                </div>
+                <div class="tamanoTipoDocumento">
+                    <select id="tipoDeDocumento" class="form-select"  v-model="tipomodificacion"  @change ="changeOption(), setData()">
+                        <option selected value="Alzamiento Parcial">Alzamiento Parcial</option>
+                        <option value="Cambio Acreedor">Cambio Acreedor</option>
+                        <option  value="Prohibicion de acto">Prohibicion de acto</option>
+                        <option value="Otros">Otros</option>
+                        Alzamiento Parcial
+                        Cambio Acreedor
+                        Prohibicion de acto
+                        Otros
+                    </select>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 
