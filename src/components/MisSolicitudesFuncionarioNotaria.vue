@@ -33,6 +33,8 @@ console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
+var username = emailGlobal
+
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
 		updateDoc(getDoc(collection(db, "Solicitud_Inscripcion_Prenda",id_solicitud)),{
@@ -155,6 +157,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 
 export default {
     mounted() {
+      this.clean()
       this.rellenarTabla()
 
     },
@@ -163,7 +166,7 @@ export default {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
             thread : ['N° Rep. Notaria', 'Funcionario', 'Fecha', 'Estado'],
-            username: usernameGlobal,
+            username: emailGlobal,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
             alzamientos_encontrados : alzamientos_encontradosGlobal
@@ -171,13 +174,24 @@ export default {
     },
     methods:{
 
+        clean(){
+            this.items.length = 0;
+            console.log("ITEMS")
+            console.log(this.items)
+            
+        },
+
 
         rellenarTabla(){
-             buscador_solicitud(1,0,"T","funcionarionotaria@funcionarionotaria.cl")
 
-             if(this.items > 0){
-                 this.items = []
-             }
+            console.log("DATADTA")
+            console.log(username)
+             buscador_solicitud(1,0,"T",username)
+            //this.items = []
+
+            console.log(this.items)
+
+            console.log("DATADTA")
 
 
              setTimeout(() => { 

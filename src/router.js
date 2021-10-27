@@ -102,7 +102,7 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/NOTARIO/:username/MisSolicitudes",
+    path: "/Dashboard/:rol/:username/MisSolicitudes",
     name: "MisSolicitudes",
     component: Dashboard,
     props: true
