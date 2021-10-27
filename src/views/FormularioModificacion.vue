@@ -35,10 +35,6 @@ import AnexosFormulario from '../components/AnexosFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal, esOFICINAGlobal)
-console.log(opciones)
 //VALIDA EL NUMERO DE REPERTORIO
 function validate_number(inputNumber){
     if(!inputNumber.includes("-")) return false;
@@ -248,8 +244,8 @@ export default {
   name: 'formularioModificacion',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
             tipoDoc:'',
             FOtorgamiento: '',
             FSuscripcion: '',
@@ -283,7 +279,7 @@ export default {
   props:{
       rol: {
           type: String,
-          default: rolGlobal
+          default: localStorage.rol
       }
 
     },

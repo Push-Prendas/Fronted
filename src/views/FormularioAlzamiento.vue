@@ -35,9 +35,6 @@ import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-console.log(emailGlobal)
 function validate_number(inputNumber){
     if(!inputNumber.includes("-")) return false;
     inputNumber = inputNumber.split("-");
@@ -240,8 +237,8 @@ export default {
   name: 'Dashboard',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
             tipoDoc:'',
             FOtorgamiento: '',
             FSuscripcion: '',
@@ -275,7 +272,7 @@ export default {
   props: {
         rol :  {
             type: String,
-            default: rolGlobal
+            default: localStorage.rol
         },
 
   },
@@ -400,7 +397,7 @@ export default {
                 this.Bienes[2], 
                 this.Bienes[3],
                 flags,
-                esOFICINAGlobal,
+                localStorage.esoficina,
                 "mi oficina"
             )
         }

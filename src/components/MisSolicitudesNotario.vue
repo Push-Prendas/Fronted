@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
 import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
 console.log("USERNAME GLOBAL")
@@ -63,7 +62,7 @@ function buscar_usuario_de_notaria(id_notaria){
         console.log(sol_data.docs)
         sol_data.docs.forEach((users) =>{
 
-            var insc_data = users.data();
+            //var insc_data = users.data();
 
             if(users.data().NotariaID == id_notaria && users.data().rol == "FUNCIONARIONOTARIA"){
 
@@ -193,7 +192,7 @@ export default {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
             thread : ['N° Rep. Notaria', 'Funcionario', 'Fecha', 'Estado'],
-            username: usernameGlobal,
+            username: localStorage.user,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
             alzamientos_encontrados : alzamientos_encontradosGlobal,

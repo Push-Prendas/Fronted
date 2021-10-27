@@ -4,7 +4,7 @@
         <Navbar :username= username />
         <div class="right">
             <h1> Revisión de documentos </h1>
-            <AntecedentesFormulario :rol="rolGlobal" />
+            <AntecedentesFormulario :rol="rol" />
             <VehiculosLectura :tipoSolicitud="Alzamiento" />
             <!-- FALTA COLOCALAR LOS ARCHIVOS -->
             <div class="row d-flex justify-content-center" id="contenedor">
@@ -20,8 +20,7 @@ import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
 import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, rolGlobal}  from "@/views/Login"
+
 
 console.log("MY OPTS")
 console.log(localStorage.my_opts.split(','))

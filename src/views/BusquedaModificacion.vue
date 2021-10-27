@@ -62,9 +62,6 @@ import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal)
 
 
 function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_constituyente){
@@ -142,8 +139,8 @@ export default {
     name: 'BusquedaAlzamiento',
     data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
             folio: '',
             anio: '',
             id:'',
@@ -152,7 +149,7 @@ export default {
     props:{
     rol: {
         type: String,
-        default: rolGlobal
+        default: localStorage.rol
     }
 
     },
@@ -181,7 +178,7 @@ export default {
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
-                this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/ModifContPrendas`, params: {username: usernameGlobal, rol: rolGlobal}})
+                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/ModifContPrendas`, params: {username: localStorage.user, rol: localStorage.rol}})
 
 
 

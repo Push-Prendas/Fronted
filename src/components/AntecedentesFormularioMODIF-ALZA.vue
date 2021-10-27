@@ -103,8 +103,7 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal, notarias}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal,usernameGlobal)
+import { notarias } from '@/views/Login'
 
 export default {
 

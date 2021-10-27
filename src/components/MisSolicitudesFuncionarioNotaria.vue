@@ -26,14 +26,12 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
 import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
-var username = emailGlobal
+var username = localStorage.user
 
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
@@ -166,7 +164,7 @@ export default {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
             thread : ['N° Rep. Notaria', 'Funcionario', 'Fecha', 'Estado'],
-            username: emailGlobal,
+            username: localStorage.mail,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
             alzamientos_encontrados : alzamientos_encontradosGlobal

@@ -103,8 +103,6 @@
 
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal,usernameGlobal)
 import * as Countries from '../data/countries.js';
 export default {
   name: 'AcreedorFormularios',

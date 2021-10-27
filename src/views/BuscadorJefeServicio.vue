@@ -17,18 +17,15 @@ import Navbar from '../components/Navbar.vue'
 //import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
 //import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 
 
 export default {
   name: 'Dashboard',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
-            rol: rolGlobal
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
+            rol: localStorage.rol
         }
     },
   components: {
