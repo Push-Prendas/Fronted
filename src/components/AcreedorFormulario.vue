@@ -101,6 +101,7 @@
     </div>
 </template>
 
+
 <script>
 import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
 console.log(emailGlobal, rolGlobal,usernameGlobal)
