@@ -96,8 +96,14 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/JEFEDESERVICIO/:username/Tareas",
+    path: "/Dashboard/:rol/:username/Tareas",
     name: "ModificaciondecontratodeprendasTareas",
+    component: Dashboard,
+    props: true
+  },
+  {
+    path: "/Dashboard/JEFEDESERVICIO/:username/Informes",
+    name: "InformeSolicitudes",
     component: Dashboard,
     props: true
   },
@@ -108,7 +114,7 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/REVISOR/:username/RevisionDoc",
+    path: "/Dashboard/:rol/:username/RevisionDoc",
     name: "RevisionDocumentoNotario",
     component: RevisionDocumentoNotario,
     props: true
@@ -118,7 +124,20 @@ const routes = [
     name: "PagosPendientes",
     component: Dashboard,
     props: true
-  },{
+  },
+  {
+    path: "/Dashboard/PAGADOR/:username/ResumendePagos",
+    name: "ResumendePagos",
+    component: Dashboard,
+    props: true
+  },
+  {
+    path: "/Dashboard/RECEPTOR/:username/RecepcionSolicitudes",
+    name: "ResumendePagos",
+    component: Dashboard,
+    props: true
+  },
+  {
     path: '*',
     name: 'catchAll',
     component: Login
