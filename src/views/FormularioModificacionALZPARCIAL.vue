@@ -246,6 +246,10 @@ function  inscripcion_modificacion(
 
 export default {
   name: 'formularioModificacion',
+  mounted(){
+      console.log("ROL")
+      console.log(localStorage.rol)
+  },
   data() {
         return {
             opcion: localStorage.my_opts.split(','),
