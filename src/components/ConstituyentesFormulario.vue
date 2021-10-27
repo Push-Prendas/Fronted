@@ -44,65 +44,54 @@
                         </div>
 
                     </div>
-                    <div class="row" v-if="option == 'Juridica'">
-                        <div class="titles d-flex justify-content-start" >
-                            RAZON SOCIAL
-                        </div>
-                        <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="rut">
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="row" v-if="option == 'Natural'">
-                    <div class="col row" >
-                            <div class="titles d-flex" >
-                                APELLIDO PATERNO
-                            </div>
-                            <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="nombrePersona">
-                            </div>
-                    </div>
-                    <div class="col row">
-                            <div class="titles d-flex " >
-                               APELLIDO MATERNO
-
-                            </div>
-                            <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="nombrePersona">
-                            </div>
-                    </div>
-
                     <div class="row">
-                        <div class="titles d-flex " >
-                            NOMBRES
-                        </div>
-                        <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrePersona">
-                        </div>
+                    <div class="col row" v-if="option == 'natural'">
+                            <div class="titles d-flex justify-content-start" >
+                                NOMBRE COMPLETO
+
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input id="nombre" type="text" v-model="nombrePersona">
+                            </div>
                     </div>
-                    
-            
-                </div>
-                <div class="row" v-if="option == 'Extranjero'">
-                    <div class="col row">
-                        <div class="titles d-flex " >
-                            NOMBRE COMPLETO
+
+                        <div class="col row" v-if="option == 'juridico'">
+                            <div class="titles d-flex justify-content-start" >
+                                RAZON SOCIAL
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input type="text" v-model="nombrePersona" id="razonsocial">
+                            </div>
+
+
                         </div>
-                        <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrePersona">
+
+                        <div class="col row" v-if="option == 'extranjero'">
+                            <div class="titles d-flex justify-content-start" >
+                                NOMBRE COMPLETO
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input type="text" v-model="nombrePersona" id="nombrePersona">
+                            </div>
+
+                            <div class="titles d-flex justify-content-start" >
+                                PAÍS
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <select id="pais" class="form-select" v-model="pais" @change ="changeOption(), getData()" >
+                                    
+                                    <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}       
+                                    </option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
+                                    
+                                </select>
+                            </div>
+
+
+
                         </div>
-                    </div>
-                    <div class="col row" v-if="option == 'Extranjero'">
-                        <div class="titles d-flex justify-content-start" >
-                            PAÍS
-                        </div>
-                        <div class="tamanoTipoDocumento">
-                            <select  class="form-select"  v-model="pais" @change ="changeOption(), getData()" >
-                                <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
-                                
-                            </select>
-                        </div>
+
+
+
                     </div>
                 </div>
                 <b-button id="ADDConstituyente" @click="add(), setData(), clean()">Agregar Constituyente</b-button>
@@ -142,6 +131,7 @@ export default {
   data() {
       const countries= Countries.default.countries;
         return {
+
             option:'natural',
             headers: ['Tipo', 'Id', 'Name','pais'],
             items: [],

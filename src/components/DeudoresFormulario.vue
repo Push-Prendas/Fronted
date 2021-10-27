@@ -43,23 +43,23 @@
                             <input type="text" v-model="idDocumento" id="rut">
                         </div>
                     </div>
-
-                    <div class="row" v-if="option == 'Juridica'">
-                        <div class="titles d-flex justify-content-start" >
-                            RAZON SOCIAL
-                        </div>
-                        <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="rut">
-                        </div>
-                    </div>
-                </div>
-                <div class="row" v-if="option == 'Natural'">
-                    <div class="col row" >
-                            <div class="titles d-flex" >
-                                APELLIDO PATERNO
+                    <div class="row">
+                    <div class="col row" v-if="option == 'natural'">
+                            <div class="titles d-flex justify-content-start" >
+                                NOMBRE COMPLETO
                             </div>
                             <div class="tamanoTipoDocumento">
                                 <input id="nombre" type="text" v-model="nombrePersona">
+                            </div>
+                    </div>
+
+                        <div class="col row" v-if="option == 'juridico'">
+                            <div class="titles d-flex justify-content-start" >
+                                RAZON SOCIAL
+                            </div>
+                            <div class="tamanoTipoDocumento">
+                                <input type="text" v-model="nombrePersona" id="razonsocial">
+
                             </div>
 
 
@@ -164,8 +164,8 @@
 <script>
 import * as Countries from '../data/countries.js';
 export default {
-
-  name: 'deudoresFormulario',
+    
+  name: 'AcreedorFormularios',
   data() {
       const countries= Countries.default.countries;
         return {
