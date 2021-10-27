@@ -52,6 +52,8 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
     var MODIFICACION = ""
     var ALZAMIENTO = ""
 
+    console.log("LOL FILES")
+
     if(tipo == 0){// INSCRIPCION
         INSCRIPCION = id
     }
@@ -61,7 +63,10 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
     else if(tipo == 2){//ALZAMIENTO
         ALZAMIENTO = id
     }
-    
+
+    console.log("INSCRIPCION: " + INSCRIPCION)
+    console.log("MODIFICACION: " + MODIFICACION)
+    console.log("ALZAMIENTO: " + ALZAMIENTO)
 
 	getDocs(collection(db,"Document_RPsD")).then((pat_data) => {
 		var id_inspeccion = pat_data.docs.length
@@ -73,11 +78,13 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 	getDocs(collection(db, "Document_RPsD")).then(async(doc_data) => {
 		var document_id = doc_data.docs.length
 		console.log("Entro")
+        console.log(contratos.length)
 		//const storageRef = ref(storage); 					
 		for(var i = 0; i<contratos.length; i++){
 			const fileRef = ref(storage,contratos[i].name);
 			await uploadBytes(fileRef,contratos[i]);
 			const url_file = await getDownloadURL(fileRef)
+            console.log("CONTRATO")
 			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 				id_alzamiento: INSCRIPCION,
 				id_modificacion: MODIFICACION,
@@ -93,10 +100,11 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 			const fileRef = ref(storage,archivos[i].name);
 			await uploadBytes(fileRef,archivos[i]);
 			const url_file = await getDownloadURL(fileRef)
+            console.log("ADJUNTO")
 			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 				idInscripcion: INSCRIPCION,
-				id_alzamiento: MODIFICACION,
-				id_modificacion: ALZAMIENTO,
+				id_alzamiento: ALZAMIENTO,
+				id_modificacion: MODIFICACION,
 				año_repertorio_del_contrato: new Date().getFullYear(),
 				numero_repertorio_RPsD: repertorio + 1,
 				url: url_file,
@@ -148,6 +156,7 @@ function alzamiento(
         var validate = true
         console.log("VERYFING...")
         console.log(name_oficina)
+        
 
         //FILTRO
         //PARA FILTRAR EL AÑO SE PUEDE PONER UN MINIMO Y MAXIMO EN EL INPUT DE FECHAS
@@ -181,11 +190,13 @@ function alzamiento(
             estado_inicial = 3 //ENVIADO DESDE OFICINA
         else
             estado_inicial = 1 //ENVIADO DESDE NOTARIA
+
     
     }
 
     console.log("MY DATA")
     console.log(activo_fijo)
+    console.log(estado_inicial)
 
     var ids = null
     getDocs(collection(db,"Solicitud_Alzamiento_Prenda")).then((pat_data) => {
@@ -222,6 +233,7 @@ function alzamiento(
 
     })
     if(estado_inicial == 1){// 1 significa que esta en revision en la notaria
+
         Subir_archivos_en_oficina(contratos,archivos, ids.toString(), 2)   
     }
     })
@@ -391,7 +403,7 @@ export default {
                 this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                 this.fechaRequirente,//
-                [].push(this.contrato),//
+                this.contrato,//
                 this.anexos, 
                 this.Bienes[0],
                 this.Bienes[1], 
