@@ -132,7 +132,6 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			console.log("INSCRIPCION")
 			console.log(patentes_relacionadas)
 
-
             
 
 
