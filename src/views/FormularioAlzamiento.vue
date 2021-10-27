@@ -6,7 +6,7 @@
             <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
 			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
 			@getFechaRequirente="getFechaRequirente" @change="getPatentes()"/>
-            <AntecedentesFormularioALZA :rol="rol" :esInsc="false" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
+            <AntecedentesFormulario :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria" @change="getPatentes()"/>
@@ -26,7 +26,7 @@
 import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
+import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
 import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
@@ -279,7 +279,7 @@ export default {
 
   },
   components: {
-    AntecedentesFormularioALZA,
+    AntecedentesFormulario,
     VehiculosFormulario,
     ContratoFormulario,
     AnexosFormulario,
