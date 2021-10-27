@@ -44,8 +44,8 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {opciones} from "@/views/Dashboard"
 import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-import { getStorage } from "firebase/storage";
-import { getApp,initializeApp  } from "firebase/app";
+//import { getStorage } from "firebase/storage";
+//import { getApp,initializeApp  } from "firebase/app";
 console.log(emailGlobal, rolGlobal)
 console.log(opciones)
 
