@@ -3,14 +3,17 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
+            <h1 bold>OTROS</h1>
+            <RequirenteFormulario v-if="rol == 'FUNCIONARIOOFICINA'"/>
+
             <AntecedentesFormularioALZA :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria"/> 
-            <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
-            @getid="getid" @getpais="getpais" @getrut="getrut" 
-            @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <VehiculosFormulario :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
+            <div class="mb-3" id="textarea">
+                <label for="textoOTRO" class="form-label titleFormulario">RESUMA EL MOTIVO DE LA MODIFICACION</label>
+                <textarea class="form-control" id="textoOTRO" rows="3"></textarea>
+            </div>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
@@ -28,10 +31,10 @@ import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
-import AcreedorFormulario from '../components/AcreedorFormulario.vue'
-import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
+import RequirenteFormulario from '../components/RequirenteFormulario.vue'
+
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
@@ -285,9 +288,8 @@ export default {
     },
   components: {
     AntecedentesFormularioALZA,
-    AcreedorFormulario,
-    VehiculosFormulario,
     ContratoFormulario,
+    RequirenteFormulario,
     AnexosFormulario,
     Monto,
     Menu,
@@ -416,6 +418,25 @@ export default {
 </script>
 
 <style scoped>
+#textarea{
+    width: 58em;
+    margin-left: 29%;
+    float: right;
+
+}
+.titleFormulario{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    width: 58em;
+    margin-bottom: 2em;
+    margin-top: 2em;
+}
+
+
+
 #contenedor{
     width: 60em;
     margin-left: 34%;

@@ -10,7 +10,6 @@
 
             <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
                 <td>{{item.Rep}}</td>
-                <td>{{item.Funcionario}}</td>
                 <td>{{item.Fecha}}</td>
                 <td >
                     <p class="titleFormulario">{{item.Estado}} </p>
@@ -163,7 +162,7 @@ export default {
     data() {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            thread : ['N° Rep. Notaria', 'Funcionario', 'Fecha', 'Estado'],
+            thread : ['N° Rep. Notaria','Fecha', 'Estado'],
             username: localStorage.mail,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
@@ -311,7 +310,7 @@ export default {
 }
 #contenedor{
     width: 60em;
-    margin-left: 34%;
+    margin-left: 29%;
     margin-top: 2%;
 }
 

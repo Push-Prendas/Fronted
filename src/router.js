@@ -9,7 +9,11 @@ import oficinasAdmin from "./views/Admin/oficinas.vue";
 import FormularioInscripcion from "./views/FormularioInscrpcion.vue"
 import BusquedaAlzamiento from "./views/BusquedaAlzamiento.vue"
 import FormularioAlzamiento from "./views/FormularioAlzamiento.vue"
-import FormularioModificacion from "./views/FormularioModificacion.vue"
+import FormularioModificacionALZPARCIAL from "./views/FormularioModificacionALZPARCIAL.vue"
+import FormularioModificacionCAMBIOACREEDOR from "./views/FormularioModificacionCAMBIOACREEDOR.vue"
+import FormularioModificacionOTRO from "./views/FormularioModificacionOTRO.vue"
+import FormularioModificacionPROHIBACTO from "./views/FormularioModificacionPROHIBACTO.vue"
+
 import BuscadorModificacion from "./views/BusquedaModificacion.vue"
 import BuscadorJefeServicio from './views/BuscadorJefeServicio.vue'
 import ComprobanteSolicutud from './views/ComprobanteSolicitud.vue'
@@ -66,9 +70,27 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/:rol/:username/ModifContPrendas",
-    name: "ModifContPrendas",
-    component: FormularioModificacion,
+    path: "/Dashboard/:rol/:username/FormularioModificacionALZPARCIAL",
+    name: "FormularioModificacionALZPARCIAL",
+    component: FormularioModificacionALZPARCIAL,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/FormularioModificacionCAMBIOACREEDOR",
+    name: "FormularioModificacionCAMBIOACREEDOR",
+    component: FormularioModificacionCAMBIOACREEDOR,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/FormularioModificacionOTRO",
+    name: "FormularioModificacionOTRO",
+    component: FormularioModificacionOTRO,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/FormularioModificacionPROHIBACTO",
+    name: "FormularioModificacionPROHIBACTO",
+    component: FormularioModificacionPROHIBACTO,
     props: true
   },
   {

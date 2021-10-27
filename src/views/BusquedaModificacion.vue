@@ -179,13 +179,24 @@ export default {
             console.log(id_sol)
             if(this.tipomodificacion=="Alzamiento Parcial"){
                 console.log("Alzamiento Parcial")
+                this.id_sol2=-1
+                id_sol=-1
+                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/FormularioModificacionALZPARCIAL`, params: {username: localStorage.user, rol: localStorage.rol}})
             }else if(this.tipomodificacion=="Cambio Acreedor"){
                 console.log("Cambio Acreedor")
+                this.id_sol2=-1
+                id_sol=-1
+                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/FormularioModificacionCAMBIOACREEDOR`, params: {username: localStorage.user, rol: localStorage.rol}})
             }else if(this.tipomodificacion=="Prohibicion de acto"){
                 console.log("Prohibicion de acto")
+                this.id_sol2=-1
+                id_sol=-1
+                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/FormularioModificacionPROHIBACTO`, params: {username: localStorage.user, rol: localStorage.rol}})
             }else if(this.tipomodificacion=="Otros"){
                 console.log("Otros")
-                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/ModifContPrendas`, params: {username: localStorage.user, rol: localStorage.rol}})
+                this.id_sol2=-1
+                id_sol=-1
+                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/FormularioModificacionOTRO`, params: {username: localStorage.user, rol: localStorage.rol}})
 
             }
             },1000)

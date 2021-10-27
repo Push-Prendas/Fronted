@@ -329,7 +329,7 @@ export default {
 }
 #contenedor{
     width: 60em;
-    margin-left: 34%;
+    margin-left: 29%;
     margin-top: 2%;
 }
 
