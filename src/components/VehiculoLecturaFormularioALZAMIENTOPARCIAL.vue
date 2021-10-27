@@ -53,7 +53,7 @@ function add(patente,rvm,GoE,estado) {
 
         total_items.push(item);
     }
-
+var patentes_relacionadas = []
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
@@ -62,8 +62,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	var constituyentes_relacionados = []
 	var deudores_relacionados = []
 	var contratos_relacionados = []
-	var archivos_relacionados = []
-	var patentes_relacionadas = []
+	var archivos_relacionados = []	
     console.log("ENTREEEEEEEE")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
@@ -107,7 +106,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 						console.log(constituyentes_relacionados)
 						console.log(deudores_relacionados)
 					})
-					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
 						all_patentes.forEach((p) => {
 							var my_doc = p.data();
@@ -232,15 +231,13 @@ export default {
     mounted() {
     this.items = []
 	total_items = []
-    
-      buscador_especifico_solicitud(parseInt(id_sol),'I')
+      console.log()
+      setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
       //add("1","1","1","12")
 
-      this.items = total_items
-      console.log(this.items)
-      console.log("cambio")
-      console.log(id_sol)
-      console.log("cambio")
+      console.log("AUTOS")
+	  console.log(patentes_relacionadas)
+      //add("1","1","1","12")
 
     },
     props: {

@@ -41,6 +41,7 @@ import { collection, getDocs, query, where} from "firebase/firestore";
 import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
+var patentes_relacionadas = []
 
 
 function add(patente,rvm,GoE,estado) {
@@ -62,8 +63,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	var deudores_relacionados = []
 	var contratos_relacionados = []
 	var archivos_relacionados = []
-	var patentes_relacionadas = []
-    console.log("ENTREEEEEEEE")
+    console.log("ENTREEEEEEEE AUTOOOOO")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
@@ -241,14 +241,11 @@ export default {
     this.items = []
 	total_items = []
     
-      buscador_especifico_solicitud(parseInt(id_sol),'I')
+      setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
       //add("1","1","1","12")
 
-      this.items = total_items
-      console.log(this.items)
-      console.log("cambio")
-      console.log(id_sol)
-      console.log("cambio")
+      console.log("AUTOS")
+	  console.log(patentes_relacionadas)
 
     },
     props: {
