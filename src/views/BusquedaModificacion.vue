@@ -3,56 +3,52 @@
         <Navbar :username= username />
         <Menu :opciones= opcion />
         <div  class="d-flex justify-content-center contenedor right row">
-        <h1 class="title">Solicitud de MODIFICACION de Contrato de Prendas</h1>
-        <div class="row d-flex justify-content-center item">
-            <div class="col-2">
-                    FOLIO REP. PRENDA
-                    <input type="text"  placeholder="Folio" v-model="folio">
-            </div>
-            <div class="col-4">
-                <div class="titles d-flex justify-content-center">
-                    AÑO REPERTORIO
+            <h1 class="title">Solicitud de MODIFICACION de Contrato de Prendas</h1>
+            <div class="row d-flex justify-content-center item">
+                <div class="col-2">
+                        FOLIO REP. PRENDA
+                        <input type="text"  placeholder="Folio" v-model="folio">
                 </div>
-                <div class="d-flex justify-content-center">
-                    <input type="text" placeholder="Año" v-model="anio">
-                    
-                </div>
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center item">
-            <div class="col-3">
-                <div class="titles d-flex justify-content-center">
-                    IDENTIFICADOR DE ALGUN CONSTITUYENTE
-                </div>
-                <div class="d-flex justify-content-center">
-                    <input type="text" class="nrepertorioleft" placeholder="ID DE CONSTITUYENTE" v-model="id">
-                    
+                <div class="col-4">
+                    <div class="titles d-flex justify-content-center">
+                        AÑO REPERTORIO
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <input type="text" placeholder="Año" v-model="anio">
+                        
+                    </div>
                 </div>
             </div>
-        </div>
-        <button class="d-flex justify-content-center button" @click="busqueda()">Buscar</button>
-        <div v-if="id_sol!==-1">
+            <div class="row d-flex justify-content-center item">
+                <div class="col-3">
+                    <div class="titles d-flex justify-content-center">
+                        IDENTIFICADOR DE ALGUN CONSTITUYENTE
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <input type="text" class="nrepertorioleft" placeholder="ID DE CONSTITUYENTE" v-model="id">
+                        
+                    </div>
+                </div>
+            </div>
+            <button class="d-flex justify-content-center button" @click="busqueda()">Buscar</button>
+        </div >
+        <div v-if="id_sol2!==-1" class="row d-flex justify-content-center item" id="tipomodific">
             <div class="col row">
-                <div class="titles d-flex justify-content-start">
+                <div class="titles d-flex justify-content-start item">
                     TIPO DE MODIFICACION
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDeDocumento" class="form-select"  v-model="tipomodificacion"  @change ="changeOption(), setData()">
+                    <select id="tipoDeDocumento" class="form-select"  v-model="tipomodificacion"  @change ="elegirSolicitud()">
                         <option selected value="Alzamiento Parcial">Alzamiento Parcial</option>
                         <option value="Cambio Acreedor">Cambio Acreedor</option>
                         <option  value="Prohibicion de acto">Prohibicion de acto</option>
                         <option value="Otros">Otros</option>
-                        Alzamiento Parcial
-                        Cambio Acreedor
-                        Prohibicion de acto
-                        Otros
                     </select>
                 </div>
             </div>
 
         </div>
     </div>
-</div>
 
     
 </template>
@@ -78,9 +74,6 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 				var my_data_id = d.id;
                 console.log(my_data_id)
 				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(my_data_id)))).then((per_data) => {
-
-                    
-
                     console.log(per_data.docs)
 
 					var my_person_data = per_data.docs;
@@ -134,7 +127,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
     
     
 }
-var id_sol;
+var id_sol=-1;
 export default {
     name: 'BusquedaAlzamiento',
     data() {
@@ -144,6 +137,8 @@ export default {
             folio: '',
             anio: '',
             id:'',
+            id_sol2: id_sol,
+            tipomodificacion: '',
         }
     },
     props:{
@@ -155,41 +150,46 @@ export default {
     },
     methods:{
         busqueda(){
-
-            
             buscar_y_validar_solicitud((this.folio+"-"+this.anio).toString(), this.id)
-            
             //this.loadUsers(this.folio,this.anio, this.id)
-
-
-
-                        
-
             console.log("DATA")
             console.log(this.folio)
             console.log(this.anio)
             console.log(this.id)
-
-            //console.log(id_sol)
-
+           
+            
+            console.log("this.id_sol2")
+            console.log(this.id_sol2)
+            console.log("id_sol")
+            console.log(id_sol)
             setTimeout(() => { 
             console.log("TIMEOUT")
             console.log(id_sol)
+            this.id_sol2 = id_sol
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
-            }else{
+            }
+            },3000)
+            
+        
+        },
+        elegirSolicitud(){
+            setTimeout(() => { 
+            console.log("TIMEOUT")
+            console.log(id_sol)
+            if(this.tipomodificacion=="Alzamiento Parcial"){
+                console.log("Alzamiento Parcial")
+            }else if(this.tipomodificacion=="Cambio Acreedor"){
+                console.log("Cambio Acreedor")
+            }else if(this.tipomodificacion=="Prohibicion de acto"){
+                console.log("Prohibicion de acto")
+            }else if(this.tipomodificacion=="Otros"){
+                console.log("Otros")
                 this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/ModifContPrendas`, params: {username: localStorage.user, rol: localStorage.rol}})
-
-
 
             }
             },1000)
-
-
-
-
-
-        },
+        }
 
     },
     components: {
@@ -210,6 +210,10 @@ export{id_sol}
 </script>
 
 <style scoped>
+#tipomodific{
+    width: 20rem;
+    margin-right: 30%;
+    float: right;}
 .contenedor{
     margin-top: 2em;
     color: #514BD5;
