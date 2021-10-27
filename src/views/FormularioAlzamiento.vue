@@ -171,15 +171,6 @@ function alzamiento(
             //////////////////////////
         }
 
-        if(numero_repertorio_RPsD.length != 9 && !validate_number(numero_repertorio_RPsD)){
-
-            validate = false
-            console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
-            //FRONTEND => MOSTRAR ERROR
-    
-            //////////////////////////
-        }
-
     if(validate){
     var estado_inicial = 0 //GUARDADO
     console.log("validate")

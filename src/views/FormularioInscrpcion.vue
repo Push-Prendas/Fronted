@@ -291,7 +291,12 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 			}).then(() => {
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
-				alert("Solicitud Enviada Exitosamente")
+				if (send_flag==true){
+					alert("Solicitud Guardada Exitosamente")
+				}else{
+					alert("Solicitud Enviada Exitosamente")
+				}
+				
 				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
 				
 
@@ -416,8 +421,6 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-			console.log("HOLAAAAAAAA-=-=-=-")
-			console.log(this.Bienes)
 			this.Bienes = data        
         },
         getConstituyentes(data) {
