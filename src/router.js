@@ -106,9 +106,9 @@ const routes = [
     props: true
   },
   {
-    path: "/Dashboard/REVISOR/:username/Tareas",
-    name: "ModificaciondecontratodeprendasTareas",
-    component: ComprobanteSolicutud, //No va comprobante
+    path: "/Dashboard/REVISOR/:username/ComprobanteSolicutud",
+    name: "ComprobanteSolicutud",
+    component: ComprobanteSolicutud,
     props: true
   },
   {
@@ -119,7 +119,7 @@ const routes = [
   },
   {
     path: "/Dashboard/:rol/:username/Tareas",
-    name: "ModificaciondecontratodeprendasTareas",
+    name: "Tareas",
     component: Dashboard,
     props: true
   },
