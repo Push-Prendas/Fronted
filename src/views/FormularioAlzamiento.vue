@@ -142,10 +142,12 @@ function alzamiento(
     numero_repertorio_RPsD,
     send_flag,
     rol_oficina=false,
-    Oficina
+    name_oficina
     //AGREGADO RECIENTMENTE FALTA PONER EN LA VISTA
     ){
         var validate = true
+        console.log("VERYFING...")
+        console.log(name_oficina)
 
         //FILTRO
         //PARA FILTRAR EL AÑO SE PUEDE PONER UN MINIMO Y MAXIMO EN EL INPUT DE FECHAS
@@ -182,6 +184,9 @@ function alzamiento(
     
     }
 
+    console.log("MY DATA")
+    console.log(activo_fijo)
+
     var ids = null
     getDocs(collection(db,"Solicitud_Alzamiento_Prenda")).then((pat_data) => {
 
@@ -211,7 +216,7 @@ function alzamiento(
             derechos_intangibles: derechos_intangibles,
             año_repertorio_RPsD: año_repertorio_RPsD,
             numero_repertorio_RPsD: numero_repertorio_RPsD,
-            oficina: Oficina
+            oficina: "mi oficina"
 
 
 
@@ -346,7 +351,7 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-			this.Bienes = data        
+			this.Bienes = data      
         },
         getConstituyentes(data) {
         this.constituyentes = data
@@ -369,6 +374,11 @@ export default {
         console.log("Anexos:"+this.anexos)
         },
         alzar(flags){
+            console.log("MIS BIENES")
+            console.log(this.Bienes[0])
+            console.log(this.Bienes[1])
+            console.log(this.Bienes[2])
+            console.log(this.Bienes[3])
             alzamiento(
                 this.nDocRequirente,//
                 this.tipoDoc.toString(),//
@@ -389,7 +399,7 @@ export default {
                 this.Bienes[3],
                 flags,
                 localStorage.esoficina,
-                "mi oficina"
+                "Mi oficina"
             )
         }
   }

@@ -177,6 +177,9 @@ export default {
             this.$emit("getProhibGravEnajenar",this.ProhibGravEnajenar);
             this.$emit("getBienes", [document.getElementById("0").checked, document.getElementById("1").checked, 
             document.getElementById("2").checked, document.getElementById("3").checked])
+
+            console.log([document.getElementById("0").checked, document.getElementById("1").checked, 
+            document.getElementById("2").checked, document.getElementById("3").checked])
         }
     }
 

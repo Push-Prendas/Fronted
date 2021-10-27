@@ -83,6 +83,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 
                                     id_sol = persona.idInscripcion
                                 }
+                                localStorage.idSol = id_sol
 								//MODIFICACIONES HECHAS
 								///////////////////////////////////////////////
 							}
