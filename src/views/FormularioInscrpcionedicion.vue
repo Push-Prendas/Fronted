@@ -13,9 +13,9 @@
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <ConstituyentesFormulario @getConstituyentes="getConstituyentes" />
-            <DeudoresFormulario @getDeudores="getDeudores"/>
-			<VehiculosFormulario @getVehiculos="getVehiculos"/>
+            <ConstituyentesFormulario :items="constituyentes" @getConstituyentes="getConstituyentes" />
+            <DeudoresFormulario :items="deudores" @getDeudores="getDeudores"/>
+			<VehiculosFormulario :items="vehiculos" @getVehiculos="getVehiculos"/>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
@@ -489,7 +489,74 @@ export default {
 		console.log(patentes_relacionadas)
 
 		//CARGAR DATOS
-		
+		//Requiriente
+		if(localStorage.rol == "FUNCIONARIOOFICINA"){
+			document.getElementById('nombrecompletorequirente').value = solicitud_relacionada.nombreRequiriente
+			document.getElementById('ndedocumentorequirente').value = solicitud_relacionada.runRequiriente
+			document.getElementById('correorequirente').value = solicitud_relacionada.correoRequiriente
+			document.getElementById('fecharequirente').value = solicitud_relacionada.fechaRequiriente
+		}
+
+		//Antecedentes
+		document.getElementById('tipoDeDocumento').value = solicitud_relacionada.privacidadDocumento
+		if(solicitud_relacionada.privacidadDocumento == "publico"){
+			document.getElementById('FechaOtorgamiento').value = solicitud_relacionada.fechaOtorgamientoEscritura
+			document.getElementById('FechaSubscripcion').value = solicitud_relacionada.fechaSuscripcion
+		}
+		else{
+			document.getElementById('FechaAutorizacion').value = solicitud_relacionada.fechaAutorizacionContratoPrivado
+			document.getElementById('FechaProtocolizacion').value = solicitud_relacionada.fechaProtocolizacionContratoPrivado
+		}	
+		document.getElementById('foliorepnontaria').value = solicitud_relacionada.numeroRepertorioNotario.split('-')[0]
+		document.getElementById('anorepnotaria').value = solicitud_relacionada.numeroRepertorioNotario.split('-')[1]
+		document.getElementById('gravaroenajenar').checked = solicitud_relacionada.prohibicionGravarEnajenar
+		if(localStorage.rol == "FUNCIONARIOOFICINA"){
+			document.getElementById('notaria').value = solicitud_relacionada.notaria
+		}
+		document.getElementById('0').checked = solicitud_relacionada.activoFijo
+		document.getElementById('1').checked = solicitud_relacionada.bienesAgropecuarios
+		document.getElementById('2').checked = solicitud_relacionada.derechosIntangibles
+		document.getElementById('3').checked = solicitud_relacionada.vehiculos
+
+		//Acreedor
+		//document.getElementById('tipodepersona').value = acreedores_relacionados[0].tipoAcreedor
+		//document.getElementById('runacreedor').value = acreedores_relacionados[0].runPersona
+		//document.getElementById('paisacreedor').value = acreedores_relacionados[0].paisPersona
+		//document.getElementById('nombresacreedor').value = acreedores_relacionados[0].nombrePersona
+
+
+		//Constituyentes
+		constituyentes_relacionados.forEach((c) => {
+			let item = {
+                    "Tipo": c.tipoAcreedor,
+                    "Id": c.runPersona,
+                    "Name": c.nombrePersona}
+			this.constituyentes.push(item)	
+		})
+
+		//Deudores
+		deudores_relacionados.forEach((d) => {
+			let item = {
+                    "Tipo": d.tipoAcreedor,
+                    "Id": d.runPersona,
+                    "Name": d.nombrePersona}
+			this.deudores.push(item)		
+		})
+
+
+		//Vehiculos
+		patentes_relacionadas.forEach((p) => {
+			let item = {
+                    "patente": p.patente,
+                    "rvm": p.inscripcionPrendaRVM,
+                    "GoE": p.inscripcionProhibicionGravarEnajenar,
+					"estado":p.alzamiento}
+			this.vehiculos.push(item)			
+		})
+
+
+		//Monto
+		document.getElementById('monto').value = solicitud_relacionada.montoTotal
 
 		}, 1500)
   },
