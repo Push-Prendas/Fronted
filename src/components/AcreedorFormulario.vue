@@ -56,7 +56,7 @@
                    RAZÓN SOCIAL
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombres" @change ="setData()">
+                    <input type="text" v-model="razonsocial" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
                     NOMBRE COMPLETO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombres" @change ="setData()">
+                    <input type="text" v-model="nombrecompleto" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -110,18 +110,7 @@ export default {
       const countries= Countries.default.countries;
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
-            option:'Natural',
             countries,
-            tipoPersona:'Natural',
-            run: '',
-            id: '',
-            pais: 'Chile',
-            rut: '',
-            razonsocial: '',
-            Apaterno: '',
-            Amaterno: '',
-            nombres: '',
-            
         }
     },
     methods:{
@@ -143,7 +132,47 @@ export default {
         }
     },
     props:{
-        
+        nombrecompleto:{
+            type: String,
+            default: '',
+        },
+        tipoPersona:{
+            type: String,
+            default: 'Natural',
+            },
+        run:{
+            type: String,
+            default: '',
+            },
+        id:{
+            type: String,
+            default: '',
+            },
+        pais:{
+            type: String,
+            default: 'Chile',
+            },
+        rut:{
+            type: String,
+            default: '',
+            },
+        razonsocial:{
+            type: String,
+            default: '',
+            },
+        Apaterno:{
+            type: String,
+            default: '',
+            },
+        Amaterno:{
+            type: String,
+            default: '',
+            },
+        nombres:{
+            type: String,
+            default: '',
+            },
+
     }
 
 }

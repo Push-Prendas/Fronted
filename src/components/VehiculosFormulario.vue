@@ -70,7 +70,6 @@
 <script>
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-//import {id_sol} from "@/views/BusquedaAlzamiento"
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS

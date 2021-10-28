@@ -39,7 +39,6 @@
 
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
 
@@ -231,13 +230,13 @@ export default {
     mounted() {
     this.items = []
 	total_items = []
-      console.log()
-      setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
-      //add("1","1","1","12")
+	console.log()
+	setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
+	//add("1","1","1","12")
 
-      console.log("AUTOS")
-	  console.log(patentes_relacionadas)
-      //add("1","1","1","12")
+	console.log("AUTOS")
+	console.log(patentes_relacionadas)
+	//add("1","1","1","12")
 
     },
     props: {

@@ -276,7 +276,10 @@ export default {
                             "Tipo": "I"}
                     console.log(item)
                     console.log(this.items)
-                    this.items.push(item)
+                    if(insc[1]["firma"] == false){
+                        this.items.push(item)
+                    }
+                    
                     });
 
                 }
@@ -297,7 +300,9 @@ export default {
                             "ID": insc[0],
                             "Tipo": "M"}
 
-                    this.items.push(item)
+                 if(insc[1]["firma"] == false){
+                        this.items.push(item)
+                    }
                     });
 
                 }
@@ -318,7 +323,9 @@ export default {
                             "ID": insc[0],
                             "Tipo": "A"}
 
-                    this.items.push(item)
+                    if(insc[1]["firma"] == false){
+                        this.items.push(item)
+                    }
                     });
 
                 }
