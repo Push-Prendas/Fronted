@@ -410,19 +410,19 @@ function  inscripcion_modificacion(
 export default {
   name: 'formularioModificacion',
   mounted(){
-	  console.log("STARTER DATA")
-	  console.log(localStorage.id_revisar)
-	  console.log(localStorage.tipo_revisar)
-	  buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
-	  setTimeout(() => {
-		  console.log(solicitud_relacionada)
-		  console.log(acreedores_relacionados)
-		  console.log(constituyentes_relacionados)
-		  console.log(deudores_relacionados)
-		  console.log(contratos_relacionados)
-		  console.log(archivos_relacionados)
-		  console.log(patentes_relacionadas)
-	  }, 1500)
+        console.log("STARTER DATA")
+        console.log(localStorage.id_revisar)
+        console.log(localStorage.tipo_revisar)
+        buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
+        setTimeout(() => {
+        console.log(solicitud_relacionada)
+        console.log(acreedores_relacionados)
+        console.log(constituyentes_relacionados)
+        console.log(deudores_relacionados)
+        console.log(contratos_relacionados)
+        console.log(archivos_relacionados)
+        console.log(patentes_relacionadas)
+    }, 1500)
   },
   data() {
         return {
