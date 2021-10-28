@@ -239,7 +239,7 @@ export default {
             var today = now.getFullYear()+"-"+(month)+"-"+(day);
 			console.log(today)
 
-            if(solicitud_relacionada.privacidadDocumento == "publico"){
+            if(solicitud_relacionada.privacidadDocumento == "Publico"){
                 var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
                 var FechaSubscripcion = document.getElementById("FechaSubscripcion");
 
@@ -249,7 +249,7 @@ export default {
 
                 FechaSubscripcion.value = solicitud_relacionada.fechaSuscripcion
             }
-            else if(solicitud_relacionada.privacidadDocumento == "privado"){
+            else if(solicitud_relacionada.privacidadDocumento == "Privado"){
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
                 var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
 				console.log(FechaAutorizacion, FechaProtocolizacion)

@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <!--V-if publico-->
+            <!--V-if Publico-->
             <div class="col row" v-if="option == 'Natural'">
                 <div class="titles d-flex justify-content-start" >
                     RUN
