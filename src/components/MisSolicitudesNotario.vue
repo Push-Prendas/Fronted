@@ -16,7 +16,7 @@
                     <p class="titleFormulario">{{item.Estado}} </p>
                 </td>
                 <td>
-                    <a class="logout" :href="'/Dashboard/NOTARIO/'+username+'/RevisionDoc'"><font-awesome-icon style= "margin-right:5px" icon="file-download" /> </A>
+                    <a class="logout"  @click="obtain_id_go(item.ID, item.Tipo)"><font-awesome-icon style= "margin-right:5px" icon="file-download" /> </A>
                 </td>
             </tbody>
  
@@ -34,6 +34,13 @@ var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
 var funcionarios_notaria_encontradosGlobal = []
+
+
+var username = localStorage.user
+
+const URL_REVISION = '/Dashboard/NOTARIO/'+username+'/RevisionDoc'
+
+
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
 		updateDoc(getDoc(collection(db, "Solicitud_Inscripcion_Prenda",id_solicitud)),{
@@ -200,6 +207,13 @@ export default {
         }
     },
     methods:{
+        obtain_id_go(id, tipo){
+            console.log("NOIZ ID")
+            console.log(id)
+            localStorage.id_revisar = id
+            localStorage.tipo_revisar = tipo
+            location.href = URL_REVISION
+        },
         clean(){
             this.items.length = 0;
             this.inscripciones_encontradas.length = 0;
@@ -228,7 +242,7 @@ export default {
 
 
                 
-            },1500)
+            },2000)
             
 
 
@@ -255,7 +269,9 @@ export default {
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "ID": insc[0],
+                            "Tipo": "I"}
                     console.log(item)
                     console.log(this.items)
                     this.items.push(item)
@@ -275,7 +291,9 @@ export default {
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "ID": insc[0],
+                            "Tipo": "M"}
 
                     this.items.push(item)
                     });
@@ -294,7 +312,9 @@ export default {
                             "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
+                            "Estado": estad,
+                            "ID": insc[0],
+                            "Tipo": "A"}
 
                     this.items.push(item)
                     });
@@ -302,7 +322,7 @@ export default {
                 }
             //this.items=i
             console.log(this.items)
-             },2000);
+             },3000);
             
             },
         firmardoc(){

@@ -12,7 +12,7 @@
                             TIPO DE PERSONA
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select id="tipoDePersonaConstituyente" class="form-select" @change ="changeOption(), setData(), clean()">
+                            <select id="tipoDePersonaConstituyente" v-model="tipoDePersonaConstituyente" class="form-select" @change ="changeOption(), setData(), clean()">
                                 <option selected value="Natural">Natural</option>
                                 <option value="Juridica">Juridica</option>
                                 <option value="Extranjero">Extranjero</option>
@@ -24,7 +24,7 @@
                             RUN
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="run">
+                            <input type="text" v-model="run" id="run">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -32,7 +32,7 @@
                             ID
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="id">
+                            <input type="text" v-model="id" id="id">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Juridica'">
@@ -40,7 +40,7 @@
                             RUT
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="rut">
+                            <input type="text" v-model="rut" id="rut">
                         </div>
                     </div>
                     <div class="row" v-if="option == 'Juridica'">
@@ -48,7 +48,7 @@
                             RAZON SOCIAL
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="rut">
+                            <input type="text" v-model="razonsocial" id="rut">
                         </div>
                     </div>
                     
@@ -59,7 +59,7 @@
                                 APELLIDO PATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="nombrePersona">
+                                <input id="nombre" type="text" v-model="apellidopaterno">
                             </div>
                     </div>
                     <div class="col row">
@@ -67,7 +67,7 @@
                                APELLIDO MATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="nombrePersona">
+                                <input id="nombre" type="text" v-model="apellidomaterno">
                             </div>
                     </div>
                     <div class="row">
@@ -75,7 +75,7 @@
                             NOMBRES
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrePersona">
+                            <input id="nombre" type="text" v-model="nombres">
                         </div>
                     </div>
                     
@@ -87,7 +87,7 @@
                             NOMBRE COMPLETO
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrePersona">
+                            <input id="nombre" type="text" v-model="nombrecompleto">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -136,16 +136,53 @@ export default {
   data() {
       const countries= Countries.default.countries;
         return {
-
             option:'natural',
-            headers: ['Tipo', 'Id', 'Name','pais'],
             items: [],
-            idDocumento:"",
-            nombrePersona: "",
-            razonsocial: "",
             countries,
-            pais:"",
         }
+    },
+    props: {
+         nombrecompleto:{
+            type: String,
+            default: '',
+        },
+        tipoPersona:{
+            type: String,
+            default: 'Natural',
+            },
+        run:{
+            type: String,
+            default: '',
+            },
+        id:{
+            type: String,
+            default: '',
+            },
+        pais:{
+            type: String,
+            default: 'Chile',
+            },
+        rut:{
+            type: String,
+            default: '',
+            },
+        razonsocial:{
+            type: String,
+            default: '',
+            },
+        Apaterno:{
+            type: String,
+            default: '',
+            },
+        Amaterno:{
+            type: String,
+            default: '',
+            },
+        nombres:{
+            type: String,
+            default: '',
+            },
+
     },
 
     methods:{
