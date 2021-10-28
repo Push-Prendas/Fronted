@@ -41,7 +41,7 @@ import { collection, getDocs, query, where} from "firebase/firestore";
 import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
-var patentes_relacionadas = []
+
 
 
 function add(patente,rvm,GoE,estado) {
@@ -53,6 +53,8 @@ function add(patente,rvm,GoE,estado) {
 
         total_items.push(item);
     }
+
+var patentes_relacionadas = []
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
@@ -240,12 +242,17 @@ export default {
     mounted() {
     this.items = []
 	total_items = []
+
+	buscador_especifico_solicitud(localStorage.id_revisar, "I")
     
-      setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
-      //add("1","1","1","12")
+      setTimeout(() => { 
 
       console.log("AUTOS")
-	  console.log(patentes_relacionadas)
+	  console.log(total_items)
+	  }, 1000)
+      //add("1","1","1","12")
+
+    
 
     },
     props: {

@@ -3,13 +3,17 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
-            <h1 bold>ALZAMIENTO PARCIAL</h1>
-            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" />
+            <h1 bold>OTROS</h1>
+            <RequirenteFormulario v-if="rol == 'FUNCIONARIOOFICINA'"/>
+
             <AntecedentesFormularioALZA :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria"/> 
-            <VehiculoLecturaFormularioALZAMIENTOPARCIAL :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
+            <div class="mb-3" id="textarea">
+                <label for="textoOTRO" class="form-label titleFormulario">RESUMA EL MOTIVO DE LA MODIFICACION</label>
+                <textarea class="form-control" id="textoOTRO" rows="3"></textarea>
+            </div>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
@@ -27,7 +31,6 @@ import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
-import VehiculoLecturaFormularioALZAMIENTOPARCIAL from '../components/VehiculoLecturaFormularioALZAMIENTOPARCIAL.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
 import RequirenteFormulario from '../components/RequirenteFormulario.vue'
@@ -52,10 +55,6 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
     var INSCRIPCION = ""
     var MODIFICACION = ""
     var ALZAMIENTO = ""
-
-    console.log("MOD DATA")
-    console.log(id)
-    console.log(tipo)
 
     if(tipo == 0){// INSCRIPCION
         INSCRIPCION = id
@@ -211,7 +210,7 @@ function  inscripcion_modificacion(
                 fecha_de_protocolizacion: fecha_de_protocolizacion,
                 fecha_de_autorizacion: fecha_de_autorizacion,
                 numero_repertorio_notaria: numero_repertorio_notaria,
-                parrafo_modificacion_generica: parrafo_modificacion_generica,
+                parrafo_modificacion_generica: document.getElementById("textoOTRO").value,
                 tipo_de_persona: tipo_de_persona,
                 nombre_acreedor: nombre_acreedor,
                 rut_acreedor: rut_acreedor,
@@ -246,10 +245,6 @@ function  inscripcion_modificacion(
 
 export default {
   name: 'formularioModificacion',
-  mounted(){
-      console.log("ROL")
-      console.log(localStorage.rol)
-  },
   data() {
         return {
             opcion: localStorage.my_opts.split(','),
@@ -293,7 +288,6 @@ export default {
     },
   components: {
     AntecedentesFormularioALZA,
-    VehiculoLecturaFormularioALZAMIENTOPARCIAL,
     ContratoFormulario,
     RequirenteFormulario,
     AnexosFormulario,
@@ -434,6 +428,25 @@ export default {
 </script>
 
 <style scoped>
+#textarea{
+    width: 58em;
+    margin-left: 29%;
+    float: right;
+
+}
+.titleFormulario{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    width: 58em;
+    margin-bottom: 2em;
+    margin-top: 2em;
+}
+
+
+
 #contenedor{
     width: 60em;
     margin-left: 34%;

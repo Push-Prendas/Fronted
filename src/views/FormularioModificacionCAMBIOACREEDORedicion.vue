@@ -3,19 +3,22 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
-            <h1 bold>ALZAMIENTO PARCIAL</h1>
-            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" />
+            <h1 bold>CAMBIO ACREEDOR</h1>
+            <RequirenteFormulario v-if="rol == 'FUNCIONARIOOFICINA'"/>
             <AntecedentesFormularioALZA :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria"/> 
-            <VehiculoLecturaFormularioALZAMIENTOPARCIAL :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
+            <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
+            @getid="getid" @getpais="getpais" @getrut="getrut" 
+            @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
+            <VehiculoLecturaFormulario :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton" @click="modificar(false)">Guardar</button>
-                <button class="col-2 titleButton" @click="modificar(true)">Enviar</button>
+                <button class="col-2 titleButton" @click="modificar(false)" >Guardar</button>
+                <button class="col-2 titleButton" @click="modificar(true)" >Enviar</button>
             </div>
         </div>
         
@@ -27,7 +30,8 @@ import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
-import VehiculoLecturaFormularioALZAMIENTOPARCIAL from '../components/VehiculoLecturaFormularioALZAMIENTOPARCIAL.vue'
+import AcreedorFormulario from '../components/AcreedorFormulario.vue'
+import VehiculoLecturaFormulario from '../components/VehiculoLecturaFormulario.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
 import RequirenteFormulario from '../components/RequirenteFormulario.vue'
@@ -52,10 +56,6 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
     var INSCRIPCION = ""
     var MODIFICACION = ""
     var ALZAMIENTO = ""
-
-    console.log("MOD DATA")
-    console.log(id)
-    console.log(tipo)
 
     if(tipo == 0){// INSCRIPCION
         INSCRIPCION = id
@@ -148,7 +148,7 @@ function  inscripcion_modificacion(
     vehiculos,//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
     GrabarEnagenar,//
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-    fecha_requirente=""//
+    fecha_requirente="",//
     ){
 
 
@@ -246,10 +246,6 @@ function  inscripcion_modificacion(
 
 export default {
   name: 'formularioModificacion',
-  mounted(){
-      console.log("ROL")
-      console.log(localStorage.rol)
-  },
   data() {
         return {
             opcion: localStorage.my_opts.split(','),
@@ -293,9 +289,10 @@ export default {
     },
   components: {
     AntecedentesFormularioALZA,
-    VehiculoLecturaFormularioALZAMIENTOPARCIAL,
-    ContratoFormulario,
+    AcreedorFormulario,
+    VehiculoLecturaFormulario,
     RequirenteFormulario,
+    ContratoFormulario,
     AnexosFormulario,
     Monto,
     Menu,
