@@ -51,7 +51,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
+            <tbody class="bodyTabla" v-else v-for="(item,index) in items" id="tablapatentesinscripcion" :key="index">
                 <td>{{item.patente}}</td>
                 <td>{{item.rvm}} </td>
                 
@@ -70,7 +70,6 @@
 <script>
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-//import {id_sol} from "@/views/BusquedaAlzamiento"
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
@@ -230,15 +229,30 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            option:'natural',
-            patente:"",
-            GoE:false,
-            rvm:false
+            option:'Natural',
+
         }
     },props:{
-         items:{
+
+        items:{
             type: Array,
-            default: new Array
+            default: new Array,
+        },
+		patente:{
+            type: String,
+            default: ''
+        },
+		GoE:{
+            type: Boolean,
+            default: false,
+        },
+		rvm:{
+            type: Boolean,
+            default: false
+        },
+		estado:{
+            type: String,
+            default: ''
         },
 
     },

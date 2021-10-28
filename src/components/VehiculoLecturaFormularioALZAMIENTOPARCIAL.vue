@@ -16,7 +16,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
+            <tbody class="bodyTabla" v-else v-for="(item,index) in items" id="tablapatenteslecturaalzamiento" :key="index">
                 <td>{{item.patente}}</td>
                 <td>{{item.rvm}}</td>
                 <td>{{item.GoE}}</td>
@@ -39,7 +39,6 @@
 
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
 
@@ -220,12 +219,7 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            option:'natural',
-            patente:"",
-            GoE:false,
-            rvm:false,
-            estado:""
+  
         }
     },
     mounted() {
@@ -245,6 +239,26 @@ export default {
         tipoSolicitud:{
             type: String,
             default: 'Modificacion'
+        },
+		items:{
+            type: Array,
+            default: new Array,
+        },
+		patente:{
+            type: String,
+            default: ''
+        },
+		GoE:{
+            type: Boolean,
+            default: false,
+        },
+		rvm:{
+            type: Boolean,
+            default: false
+        },
+		estado:{
+            type: String,
+            default: ''
         },
     },
     methods:{

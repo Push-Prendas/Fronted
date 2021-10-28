@@ -28,7 +28,7 @@
 </template>
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc,  query, where} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
@@ -120,9 +120,171 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 	//
 })
 
-
-
 }
+
+var solicitud_relacionada;
+var acreedores_relacionados = []
+var constituyentes_relacionados = []
+var deudores_relacionados = []
+var contratos_relacionados = []
+var archivos_relacionados = []	
+var patentes_relacionadas = []
+
+
+function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
+	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
+	///CON TODAS SUS DEPENDEDNCIAS
+    console.log("ENTREEEEEEEE")
+	if(tipo_de_solicitud == "I"){
+		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();					
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONAS")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						console.log(deudores_relacionados)
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
+
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
+
+                        patentes_relacionadas.forEach((data) =>{
+                                console.log(data.patente)
+                                console.log(data.inscripcionPrendaRVM)
+                                console.log(data.inscripcionProhibicionGravarEnajenar)
+                                console.log(data.alzamiento)
+                                //add(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                                //this.option
+                            })
+					})
+				}
+			})
+		}).then(() => {
+			console.log("INSCRIPCION")
+			console.log(patentes_relacionadas)
+            //add(patente,rvm,GoE,estado)
+			///INSCRIPCION ENCONTRADA
+			///FRONTEND -> MODIFICAR ACA	///
+
+		})
+	}
+	else if(tipo_de_solicitud == "M"){
+		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+
+
+				}
+			})
+		}).then(() => {
+			console.log("MODIFICACION")
+			console.log(solicitud_relacionada)
+			///MODIFICACION ENCONTRADA
+			///FRONTEND MODIFICAR ACA
+
+
+
+			///
+
+		})
+		
+	}
+	else if (tipo_de_solicitud == "A"){
+		//VER COMO ESTA CONSTITUIDO ALZAMIENTO
+		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+			var all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						var all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("ALZAMIENTO")
+			console.log(solicitud_relacionada)
+
+			///ALZAMIENTO ENCONTRADO
+			///FRONTEND MODIFICAR DE ACA
+
+
+			//////////////////////
+		})
+	}
+}
+
 
 function  inscripcion_modificacion(
     tipo_de_documento,//
@@ -241,9 +403,24 @@ function  inscripcion_modificacion(
         
         })
     }
-    }
+}
 
 export default {
+  mounted(){
+        console.log("STARTER DATA")
+        console.log(localStorage.id_revisar)
+        console.log(localStorage.tipo_revisar)
+        buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
+        setTimeout(() => {
+            console.log(solicitud_relacionada)
+            console.log(acreedores_relacionados)
+            console.log(constituyentes_relacionados)
+            console.log(deudores_relacionados)
+            console.log(contratos_relacionados)
+            console.log(archivos_relacionados)
+            console.log(patentes_relacionadas)
+        }, 1500)
+  },
   name: 'formularioModificacion',
   data() {
         return {

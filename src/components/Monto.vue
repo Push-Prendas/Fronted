@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">
         <div class="titleFormulario col">Monto </div>  
-        <div class="col titleMonto"> $ {{this.monto}} </div> 
+        <div class="col titleMonto" id="monto"> $ {{this.monto}} </div> 
     </div>
     
 </template>

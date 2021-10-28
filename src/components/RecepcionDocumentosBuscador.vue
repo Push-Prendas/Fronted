@@ -29,7 +29,7 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            option:'natural',
+            option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
             items: [{}],
         }

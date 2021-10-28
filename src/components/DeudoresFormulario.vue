@@ -116,7 +116,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
+            <tbody class="bodyTabla" id="tabladeudores" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
                 <td>{{item.Tipo}}</td>
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>
@@ -136,7 +136,6 @@ export default {
         return {
             option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
-            items: [],
             idDocumento:"",
             nombrePersona: "",
             razonsocial: "",
@@ -146,6 +145,10 @@ export default {
     },
 
     methods:{
+        items: {
+            type: Array,
+            default: new Array(),
+        },
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaDeudor");
             this.option = selectBox.options[selectBox.selectedIndex].value; 

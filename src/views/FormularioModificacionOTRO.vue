@@ -269,7 +269,7 @@ export default {
 			nombreRequirente: '',
             nDocRequirente: '',
             correoRequirente: '',
-            fechaRequirente: '',
+            fechaRequirente: Date.now(),
             Bienes: [],
             constituyentes: [{}],
             deudores: [{}],

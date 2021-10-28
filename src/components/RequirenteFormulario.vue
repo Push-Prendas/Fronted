@@ -7,7 +7,7 @@
                     NOMBRE COMPLETO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombreCompleto" @change ="setData()">
+                    <input type="text" v-model="nombreCompleto" id="nombrecompletorequirente" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                     N DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="NdeDocumento" @change ="setData()">
+                    <input type="text" v-model="NdeDocumento" id="ndedocumentorequirente" @change ="setData()">
                 </div>
             </div>
             
@@ -27,7 +27,7 @@
                     CORREO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="correo" @change ="setData()">
+                    <input type="text" v-model="correo" id="correorequirente" @change ="setData()">
                 </div>
             </div>
             <div class="col row">
@@ -35,7 +35,7 @@
                    FECHA
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="fecha" @change ="setData()">
+                    <input type="date" v-model="fecha" id="fecharequirente" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -53,15 +53,67 @@ export default {
       const countries= Countries.default.countries;
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
-            option:'natural',
-            countries,
-            nombreCompleto: "",
-            NdeDocumento: "",
-            correo: "",
-            fecha: "",
-
-            
+            countries, 
         }
+    },
+    props:{
+        nombreCompleto:{
+            type: String,
+            default: '',
+        },
+        NdeDocumento:{
+            type: String,
+            default: '',
+        },
+        correo:{
+            type: String,
+            default: '',
+        },
+        fecha:{
+            type: String,
+            default: '',
+        }, 
+        nombrecompleto:{
+            type: String,
+            default: '',
+        },
+        tipoPersona:{
+            type: String,
+            default: 'Natural',
+            },
+        run:{
+            type: String,
+            default: '',
+            },
+        id:{
+            type: String,
+            default: '',
+            },
+        pais:{
+            type: String,
+            default: 'Chile',
+            },
+        rut:{
+            type: String,
+            default: '',
+            },
+        razonsocial:{
+            type: String,
+            default: '',
+            },
+        Apaterno:{
+            type: String,
+            default: '',
+            },
+        Amaterno:{
+            type: String,
+            default: '',
+            },
+        nombres:{
+            type: String,
+            default: '',
+            },
+
     },
 
     methods:{

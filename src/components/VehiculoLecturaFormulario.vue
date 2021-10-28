@@ -16,7 +16,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
+            <tbody class="bodyTabla" v-else v-for="(item,index) in items" id="tablapatenteslectura" :key="index">
                 <td>{{item.patente}}</td>
                 <td>{{item.rvm}}</td>
                 <td>{{item.GoE}}</td>
@@ -38,7 +38,6 @@
 
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
 
@@ -50,7 +49,6 @@ function add(patente,rvm,GoE,estado) {
             "rvm": rvm,
             "GoE": GoE,
             "estado": estado}
-
         total_items.push(item);
     }
 
@@ -65,7 +63,12 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	var deudores_relacionados = []
 	var contratos_relacionados = []
 	var archivos_relacionados = []
+
+
+
+
     console.log("ENTREEEEEEEE AUTOOOOO")
+	console.log(id_inscripcion)
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
@@ -110,13 +113,14 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					})
 					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
+						console.log(all_patentes)
 						all_patentes.forEach((p) => {
 							var my_doc = p.data();
 							patentes_relacionadas.push(my_doc)
 						})
 
 					}).then(() => {
-						console.log("PATENTES")
+						console.log("PATENTESSSSS")
 						console.log(patentes_relacionadas)
 
                         patentes_relacionadas.forEach((data) =>{
@@ -231,25 +235,28 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            option:'natural',
-            patente:"",
-            GoE:false,
-            rvm:false,
-            estado:""
+            hola:''
         }
     },
     mounted() {
-    this.items = []
-	total_items = []
+    //this.items = []
+	//total_items = []
+	
+	console.log("buscardor")
+	console.log(localStorage.id_revisar)
+	setTimeout(() => { 
 
-	buscador_especifico_solicitud(localStorage.id_revisar, "I")
+		buscador_especifico_solicitud(parseInt(localStorage.id_revisar), "I")
+
+	},1000)
+	
     
       setTimeout(() => { 
 
-      console.log("AUTOS")
-	  console.log(total_items)
-	  }, 1000)
+
+		console.log("AUTOS")
+		console.log(total_items)
+		}, 1000)
       //add("1","1","1","12")
 
     
@@ -260,6 +267,26 @@ export default {
         tipoSolicitud:{
             type: String,
             default: 'Modificacion'
+        },
+		items:{
+            type: Array,
+            default: new Array,
+        },
+		patente:{
+            type: String,
+            default: ''
+        },
+		GoE:{
+            type: Boolean,
+            default: false,
+        },
+		rvm:{
+            type: Boolean,
+            default: false
+        },
+		estado:{
+            type: String,
+            default: ''
         },
     },
     methods:{

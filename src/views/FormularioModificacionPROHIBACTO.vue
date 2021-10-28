@@ -222,7 +222,9 @@ function  inscripcion_modificacion(
                 GrabarEnagenar: GrabarEnagenar,
                 correo_requirente: correo_requirente,
                 fecha_requirente: fecha_requirente,
-                revisorAsignado :-1
+                revisorAsignado :-1,
+                firma:false,
+                tipoModificacion:3
             })//18
             
             console.log("entros")

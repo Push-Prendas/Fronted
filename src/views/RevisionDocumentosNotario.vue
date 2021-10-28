@@ -8,8 +8,8 @@
             <VehiculosLectura :tipoSolicitud="Alzamiento" />
             <!-- FALTA COLOCALAR LOS ARCHIVOS -->
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton">Rechazar</button>
-                <button class="col-2 titleButton">Firmar FEA</button>
+                <button class="col-2 titleButton"  @click="rechazar()">Rechazar</button>
+                <button class="col-2 titleButton" @click="aceptar()">Firmar FEA</button>
             </div>
         </div>
         
@@ -21,7 +21,19 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc,query,where} from "firebase/firestore";
+
+import { collection, getDocs, updateDoc,query,where, doc} from "firebase/firestore";
+
+
+var username = localStorage.user
+const VOLVER= "/Dashboard/" + localStorage.rol + "/" + username + "/MisSolicitudes"
+
+
+
+
+
+
+
 
 
 
@@ -36,19 +48,17 @@ function add(patente,rvm,GoE,estado) {
         total_items.push(item);
     }
 var solicitud_relacionada;
+var acreedores_relacionados = []
+var constituyentes_relacionados = []
+var deudores_relacionados = []
+var contratos_relacionados = []
+var archivos_relacionados = []	
 var patentes_relacionadas = []
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
 
-    
-    var acreedores_relacionados = []
-    var constituyentes_relacionados = []
-    var deudores_relacionados = []
-    var contratos_relacionados = []
-    var archivos_relacionados = []	
-    
     console.log("ENTREEEEEEEE")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
@@ -216,6 +226,8 @@ export default {
 
             var tipo = document.getElementById("tipoDeDocumento");
 
+            console.log(tipo)
+
             tipo.value = solicitud_relacionada.privacidadDocumento
 
 
@@ -225,9 +237,9 @@ export default {
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
             var today = now.getFullYear()+"-"+(month)+"-"+(day);
+			console.log(today)
 
-
-            if(solicitud_relacionada.privacidadDocumento == "publico"){
+            if(solicitud_relacionada.privacidadDocumento == "Publico"){
                 var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
                 var FechaSubscripcion = document.getElementById("FechaSubscripcion");
 
@@ -236,28 +248,15 @@ export default {
 
 
                 FechaSubscripcion.value = solicitud_relacionada.fechaSuscripcion
-
-
-                
-
             }
-            else if(solicitud_relacionada.privacidadDocumento == "privado"){
+            else if(solicitud_relacionada.privacidadDocumento == "Privado"){
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
                 var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
-
+				console.log(FechaAutorizacion, FechaProtocolizacion)
             }
 
-
             var check = document.getElementById("defaultCheck1")
-
             check.checked =  solicitud_relacionada.prohibicionGravarEnajenar
-
-            
-
-
-
-            
-
 
             var numero_repertorio = solicitud_relacionada.numeroRepertorioNotario.split('-')
 
@@ -290,6 +289,86 @@ export default {
     VehiculosLectura,
     Menu,
     Navbar,
+  },
+  methods:{
+    aceptar(){
+
+    if(localStorage.tipo_revisar.toString() == "I"){
+
+
+
+            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_revisar.toString()),{
+            firma: true,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+
+
+    }
+    else if(localStorage.tipo_revisar.toString() == "M"){
+
+            updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_revisar.toString()),{
+            firma: true,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+    else if(localStorage.tipo_revisar.toString() == "A"){
+
+            updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_revisar.toString()),{
+            firma: true,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+
+},
+
+rechazar(){
+
+
+
+    if(localStorage.tipo_revisar.toString() == "I"){
+
+            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 2,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+    else if(localStorage.tipo_revisar.toString() == "M"){
+
+            updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 2,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+    else if(localStorage.tipo_revisar.toString() == "A"){
+
+            updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 2,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+
+},
+
+
+
+
+
   },
 }
 console.log(localStorage.my_opts)
