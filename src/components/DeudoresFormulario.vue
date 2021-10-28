@@ -128,8 +128,9 @@
 </template>
 <script>
 import * as Countries from '../data/countries.js';
+
+
 export default {
-    
   name: 'AcreedorFormularios',
   data() {
       const countries= Countries.default.countries;
