@@ -48,7 +48,7 @@
                             RAZON SOCIAL
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="razonsocial" id="rut">
+                            <input type="text" v-model="razonsocial" id="razonsocial">
                         </div>
                     </div>
                     
@@ -59,7 +59,7 @@
                                 APELLIDO PATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="apellidopaterno">
+                                <input id="apellidopaterno" type="text" v-model="apellidopaterno">
                             </div>
                     </div>
                     <div class="col row">
@@ -67,7 +67,7 @@
                                APELLIDO MATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="apellidomaterno">
+                                <input id="apellidomaterno" type="text" v-model="apellidomaterno">
                             </div>
                     </div>
                     <div class="row">
@@ -75,7 +75,7 @@
                             NOMBRES
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombres">
+                            <input id="nombres" type="text" v-model="nombres">
                         </div>
                     </div>
                     
@@ -87,7 +87,7 @@
                             NOMBRE COMPLETO
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrecompleto">
+                            <input id="nonmbrecompleto" type="text" v-model="nombrecompleto">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -95,7 +95,7 @@
                             PAÍS
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select  class="form-select"  v-model="pais" @change ="changeOption(), getData()" >
+                            <select  class="form-select" id="pais"  v-model="pais" @change ="changeOption(), getData()" >
                                 <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                                 
                             </select>
@@ -118,7 +118,7 @@
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
-            <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
+            <tbody class="bodyTabla" id="tablaconstituyentes" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
                 <td>{{item.Tipo}}</td>
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>

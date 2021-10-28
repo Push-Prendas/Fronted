@@ -7,7 +7,7 @@
                     TIPO DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc"  @change ="changeOption(), setData()">
+                    <select id="tipoDeDocumento" class="form-select"   v-model="tipoDoc"  @change ="changeOption(), setData()">
                         <option selected value="Publico">Público</option>
                         <option value="Privado">Privado</option>
                     </select>
@@ -57,7 +57,7 @@
                     N DE REPERTORIO DE NOTARIA
                 </div>
                 <div class="d-flex justify-content-start">
-                    <input type="text" class="nrepertorioleft" placeholder="Folio" @change =" setData()" v-model="RepNotaria">-<input type="text" class="nrepertorioright" placeholder="Ano" @change =" setData()" v-model="anioRepNotaria">
+                    <input type="text" class="nrepertorioleft" placeholder="Folio" @change =" setData()" v-model="RepNotaria" id="foliorepnontaria">-<input type="text" id="anorepnotaria" class="nrepertorioright" placeholder="Ano" @change =" setData()" v-model="anioRepNotaria">
                     
                 </div>
             </div>
@@ -66,7 +66,7 @@
         <div class="row">
             <div class="col row Space">
                 <div class="form-check ">
-                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"  @change =" setData()" v-model="ProhibGravEnajenar">
+                    <input class="form-check-input" type="checkbox" value="" id="gravaroenajenar"  @change =" setData()" v-model="ProhibGravEnajenar">
                     <label class="form-check-label d-flex align-items-start" for="defaultCheck1">
                         PROHIBICIÓN DE GRAVAR O ENAJENAR
                     </label>
@@ -87,7 +87,7 @@
                 <div class="titles d-flex justify-content-start">
                     NOTARIAS
                 </div>
-                <select id="notaria" class="form-select" v-model="notaria"  @change ="changeOption(), setData()" >
+                <select id="notaria" class="form-select" v-model="notaria"   @change ="changeOption(), setData()" >
                         
                     <option :value="notaria.organizacion" v-for="(notaria,index) in notariasP" :key="index">{{notaria.organizacion}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
