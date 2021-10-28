@@ -21,7 +21,7 @@
               <th >{{item.Fecha}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <a class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" :href="'/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'">Revisar</a>
+                      <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" @click="obtain_id_judge(item.id, item.Tipo)" >Revisar</th>
                       <th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey" @click="LiberarSolicitud(index)">Liberar</th>
                   </div>
               </td>
@@ -40,6 +40,7 @@ import { collection, getDocs, query, where, getDoc, doc, updateDoc} from "fireba
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
+var username = localStorage.user
 
 /*async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
 
@@ -341,6 +342,13 @@ export default {
             this.inscripciones_encontradas.length = 0;
             this.modificaciones_encontradas.length = 0;
             this.alzamientos_encontrados.length = 0;
+            
+        },obtain_id_judge(id, tipo){
+            console.log("NOIZ ID")
+            console.log(id)
+            localStorage.id_judge = id
+            localStorage.tipo_judge = tipo
+            location.href = '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'
             
         }
             

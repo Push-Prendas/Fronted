@@ -19,6 +19,7 @@ import BuscadorJefeServicio from './views/BuscadorJefeServicio.vue'
 import ComprobanteSolicutud from './views/ComprobanteSolicitud.vue'
 import RecepcionDocBuscador from './views/BuscadorReceptor.vue'
 import RevisionDocumentoNotario from './views/RevisionDocumentosNotario.vue'
+import RevisionDocumentosRevisor from './views/RevisionDocumentosRevisor.vue'
 
 import FormularioInscripcionEdit from './views/FormularioInscrpcionedicion.vue'
 import FormularioAlzamientoEdit from './views/FormularioAlzamientoedicion.vue'
@@ -152,6 +153,12 @@ const routes = [
     path: "/Dashboard/:rol/:username/RevisionDoc",
     name: "RevisionDocumentoNotario",
     component: RevisionDocumentoNotario,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/RevisionDocumentosRevisor",
+    name: "RevisionDocumentosRevisor",
+    component: RevisionDocumentosRevisor,
     props: true
   },
   {

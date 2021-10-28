@@ -232,73 +232,73 @@ export default {
             console.log("relleno tabla")
             //this.items.length = 0;
             buscador_solicitud("T")
-			setTimeout(() => {
-				console.log("Timeout Enter")
-				//Llama a todas las tablas
-				if(this.inscripciones_encontradas.length>0){
-					console.log(this.inscripciones_encontradas);
-					var estad;
-					this.inscripciones_encontradas.forEach((insc)=>{
-						if(insc[1]["estadoSecundario"]!=2){
-							estad="Por pagar"
-						}else{
-							estad="Pagado"
-						}
-						let item = {
-								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-								"Funcionario": insc[1]["usuarioCreador"],
-								"Fecha": insc[1]["fechaSuscripcion"],
-								"Estado": estad,
-								"Tipo": "I"}
-						console.log(item)
-						console.log(this.items)
-						this.items.push(item)
-						});
+	            setTimeout(() => {
+	            	console.log("Timeout Enter")
+		            //Llama a todas las tablas
+		            if(this.inscripciones_encontradas.length>0){
+		                console.log(this.inscripciones_encontradas);
+		                var estad;
+		                this.inscripciones_encontradas.forEach((insc)=>{
+		                    if(insc[1]["estadoSecundario"]!=2){
+		                        estad="Por pagar"
+		                    }else{
+		                        estad="Pagado"
+		                    }
+		                    let item = {
+		                            "id": insc[0],
+		                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+		                            "Funcionario": insc[1]["usuarioCreador"],
+		                            "Fecha": insc[1]["fechaSuscripcion"],
+		                            "Estado": estad,
+		                            "Tipo": "I"}
+		                    console.log(item)
+		                    console.log(this.items)
+		                    this.items.push(item)
+		                    });
 
-					}
-				if(this.modificaciones_encontradas.length>0){
-					this.modificaciones_encontradas.forEach((insc)=>{
-						if(insc[1]["estadoSecundario"]!=2){
-							estad="Por pagar"
-						}else{
-							estad="Pagado"
-						}
-						let item = {
-								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-								"Funcionario": insc[1]["usuarioCreador"],
-								"Fecha": insc[1]["fechaSuscripcion"],
-								"Estado": estad,
-								"Tipo": "M"}
+		                }
+		            if(this.modificaciones_encontradas.length>0){
+		                this.modificaciones_encontradas.forEach((insc)=>{
+		                    if(insc[1]["estadoSecundario"]!=2){
+		                        estad="Por pagar"
+		                    }else{
+		                        estad="Pagado"
+		                    }
+		                    let item = {
+		                            "id": insc[0],
+		                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+		                            "Funcionario": insc[1]["usuarioCreador"],
+		                            "Fecha": insc[1]["fechaSuscripcion"],
+		                            "Estado": estad,
+		                            "Tipo": "M"}
 
-						this.items.push(item)
-						});
+		                    this.items.push(item)
+		                    });
 
-					}
-				if(this.alzamientos_encontrados.length>0){
-					this.alzamientos_encontrados.forEach((insc)=>{
-						if(insc[1]["estadoSecundario"]!=2){
-							estad="Por pagar"
-						}else{
-							estad="Pagado"
-						}
-						let item = {
-								"id": insc[0],
-								"Rep": insc[1]["numero_repertorio_RPsD"],
-								"Funcionario": insc[1]["usuarioCreador"],
-								"Fecha": insc[1]["fechaSuscripcion"],
-								"Estado": estad,
-								"Tipo": "A"}
+		                }
+		            if(this.alzamientos_encontrados.length>0){
+		                this.alzamientos_encontrados.forEach((insc)=>{
+		                    if(insc[1]["estadoSecundario"]!=2){
+		                        estad="Por pagar"
+		                    }else{
+		                        estad="Pagado"
+		                    }
+		                    let item = {
+		                            "id": insc[0],
+		                            "Rep": insc[1]["numero_repertorio_RPsD"],
+		                            "Funcionario": insc[1]["usuarioCreador"],
+		                            "Fecha": insc[1]["fechaSuscripcion"],
+		                            "Estado": estad,
+		                            "Tipo": "A"}
 
-						this.items.push(item)
-						});
+		                    this.items.push(item)
+		                    });
 
-					}
-				//this.items=i
-				console.log(this.items)
-			},3000)
-			}
+		                }
+		            //this.items=i
+		            console.log(this.items)
+	        	},3000)
+            }
         ,clean(){
             this.items.length = 0;
             this.inscripciones_encontradas.length = 0;
