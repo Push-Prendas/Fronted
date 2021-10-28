@@ -21,7 +21,7 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc,query,where} from "firebase/firestore";
+import { collection, getDocs,query,where} from "firebase/firestore";
 
 var total_items = []
 function add(patente,rvm,GoE,estado) {
@@ -34,11 +34,11 @@ function add(patente,rvm,GoE,estado) {
         total_items.push(item);
     }
 var solicitud_relacionada;
-var acreedores_relacionados = []
-var constituyentes_relacionados = []
-var deudores_relacionados = []
-var contratos_relacionados = []
-var archivos_relacionados = []	
+//var acreedores_relacionados = []
+//var constituyentes_relacionados = []
+//var deudores_relacionados = []
+//var contratos_relacionados = []
+//var archivos_relacionados = []	
 var patentes_relacionadas = []
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
@@ -221,7 +221,7 @@ export default {
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
             var today = now.getFullYear()+"-"+(month)+"-"+(day);
-
+			console.log(today)
 
             if(solicitud_relacionada.privacidadDocumento == "publico"){
                 var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
@@ -236,7 +236,7 @@ export default {
             else if(solicitud_relacionada.privacidadDocumento == "privado"){
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
                 var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
-
+				console.log(FechaAutorizacion, FechaProtocolizacion)
             }
 
             var check = document.getElementById("defaultCheck1")

@@ -38,7 +38,6 @@
 
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
 
@@ -247,9 +246,9 @@ export default {
     
       setTimeout(() => { 
 
-      console.log("AUTOS")
-	  console.log(total_items)
-	  }, 1000)
+		console.log("AUTOS")
+		console.log(total_items)
+		}, 1000)
       //add("1","1","1","12")
 
     
