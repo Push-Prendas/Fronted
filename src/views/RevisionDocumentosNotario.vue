@@ -45,13 +45,6 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
 
-    
-    var acreedores_relacionados = []
-    var constituyentes_relacionados = []
-    var deudores_relacionados = []
-    var contratos_relacionados = []
-    var archivos_relacionados = []	
-    
     console.log("ENTREEEEEEEE")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
@@ -239,10 +232,6 @@ export default {
 
 
                 FechaSubscripcion.value = solicitud_relacionada.fechaSuscripcion
-
-
-                
-
             }
             else if(solicitud_relacionada.privacidadDocumento == "privado"){
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
@@ -250,17 +239,8 @@ export default {
 
             }
 
-
             var check = document.getElementById("defaultCheck1")
-
             check.checked =  solicitud_relacionada.prohibicionGravarEnajenar
-
-            
-
-
-
-            
-
 
             var numero_repertorio = solicitud_relacionada.numeroRepertorioNotario.split('-')
 
