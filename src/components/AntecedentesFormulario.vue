@@ -72,15 +72,38 @@
                     </label>
                 </div>
             </div>
-            <div class="col row" v-if="rol == 'FUNCIONARIONOTARIA'">
-                <div class="titles d-flex justify-content-start">
-                    BIENES PRENDADOS
+            <div class="row right">
+                <div class="col row">
+                    <div class="titles d-flex justify-content-start">
+                        BIENES PRENDADOS
+                    </div>
+                    <div class="form-check"  >
+                        <input class="form-check-input" type="checkbox" value="ACTIVO FIJO" id="checkinscactfijo" >
+                        <label class="form-check-label d-flex justify-content-start" for="actfijo">ACTIVO FIJO</label>
+                        
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="BIENES AGROPECUARIOS"  id="checkinscbagropec" >
+                        <label class="form-check-label d-flex justify-content-start" for="bagropec">BIENES AGROPECUARIOS</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="DERECHIS E INTANGIBLES"  id="checkinscderecheint" >
+                        <label class="form-check-label d-flex justify-content-start" for="derecheint">DERECHIS E INTANGIBLES</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="VEHICULOS"  id="checkinscvehic" >
+                        <label class="form-check-label d-flex justify-content-start" for="vehic">VEHICULOS</label>
+                    </div>
                 </div>
-                <div class="form-check" v-for="(opciones,index) in listBienesPrendados" :key="index" >
-                    <input class="form-check-input" type="checkbox" :value="opciones"  @change =" setData()" :id="index">
-                    <label class="form-check-label d-flex justify-content-start" :for="index">
-                        {{opciones}}
-                    </label>
+                <div class="col row" v-if="rol == 'FUNCIONARIOOFICINA'">
+                    <div class="titles d-flex justify-content-start">
+                        NOTARIAS
+                    </div>
+                    <select id="notaria" class="form-select" v-model="notaria"  @change ="changeOption(), setData()" >
+                            
+                        <option :value="notaria.organizacion" v-for="(notaria,index) in notariasP" :key="index">{{notaria.organizacion}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
+                            
+                    </select>
                 </div>
             </div>
             <div class="col row" v-if="rol == 'FUNCIONARIOOFICINA'">
