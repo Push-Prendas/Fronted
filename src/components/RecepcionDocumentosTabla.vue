@@ -302,12 +302,12 @@ export default {
             //buscador_solicitud(3,1,"T",-1)
             buscador_solicitud(3,0,"T", -1)
 			setTimeout(() => { 
-			var estad;
+			//var estad;
             if(this.inscripciones_encontradas.length>0){
                 console.log(this.inscripciones_encontradas);
                 
                 this.inscripciones_encontradas.forEach((insc)=>{
-					 console.log("INSCRIPCION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+					console.log("INSCRIPCION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
      
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {

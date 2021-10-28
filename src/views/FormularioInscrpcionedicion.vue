@@ -513,10 +513,10 @@ export default {
 		if(localStorage.rol == "FUNCIONARIOOFICINA"){
 			document.getElementById('notaria').value = solicitud_relacionada.notaria
 		}
-		document.getElementById('0').checked = solicitud_relacionada.activoFijo
-		document.getElementById('1').checked = solicitud_relacionada.bienesAgropecuarios
-		document.getElementById('2').checked = solicitud_relacionada.derechosIntangibles
-		document.getElementById('3').checked = solicitud_relacionada.vehiculos
+		document.getElementById('checkinscactfijo').checked = solicitud_relacionada.activoFijo
+		document.getElementById('checkinscbagropec').checked = solicitud_relacionada.bienesAgropecuarios
+		document.getElementById('checkinscderecheint').checked = solicitud_relacionada.derechosIntangibles
+		document.getElementById('checkinscvehic').checked = solicitud_relacionada.vehiculos
 
 		//Acreedor
 		//document.getElementById('tipodepersona').value = acreedores_relacionados[0].tipoAcreedor
