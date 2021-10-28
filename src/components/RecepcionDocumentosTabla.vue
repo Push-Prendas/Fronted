@@ -2,23 +2,19 @@
     <div id="TablaTipo">
         <div style="padding:50px; margin-left:300px">
            <table class="table table-sm table-hover zui-table-rounded" >
-          <thead style="color: white;background-color: #514BD5;" @dblclick="rellenarTabla()">
+          <thead style="color: white;background-color: #514BD5;">
             <tr>
               <th scope="col">N° Repertorio de Prenda</th>
               <th scope="col">Oficina</th>
-              <th scope="col">N° Oficina</th>
               <th scope="col">Fecha</th>
-              <th scope="col">Estado</th>
               <th scope="col">Adjuntar doc</th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
               <th >{{item.Rep}}</th>
-              <th scope="row">Oficina</th>
-              <th scope="row">N° Oficina</th>
+              <th >{{item.Oficina}}</th>
               <th >{{item.Fecha}}</th>
-              <th >{{item.Estado}}</th>
               <th><b-button v-b-modal.modal-6 class="col buttonAdd d-flex justify-content-center"><font-awesome-icon style= "margin-right:5px" icon="file-download" @click="changeIndex(index)" /></b-button></th>
             </tr>
           </tbody>
@@ -238,19 +234,22 @@ function modifyPrimaryStatus(tipo_de_solicitud, id_solicitud, estado_primario, u
 	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
 	if (tipo_de_solicitud == "I"){	
 		updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud), {
-			estadoPrimario: estado_primario
+			estadoPrimario: estado_primario,
+			estadoSecundario: 2
 		}).then(() => {
 			console.log("ACTUALIZADO")
 		})
 	}
 	else if (tipo_de_solicitud == "M"){
 		updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
-			estadoPrimario: estado_primario
+			estadoPrimario: estado_primario,
+			estadoSecundario: 2
 		});
 	}
 	else if (tipo_de_solicitud == "A"){
 		updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
-			estadoPrimario: estado_primario
+			estadoPrimario: estado_primario,
+			estadoSecundario: 2
 		});
 	}
 	var today = new Date();
@@ -280,6 +279,9 @@ function modifyPrimaryStatus(tipo_de_solicitud, id_solicitud, estado_primario, u
 }
 export default {
   name: 'TablaTipo',
+  mounted() {
+      this.rellenarTabla()
+      },
   data() {
         return {
             items: [], 
@@ -298,70 +300,69 @@ export default {
             //this.items.length = 0;
             
             //buscador_solicitud(3,1,"T",-1)
-            buscador_solicitud(1,0,"T", -1)
+            buscador_solicitud(3,0,"T", -1)
+			setTimeout(() => { 
+			var estad;
             if(this.inscripciones_encontradas.length>0){
                 console.log(this.inscripciones_encontradas);
-                var estad;
+                
                 this.inscripciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estado_secundario"]!=2){
-                        estad="Por pagar"
-                    }else{
-                        estad="Pagado"
-                    }
-                    let item = {
-                            "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad,
-                            "Tipo": "I"}
-                    console.log(item)
-                    console.log(this.items)
-                    this.items.push(item)
+					 console.log("INSCRIPCION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+     
+					if(insc[1]["estadoPrimario"] == 3){
+						let item = {
+								"id": insc[0],
+								"Rep": insc[1]["numeroRepertorioNotario"],
+								"Fecha": insc[1]["fechaRequiriente"],
+								"Oficina" : insc[1]["oficina"],
+								"Tipo": "I"}
+						console.log(item)
+
+						console.log(this.items)
+						this.items.push(item)
+					}
                     });
 
                 }
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estado_secundario"]!=2){
-                        estad="Por pagar"
-                    }else{
-                        estad="Pagado"
-                    }
-                    let item = {
-                            "id": insc[0],
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad,
-                            "Tipo": "M"}
+					console.log("MODIFICACION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+  
+					console.log("DEBUG")
+					console.log(insc)
+					if(insc[1]["estadoPrimario"] == 3){
+						let item = {
+								"id": insc[0],
+								"N° Rep. Notaria": insc[1]["numero_repertorio_notaria"],
+								"Fecha": insc[1]["fecha_requirente"],
+								"Oficina" : insc[1]["oficina"],
+								"Tipo": "M"}
 
-                    this.items.push(item)
+						this.items.push(item)
+					}
                     });
 
                 }
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estado_secundario"]!=2){
-                        estad="Por pagar"
-                    }else{
-                        estad="Pagado"
-                    }
-                    let item = {
-                            "id": insc[0],
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad,
-                            "Tipo": "A"}
+					console.log("ALZAMIENTOS-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+     
+					if(insc[1]["estadoPrimario"] == 3){
+						let item = {
+								"id": insc[0],
+								"N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+								"Fecha": insc[1]["fecha_requirente"],
+								"Oficina" : insc[1]["oficina"],
+								"Tipo": "A"}
 
-                    this.items.push(item)
+						this.items.push(item)
+					}
                     });
 
                 }
             //this.items=i
             console.log(this.items)
-            
+            },2500);
             },
       add(){
         var item = this.items[this.indexSelect]
