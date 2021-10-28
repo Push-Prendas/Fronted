@@ -3,6 +3,8 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class="right">
+            <h1 bold>CAMBIO ACREEDOR</h1>
+            <RequirenteFormulario v-if="rol == 'FUNCIONARIOOFICINA'"/>
             <AntecedentesFormularioALZA :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
@@ -10,13 +12,13 @@
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <VehiculosFormulario :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
+            <VehiculoLecturaFormulario :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton">Guardar</button>
-                <button class="col-2 titleButton" @click="modificar()">Enviar</button>
+                <button class="col-2 titleButton" @click="modificar(false)" >Guardar</button>
+                <button class="col-2 titleButton" @click="modificar(true)" >Enviar</button>
             </div>
         </div>
         
@@ -29,16 +31,14 @@ import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
-import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
+import VehiculoLecturaFormulario from '../components/VehiculoLecturaFormulario.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
+import RequirenteFormulario from '../components/RequirenteFormulario.vue'
+
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal, esOFICINAGlobal)
-console.log(opciones)
 //VALIDA EL NUMERO DE REPERTORIO
 function validate_number(inputNumber){
     if(!inputNumber.includes("-")) return false;
@@ -100,8 +100,8 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 			const url_file = await getDownloadURL(fileRef)
 			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 				idInscripcion: INSCRIPCION,
-				id_alzamiento: MODIFICACION,
-				id_modificacion: ALZAMIENTO,
+				id_alzamiento: ALZAMIENTO,
+				id_modificacion: MODIFICACION,
 				año_repertorio_del_contrato: new Date().getFullYear(),
 				numero_repertorio_RPsD: repertorio + 1,
 				url: url_file,
@@ -148,7 +148,7 @@ function  inscripcion_modificacion(
     vehiculos,//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
     GrabarEnagenar,//
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-    fecha_requirente=""//
+    fecha_requirente="",//
     ){
 
 
@@ -233,7 +233,7 @@ function  inscripcion_modificacion(
             console.log("entros")
             if(estadoPrimario == 1){// 1 significa que esta en revision en la notaria
 
-                Subir_archivos_en_oficina(contratos,archivos)
+                Subir_archivos_en_oficina(contratos,archivos,ids,1)
                 console.log("enviado")
             }
 
@@ -248,8 +248,8 @@ export default {
   name: 'formularioModificacion',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
             tipoDoc:'',
             FOtorgamiento: '',
             FSuscripcion: '',
@@ -283,14 +283,15 @@ export default {
   props:{
       rol: {
           type: String,
-          default: rolGlobal
+          default: localStorage.rol
       }
 
     },
   components: {
     AntecedentesFormularioALZA,
     AcreedorFormulario,
-    VehiculosFormulario,
+    VehiculoLecturaFormulario,
+    RequirenteFormulario,
     ContratoFormulario,
     AnexosFormulario,
     Monto,
@@ -388,7 +389,16 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        modificar(){//agregar flags
+        modificar(flag){//agregar flags
+            var est_p = 0
+            if(flag){
+               if(localStorage.rol == "FUNCIONARIONOTARIA"){
+                   est_p = 1
+               } 
+               else{
+                   est_p = 3
+               }
+            }
             inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
@@ -403,7 +413,8 @@ export default {
                 this.run,//
                 this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.nDocRequirente,//
-                [].push(this.contrato),//
+                est_p,
+                this.contrato,//
                 this.anexos, 
                 this.Bienes[0],
                 this.Bienes[1], 

@@ -27,16 +27,14 @@ import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import TablaRecepcionDocumento from '../components/RecepcionDocumentosTabla.vue'
 import MisSolicitudesNotario from '../components/MisSolicitudesNotario.vue'
 import PagosPendientes from '../components/PagosPendientes.vue'
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var opciones;
 export default {
   name: 'Dashboard',
   data() {
         return {
             opcion: opciones,
-            username: usernameGlobal,
-            rol: rolGlobal
+            username: localStorage.user,
+            rol: localStorage.rol
         }
     },
 
@@ -95,10 +93,13 @@ export default {
       }
       
       this.opcion = opciones
+      console.log("MOMENTO")
+      console.log(this.opcion)
+      localStorage.my_opts = this.opcion
   },
 }
 export {opciones}
-localStorage.setItem("opciones", opciones)
+
 </script>
 
 

@@ -48,7 +48,6 @@ import { collection, getDocs } from "firebase/firestore";
 var usernameGlobal;
 var emailGlobal;
 var rolGlobal;
-var esOFICINAGlobal;
 var notarias = [];
 var notariaGlobal;
 export default {
@@ -90,26 +89,24 @@ export default {
                                 notariaGlobal = user.NotariaID
                                 switch(rolGlobal){
                                     case "FUNCIONARIONOTARIA":
-                                        esOFICINAGlobal= false
+                                        localStorage.esoficina= false
                                         break;
                                     case "NOTARIO":
-                                        esOFICINAGlobal= false
+                                        localStorage.esoficina= false
                                         break;
                                     case "PAGADOR":
-                                        esOFICINAGlobal= false
+                                        localStorage.esoficina= false
                                         break;
                                     case "FUNCIONARIOOFICINA":
-                                        esOFICINAGlobal= true
+                                        localStorage.esoficina= true
                                         break;
                                     default:
-                                        esOFICINAGlobal= false
+                                        localStorage.esoficina= false
                                         break;
                                  }
-                                esOFICINAGlobal 
-                                localStorage.setItem('emailGlobal', emailGlobal)
-                                localStorage.setItem('usernameGlobal', usernameGlobal)
-                                localStorage.setItem('rolGlobal', rolGlobal)
-
+                                localStorage.mail = emailGlobal
+                                localStorage.user = usernameGlobal
+                                localStorage.rol = rolGlobal
                                 localStorage.notaria = notariaGlobal
                                 //TEST LOAD
                                 //const rol_load = localStorage.getItem('user_rol')
@@ -168,9 +165,9 @@ export default {
             })
         }
     }
-    
 }
-export{ usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal, notarias}
+export{notarias}
+
 </script>
 
 <style scoped>

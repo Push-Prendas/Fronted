@@ -100,8 +100,7 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal, notarias}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal,usernameGlobal)
+import { notarias}  from "@/views/Login"
 
 export default {
 
@@ -177,6 +176,9 @@ export default {
             this.$emit("getanioRepNotaria",this.anioRepNotaria);
             this.$emit("getProhibGravEnajenar",this.ProhibGravEnajenar);
             this.$emit("getBienes", [document.getElementById("0").checked, document.getElementById("1").checked, 
+            document.getElementById("2").checked, document.getElementById("3").checked])
+
+            console.log([document.getElementById("0").checked, document.getElementById("1").checked, 
             document.getElementById("2").checked, document.getElementById("3").checked])
         }
     }

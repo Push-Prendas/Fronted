@@ -42,12 +42,9 @@ import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 //import { getStorage } from "firebase/storage";
 //import { getApp,initializeApp  } from "firebase/app";
-console.log(emailGlobal, rolGlobal)
-console.log(opciones)
+
 
   
 //initializeApp()
@@ -294,7 +291,12 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 			}).then(() => {
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
-				alert("Solicitud Enviada Exitosamente")
+				if (send_flag==true){
+					alert("Solicitud Guardada Exitosamente")
+				}else{
+					alert("Solicitud Enviada Exitosamente")
+				}
+				
 				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
 				
 
@@ -307,12 +309,13 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	}
 
 }
+
 export default {
   name: 'Dashboard',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
             tipoDoc:'',
             FOtorgamiento: '',
             FSuscripcion: '',
@@ -347,7 +350,7 @@ export default {
 
         rol :  {
             type: String,
-            default: rolGlobal
+            default: localStorage.rol
         }
   },
   methods: {
@@ -418,8 +421,6 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-			console.log("HOLAAAAAAAA-=-=-=-")
-			console.log(this.Bienes)
 			this.Bienes = data        
         },
         getConstituyentes(data) {
@@ -483,9 +484,9 @@ export default {
                 this.vehiculos, 
                 this.contrato, 
                 this.anexos, 
-                esOFICINAGlobal,
+                localStorage.esoficina,
 				"mi oficina",
-				emailGlobal
+				localStorage.mail
                 )
 			
 		}

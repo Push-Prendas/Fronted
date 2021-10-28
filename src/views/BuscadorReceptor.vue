@@ -13,16 +13,13 @@
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import RepcionDocumentosBuscador from '../components/RecepcionDocumentosBuscador.vue'
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
-import {opciones} from "@/views/Dashboard"
-console.log(emailGlobal)
 export default {
   name: 'BuscadorReceptor',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
-            rol: rolGlobal
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
+            rol: localStorage.rol
         }
     },
   components: {

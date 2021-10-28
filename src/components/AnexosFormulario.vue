@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
-console.log(emailGlobal, rolGlobal,usernameGlobal)
 export default {
   name: 'AcreedorFormularios',
   data() {

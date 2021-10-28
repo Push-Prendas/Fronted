@@ -10,7 +10,6 @@
 
             <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
                 <td>{{item.Rep}}</td>
-                <td>{{item.Funcionario}}</td>
                 <td>{{item.Fecha}}</td>
                 <td >
                     <p class="titleFormulario">{{item.Estado}} </p>
@@ -26,14 +25,12 @@
 </template>
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
 import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
-var username = emailGlobal
+var username = localStorage.user
 
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
@@ -165,8 +162,8 @@ export default {
     data() {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            thread : ['N° Rep. Notaria', 'Funcionario', 'Fecha', 'Estado'],
-            username: emailGlobal,
+            thread : ['N° Rep. Notaria','Fecha', 'Estado'],
+            username: localStorage.mail,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
             alzamientos_encontrados : alzamientos_encontradosGlobal
@@ -313,7 +310,7 @@ export default {
 }
 #contenedor{
     width: 60em;
-    margin-left: 34%;
+    margin-left: 29%;
     margin-top: 2%;
 }
 

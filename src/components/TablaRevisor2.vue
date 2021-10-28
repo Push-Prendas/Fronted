@@ -35,10 +35,8 @@
 
 <script>
 
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
 import {db} from "@/main";
 import { collection, getDocs, query, where, getDoc, doc, updateDoc} from "firebase/firestore";
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
@@ -242,11 +240,11 @@ export default {
         return {
             items: [], 
             thread : ['N° Rep. Notaria', 'Funcionario', 'Fecha', 'Estado'],
-            username: usernameGlobal,
+            username: localStorage.user,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
             alzamientos_encontrados : alzamientos_encontradosGlobal,
-            emailUser: emailGlobal 
+            emailUser: localStorage.mail 
         }
     },
     methods:{

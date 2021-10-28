@@ -24,17 +24,14 @@ import AcreedorComprobante from '../components/AcreedorComprobante.vue'
 import ConstituyentesComprobante from '../components/ConstituyentesComprobante.vue'
 import DeudoresComprobante from '../components/DeudoresComprobante.vue'
 import RequirientesComprobante from '../components/RequirentesComprobante.vue'
-import {opciones} from "@/views/Dashboard"
-import { usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal}  from "@/views/Login"
-console.log(usernameGlobal, emailGlobal, rolGlobal, esOFICINAGlobal)
 
 
 export default {
   name: 'formularioModificacion',
   data() {
         return {
-            opcion: opciones,
-            username: usernameGlobal,
+            opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
         }
     },
   components: {

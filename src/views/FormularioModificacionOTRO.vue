@@ -2,39 +2,43 @@
     <div id="dashboard">
         <Menu :opciones= opcion />
         <Navbar :username= username />
-        <div id="contenedor" >
-            <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
-			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
-			@getFechaRequirente="getFechaRequirente" @change="getPatentes()"/>
-            <AntecedentesFormularioALZA :rol="rol" :esInsc="false" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
+        <div class="right">
+            <h1 bold>OTROS</h1>
+            <RequirenteFormulario v-if="rol == 'FUNCIONARIOOFICINA'"/>
+
+            <AntecedentesFormularioALZA :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
-            @getBienes="getBienes" @getNotaria="getNotaria" @change="getPatentes()"/>
-            <VehiculosFormulario :tipoSolicitud="Alzamiento" :items="patentes" />
+            @getBienes="getBienes" @getNotaria="getNotaria"/> 
+            <div class="mb-3" id="textarea">
+                <label for="textoOTRO" class="form-label titleFormulario">RESUMA EL MOTIVO DE LA MODIFICACION</label>
+                <textarea class="form-control" id="textoOTRO" rows="3"></textarea>
+            </div>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton" @click="alzar(false)">Guardar</button>
-                <button class="col-2 titleButton" @click="alzar(true)">Enviar</button>
+                <button class="col-2 titleButton" @click="modificar(false)">Guardar</button>
+                <button class="col-2 titleButton" @click="modificar(true)">Enviar</button>
             </div>
         </div>
         
+        
     </div>
 </template>
-
 <script scoped>
 import {db, storage} from "@/main";
 import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
-import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
 import RequirenteFormulario from '../components/RequirenteFormulario.vue'
+
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+//VALIDA EL NUMERO DE REPERTORIO
 function validate_number(inputNumber){
     if(!inputNumber.includes("-")) return false;
     inputNumber = inputNumber.split("-");
@@ -52,8 +56,6 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
     var MODIFICACION = ""
     var ALZAMIENTO = ""
 
-    console.log("LOL FILES")
-
     if(tipo == 0){// INSCRIPCION
         INSCRIPCION = id
     }
@@ -63,10 +65,7 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
     else if(tipo == 2){//ALZAMIENTO
         ALZAMIENTO = id
     }
-
-    console.log("INSCRIPCION: " + INSCRIPCION)
-    console.log("MODIFICACION: " + MODIFICACION)
-    console.log("ALZAMIENTO: " + ALZAMIENTO)
+    
 
 	getDocs(collection(db,"Document_RPsD")).then((pat_data) => {
 		var id_inspeccion = pat_data.docs.length
@@ -78,13 +77,11 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 	getDocs(collection(db, "Document_RPsD")).then(async(doc_data) => {
 		var document_id = doc_data.docs.length
 		console.log("Entro")
-        console.log(contratos.length)
 		//const storageRef = ref(storage); 					
 		for(var i = 0; i<contratos.length; i++){
 			const fileRef = ref(storage,contratos[i].name);
 			await uploadBytes(fileRef,contratos[i]);
 			const url_file = await getDownloadURL(fileRef)
-            console.log("CONTRATO")
 			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 				id_alzamiento: INSCRIPCION,
 				id_modificacion: MODIFICACION,
@@ -100,7 +97,6 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 			const fileRef = ref(storage,archivos[i].name);
 			await uploadBytes(fileRef,archivos[i]);
 			const url_file = await getDownloadURL(fileRef)
-            console.log("ADJUNTO")
 			setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 				idInscripcion: INSCRIPCION,
 				id_alzamiento: ALZAMIENTO,
@@ -128,50 +124,40 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 
 }
 
-function alzamiento(
-    numero_requiriente,//
+function  inscripcion_modificacion(
     tipo_de_documento,//
-    fecha_de_otorgamiento,//
     fecha_de_suscripcion,//
-    fecha_de_autorizacion,//
+    fecha_de_otorgamiento,//
     fecha_de_protocolizacion,//
-    notaria,//
+    fecha_de_autorizacion,//
+    notaria="",//
     numero_repertorio_notaria,//
-    nombre_requirente,//EL NOMBRE DEL REQUIRENTE LE CORRESPONDE EL GRUPO DE SERVICIOS
-    correo,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-    fecha,//
+    parrafo_modificacion_generica,//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
+    tipo_de_persona,//
+    nombre_acreedor,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+    rut_acreedor,//""
+    nombre_requirente="",//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
+    run_requiriente="",//
+    estadoPrimario,//
     contratos=[],//
     archivos=[],//
     activo_fijo,//
     bienes_agropecuarios,//
-    derechos_intangibles,
-    vehiculos,
-    año_repertorio_RPsD,//AGREGADO RECIENTMENTE FALTA PONER EN LA VISTA
-    numero_repertorio_RPsD,
-    send_flag,
-    rol_oficina=false,
-    name_oficina
-    //AGREGADO RECIENTMENTE FALTA PONER EN LA VISTA
+    derechos_intangibles,//
+    vehiculos,//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
+    GrabarEnagenar,//
+    correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
+    fecha_requirente=""//
     ){
-        var validate = true
-        console.log("VERYFING...")
-        console.log(name_oficina)
-        
+
+
+        var validate = true;
+
 
         //FILTRO
         //PARA FILTRAR EL AÑO SE PUEDE PONER UN MINIMO Y MAXIMO EN EL INPUT DE FECHAS
 
-        /*
-        var run_req_code = numero_requiriente.split('-');
-        if(!validate_run(run_req_code[0],run_req_code[1])){
-            validate = false
-            console.log("RUN REQUIRIENTE INVALIDO")
-            //FRONTEND => MOSTRAR ERROR
-    
-            //////////////////////////
-        }*/
-            
-        //SE VERIFICA EL NUMERO DE REPERTORIO DONDE SU LARGO TIENE QUE SER 9
+
         console.log(numero_repertorio_notaria)
         if(numero_repertorio_notaria.length != 9 && !validate_number(numero_repertorio_notaria)){
 
@@ -182,67 +168,83 @@ function alzamiento(
             //////////////////////////
         }
 
-    if(validate){
-    var estado_inicial = 0 //GUARDADO
-    console.log("validate")
-    if(send_flag){ ///VERIFICAR SI VIENE O NO DE OFICINA
-        if(rol_oficina)
-            estado_inicial = 3 //ENVIADO DESDE OFICINA
-        else
-            estado_inicial = 1 //ENVIADO DESDE NOTARIA
+        //console.log("verificar")
+        //console.log(rut_acreedor)
 
+        /*
+
+        var rut_acc_code = rut_acreedor.split('-');
+        if(!validate_run(rut_acc_code[0],rut_acc_code[1])){
+            validate = false
+            console.log("RUN ACREEDOR INVALIDO")
+            //FRONTEND => MOSTRAR ERROR
     
+            //////////////////////////
+        }
+
+        var run_req_code = run_requiriente.split('-');
+        if(!validate_run(run_req_code[0],run_req_code[1])){
+            validate = false
+            console.log("RUN REQUIRIENTE INVALIDO")
+            //FRONTEND => MOSTRAR ERROR
+    
+            //////////////////////////
+        }*/
+
+
+
+        if(validate){
+
+        //SUBIR O GUARDAR LA SOLICITUD
+        var ids = null
+        getDocs(collection(db,"Solicitud_Modificacion_Prenda")).then((pat_data) => {
+            ids = pat_data.docs.length;
+            console.log(ids)
+            console.log("submit")
+            
+        }).then(() => {
+            setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),ids.toString()),{
+                tipo_de_documento: tipo_de_documento,
+                fecha_de_suscripcion: fecha_de_suscripcion,
+                fecha_de_otorgamiento: fecha_de_otorgamiento,
+                fecha_de_protocolizacion: fecha_de_protocolizacion,
+                fecha_de_autorizacion: fecha_de_autorizacion,
+                numero_repertorio_notaria: numero_repertorio_notaria,
+                parrafo_modificacion_generica: document.getElementById("textoOTRO").value,
+                tipo_de_persona: tipo_de_persona,
+                nombre_acreedor: nombre_acreedor,
+                rut_acreedor: rut_acreedor,
+                nombre_requirente: nombre_requirente,
+                run_requiriente: run_requiriente,
+                estadoPrimario: estadoPrimario,
+                estadoSecundario: 0,
+                activo_fijo: activo_fijo,
+                bienes_agropecuarios: bienes_agropecuarios,
+                derechos_intangibles: derechos_intangibles,
+                vehiculos: vehiculos,
+                notaria: notaria,
+                GrabarEnagenar: GrabarEnagenar,
+                correo_requirente: correo_requirente,
+                fecha_requirente: fecha_requirente,
+                revisorAsignado :-1
+            })//18
+            
+            console.log("entros")
+            if(estadoPrimario == 1){// 1 significa que esta en revision en la notaria
+
+                Subir_archivos_en_oficina(contratos,archivos,ids,1)
+                console.log("enviado")
+            }
+
+
+
+        
+        })
     }
-
-    console.log("MY DATA")
-    console.log(activo_fijo)
-    console.log(estado_inicial)
-
-    var ids = null
-    getDocs(collection(db,"Solicitud_Alzamiento_Prenda")).then((pat_data) => {
-
-
-        ids = pat_data.docs.length;
-
-
-    }).then(() => {
-
-        setDoc(doc(collection(db,"Solicitud_Alzamiento_Prenda"),ids.toString()),{//se le hace un camino extra, no pude acortar, pero es con el mismo id asi que no deberia haber problemas
-            tipo_de_documento: tipo_de_documento,
-            fecha_de_otorgamiento: fecha_de_otorgamiento,
-            fecha_de_suscripcion: fecha_de_suscripcion,
-            fecha_de_autorizacion: fecha_de_autorizacion,
-            fecha_de_protocolizacion: fecha_de_protocolizacion,
-            notaria: notaria,
-            numero_repertorio_notaria: numero_repertorio_notaria,
-            numero_requiriente: numero_requiriente,
-            nombre_requiriente: nombre_requirente,
-            correo: correo,
-            fecha: fecha,
-            estadoPrimario: estado_inicial,
-            estadoSecundario: 0,
-            activo_fijo: activo_fijo,
-            bienes_agropecuarios: bienes_agropecuarios,
-            prendaVehiculo: vehiculos,
-            derechos_intangibles: derechos_intangibles,
-            año_repertorio_RPsD: año_repertorio_RPsD,
-            numero_repertorio_RPsD: numero_repertorio_RPsD,
-            oficina: "mi oficina"
-
-
-
-    })
-    if(estado_inicial == 1){// 1 significa que esta en revision en la notaria
-
-        Subir_archivos_en_oficina(contratos,archivos, ids.toString(), 2)   
     }
-    })
-
-    }
-}
 
 export default {
-  name: 'Dashboard',
+  name: 'formularioModificacion',
   data() {
         return {
             opcion: localStorage.my_opts.split(','),
@@ -269,33 +271,32 @@ export default {
             correoRequirente: '',
             fechaRequirente: '',
             Bienes: [],
-            constituyentes: [],
-            deudores: [],
-			vehiculos: [],
+            constituyentes: [{}],
+            deudores: [{}],
+			vehiculos: [{}],
 			contrato: null,
 			anexos: null,
-			notaria:'',
         }
     },
-  props: {
-        rol :  {
-            type: String,
-            default: localStorage.rol
-        },
 
-  },
+  props:{
+      rol: {
+          type: String,
+          default: localStorage.rol
+      }
+
+    },
   components: {
     AntecedentesFormularioALZA,
-    VehiculosFormulario,
     ContratoFormulario,
+    RequirenteFormulario,
     AnexosFormulario,
     Monto,
     Menu,
-    Navbar,
-    RequirenteFormulario,
+    Navbar
   },
-  methods:{
-       
+  methods: {
+
         getNotaria(data){
 		this.notaria=data
 		},
@@ -363,7 +364,7 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-			this.Bienes = data      
+			this.Bienes = data        
         },
         getConstituyentes(data) {
         this.constituyentes = data
@@ -385,44 +386,70 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        alzar(flags){
-            console.log("MIS BIENES")
-            console.log(this.Bienes[0])
-            console.log(this.Bienes[1])
-            console.log(this.Bienes[2])
-            console.log(this.Bienes[3])
-            alzamiento(
-                this.nDocRequirente,//
+        modificar(flag){//agregar flags
+            var est_p = 0
+            if(flag){
+               if(localStorage.rol == "FUNCIONARIONOTARIA"){
+                   est_p = 1
+               } 
+               else{
+                   est_p = 3
+               }
+            }
+            inscripcion_modificacion(
                 this.tipoDoc.toString(),//
-                this.FOtorgamiento.toString(),//
                 this.FSuscripcion.toString(),//
-                this.FAutorizacion.toString(),//
+                this.FOtorgamiento.toString(),//
                 this.FProtocolizacion.toString(),//
+                this.FAutorizacion.toString(),//
                 this.notaria,//
                 (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
-                this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE LE CORRESPONDE EL GRUPO DE SERVICIOS
-                this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-                this.fechaRequirente,//
+                "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
+                this.tipoPersona,//
+                this.nombres,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+                this.run,//
+                this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
+                this.nDocRequirente,//
+                est_p,
                 this.contrato,//
                 this.anexos, 
                 this.Bienes[0],
                 this.Bienes[1], 
                 this.Bienes[2], 
-                this.Bienes[3],
-                flags,
-                localStorage.esoficina,
-                "Mi oficina"
+                this.Bienes[3],//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
+                this.ProhibGravEnajenar,//
+                this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
+                this.fechaRequirente//
             )
-        }
   }
   
+}
 }
 </script>
 
 <style scoped>
+#textarea{
+    width: 58em;
+    margin-left: 29%;
+    float: right;
+
+}
+.titleFormulario{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    width: 58em;
+    margin-bottom: 2em;
+    margin-top: 2em;
+}
+
+
+
 #contenedor{
     width: 60em;
-    margin-left: 18%;
+    margin-left: 34%;
     margin-top: 2%;
 }
 .right {
@@ -431,6 +458,7 @@ export default {
     width: 100%;
     height: auto;
 }
+
 
 .titleButton{
     color: #514BD5;

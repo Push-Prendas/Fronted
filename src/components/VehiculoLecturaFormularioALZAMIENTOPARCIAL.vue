@@ -36,12 +36,12 @@
 
 <script>
 
+
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
 import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
-var patentes_relacionadas = []
 
 
 function add(patente,rvm,GoE,estado) {
@@ -53,7 +53,7 @@ function add(patente,rvm,GoE,estado) {
 
         total_items.push(item);
     }
-
+var patentes_relacionadas = []
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
@@ -62,8 +62,8 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	var constituyentes_relacionados = []
 	var deudores_relacionados = []
 	var contratos_relacionados = []
-	var archivos_relacionados = []
-    console.log("ENTREEEEEEEE AUTOOOOO")
+	var archivos_relacionados = []	
+    console.log("ENTREEEEEEEE")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
@@ -106,7 +106,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 						console.log(constituyentes_relacionados)
 						console.log(deudores_relacionados)
 					})
-					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
 						all_patentes.forEach((p) => {
 							var my_doc = p.data();
@@ -131,18 +131,9 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 		}).then(() => {
 			console.log("INSCRIPCION")
 			console.log(patentes_relacionadas)
-
-            
-
-
             //add(patente,rvm,GoE,estado)
 			///INSCRIPCION ENCONTRADA
-			///FRONTEND -> MODIFICAR ACA
-
-
-
-
-			///
+			///FRONTEND -> MODIFICAR ACA	///
 
 		})
 	}
@@ -240,12 +231,13 @@ export default {
     mounted() {
     this.items = []
 	total_items = []
-    
+      console.log()
       setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
       //add("1","1","1","12")
 
       console.log("AUTOS")
 	  console.log(patentes_relacionadas)
+      //add("1","1","1","12")
 
     },
     props: {

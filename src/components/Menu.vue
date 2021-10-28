@@ -12,8 +12,6 @@
 
 
 <script>
-import { usernameGlobal, emailGlobal, rolGlobal}  from "@/views/Login"
-console.log(emailGlobal)
 export default {
   name: 'Menu',
   data() {
@@ -26,11 +24,11 @@ props: {
         opciones:Array,
         username:{
             type: String,
-            default: usernameGlobal
+            default: localStorage.user
         },
         rol :  {
             type: String,
-            default: rolGlobal
+            default: localStorage.rol
         }
   },
   methods:{
@@ -46,7 +44,7 @@ props: {
             if (!this.answered && this.selectedIndex === index)
             {
                 answerClass = 'selected'
-                this.$router.push({path:`/Dashboard/${rolGlobal}/${usernameGlobal}/${op}`, params: {username: usernameGlobal, rol: rolGlobal, opciones: op}})
+                this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/${op}`, params: {username: localStorage.user, rol: localStorage.rol, opciones: op}})
 
             }
             else if (this.answered && this.correctIndex === index)
