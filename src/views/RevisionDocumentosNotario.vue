@@ -255,7 +255,7 @@ export default {
 				console.log(FechaAutorizacion, FechaProtocolizacion)
             }
 
-            var check = document.getElementById("defaultCheck1")
+            var check = document.getElementById("gravaroenajenar")
             check.checked =  solicitud_relacionada.prohibicionGravarEnajenar
 
             var numero_repertorio = solicitud_relacionada.numeroRepertorioNotario.split('-')

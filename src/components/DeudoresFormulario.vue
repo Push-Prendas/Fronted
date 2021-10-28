@@ -135,6 +135,7 @@ export default {
   data() {
       const countries= Countries.default.countries;
         return {
+            items: [],
             option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
             idDocumento:"",
@@ -146,10 +147,7 @@ export default {
     },
 
     methods:{
-        items: {
-            type: Array,
-            default: new Array(),
-        },
+
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaDeudor");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
