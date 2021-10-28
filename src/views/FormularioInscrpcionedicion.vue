@@ -89,7 +89,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();					
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
 							var my_doc = d.data();
@@ -105,11 +105,15 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 						console.log(contratos_relacionados)
 						console.log(archivos_relacionados)
 					})
-					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((persona_data) => {
 						var all_personas = persona_data.docs;
+						console.log("PERSONA ---->")
+						console.log(id_inscripcion)
 						all_personas.forEach((d) => {
 							var my_doc = d.data();
+							console.log(my_doc)
 							if (my_doc.tipoContratante == 0){
+								
 								acreedores_relacionados.push(my_doc)
 							}
 							else if (my_doc.tipoContratante == 1){
@@ -119,6 +123,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 								deudores_relacionados.push(my_doc)
 							}
 						})
+						console.log(acreedores_relacionados)
 					}).then(() => {
 						console.log("PERSONAS")
 						console.log(acreedores_relacionados)
@@ -499,7 +504,7 @@ export default {
 
 		//Antecedentes
 		document.getElementById('tipoDeDocumento').value = solicitud_relacionada.privacidadDocumento
-		if(solicitud_relacionada.privacidadDocumento == "publico"){
+		if(solicitud_relacionada.privacidadDocumento == "Publico"){
 			document.getElementById('FechaOtorgamiento').value = solicitud_relacionada.fechaOtorgamientoEscritura
 			document.getElementById('FechaSubscripcion').value = solicitud_relacionada.fechaSuscripcion
 		}
@@ -519,10 +524,47 @@ export default {
 		document.getElementById('checkinscvehic').checked = solicitud_relacionada.vehiculos
 
 		//Acreedor
-		//document.getElementById('tipodepersona').value = acreedores_relacionados[0].tipoAcreedor
-		//document.getElementById('runacreedor').value = acreedores_relacionados[0].runPersona
-		//document.getElementById('paisacreedor').value = acreedores_relacionados[0].paisPersona
-		//document.getElementById('nombresacreedor').value = acreedores_relacionados[0].nombrePersona
+		document.getElementById('tipodepersona').value = acreedores_relacionados[0].tipoAcreedor
+		try{
+			document.getElementById('runacreedor').value = acreedores_relacionados[0].runPersona
+			var nombre_list = acreedores_relacionados[0].nombrePersona.split(' ')
+			if(nombre_list.length == 1){
+				document.getElementById('nombresacreedor').value = acreedores_relacionados[0].nombrePersona
+			}
+			else if (nombre_list.length == 2){
+				document.getElementById('nombresacreedor').value = nombre_list[0]
+				document.getElementById('apellidopaterno').value = nombre_list[1]
+			}
+			else{
+				var mi_nombre = ""
+				for(var i = 0; i < nombre_list.length - 2; i++){
+					mi_nombre += nombre_list[i] + " "
+				}
+				document.getElementById('nombresacreedor').value = mi_nombre
+				document.getElementById('apellidopaterno').value = nombre_list[nombre_list.length - 2]
+				document.getElementById('apellidomaterno').value = nombre_list[nombre_list.length - 1]
+			}		
+		
+		}
+		catch{
+
+		}
+
+		try{
+			document.getElementById('nombresacreedor').value = acreedores_relacionados[0].nombrePersona
+			document.getElementById('runacreedor').value = acreedores_relacionados[0].runPersona
+		}
+		catch{
+
+		}
+
+		try{
+			document.getElementById('runacreedor').value = acreedores_relacionados[0].runPersona
+			document.getElementById('paisacreedor').value = acreedores_relacionados[0].paisPersona
+		}
+		catch{
+
+		}
 
 
 		//Constituyentes
@@ -558,7 +600,7 @@ export default {
 		//Monto
 		document.getElementById('monto').value = solicitud_relacionada.montoTotal
 
-		}, 1500)
+		}, 2500)
   },
   name: 'Dashboard',
   data() {
