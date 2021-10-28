@@ -112,8 +112,14 @@ const routes = [
     props: true
   },
   {
+    path: "/Dashboard/:rol/:username/RecepcionSolicitudes",
+    name: "RecepcionDocBuscador",
+    component: RecepcionDocBuscador,
+    props: true
+  },
+  {
     path: "/Dashboard/:rol/:username/Busqueda",
-    name: "ModificaciondecontratodeprendasBusqueda",
+    name: "RecepcionDocBuscador",
     component: RecepcionDocBuscador,
     props: true
   },
