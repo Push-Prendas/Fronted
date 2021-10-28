@@ -124,7 +124,6 @@ export default {
             
         }
     },
-
     methods:{
         changeOption(){
             var selectBox = document.getElementById("tipoDePersona");
@@ -142,6 +141,9 @@ export default {
             this.$emit("getAmaterno",this.Amaterno.toString());
             this.$emit("getnombres",this.nombres.toString());
         }
+    },
+    props:{
+        
     }
 
 }
