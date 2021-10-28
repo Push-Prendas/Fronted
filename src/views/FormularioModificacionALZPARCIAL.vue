@@ -227,7 +227,9 @@ function  inscripcion_modificacion(
                 GrabarEnagenar: GrabarEnagenar,
                 correo_requirente: correo_requirente,
                 fecha_requirente: fecha_requirente,
-                revisorAsignado :-1
+                revisorAsignado :-1,
+                firma:false,
+                tipoModificacion:1
             })//18
             
             console.log("entros")
@@ -249,6 +251,7 @@ export default {
   mounted(){
       console.log("ROL")
       console.log(localStorage.rol)
+      
   },
   data() {
         return {

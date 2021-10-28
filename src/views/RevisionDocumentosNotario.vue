@@ -21,7 +21,7 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
+import { collection, getDocs, where, query} from "firebase/firestore";
 
 var solicitud_relacionada;
 var acreedores_relacionados = []
@@ -29,6 +29,7 @@ var constituyentes_relacionados = []
 var deudores_relacionados = []
 var contratos_relacionados = []
 var archivos_relacionados = []	
+var patentes_relacionadas = []
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE

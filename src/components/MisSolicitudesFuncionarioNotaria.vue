@@ -15,7 +15,7 @@
                     <p class="titleFormulario">{{item.Estado}} </p>
                 </td>
                 <td>
-                    <a class="logout" @click="obtain_id_go(item.ID, item.Tipo)"><font-awesome-icon style= "margin-right:5px" icon="file-download" /> </A>
+                    <a class="logout" @click="obtain_id_go(item.ID, item.Tipo, item.Mod)"><font-awesome-icon style= "margin-right:5px" icon="file-download" /> </A>
                 </td>
             </tbody>
  
@@ -27,13 +27,19 @@
 <script>
 import {db} from "@/main";
 import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
+
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
 
 var username = localStorage.user
 
-const URL_REVISION = "/Dashboard/" + localStorage.rol + "/" + username + "/Inscripciondecontratodeprendas"
+const URL_REVISION_INSCRIPCION = "/Dashboard/"+localStorage.rol+"/"+username+"/InscripciondecontratodeprendasEdit"
+const URL_REVISION_ALZAMIENTO = "/Dashboard/"+localStorage.rol+"/"+username+"/solicitudAlzamientoEdit"
+const URL_REVISION_MODIFICACION_ALZA = "/Dashboard/"+localStorage.rol+"/"+username+"/solicitudModificacion1Edit"
+const URL_REVISION_MODIFICACION_ACREEDOR = "/Dashboard/"+localStorage.rol+"/"+username+"/solicitudModificacion2Edit"
+const URL_REVISION_MODIFICACION_PROHIBICION = "/Dashboard/"+localStorage.rol+"/"+username+"/solicitudModificacion3Edit"
+const URL_REVISION_MODIFICACION_OTRO = "/Dashboard/"+localStorage.rol+"/"+username+"/solicitudModificacion4Edit"
 
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
@@ -174,12 +180,33 @@ export default {
     },
     methods:{
 
-        obtain_id_go(id, tipo){
+        obtain_id_go(id, tipo, mod){
             console.log("NOIZ ID")
             console.log(id)
             localStorage.id_revisar = id
             localStorage.tipo_revisar = tipo
-            location.href = URL_REVISION
+            //location.href = URL_REVISION
+            switch(mod){
+                case 1:
+                    this.$router.push({path:URL_REVISION_INSCRIPCION})
+                    break
+                case 2:
+                    this.$router.push({path:URL_REVISION_ALZAMIENTO})
+                    break
+                case 3:
+                    this.$router.push({path:URL_REVISION_MODIFICACION_ALZA})
+                    break
+                case 4:
+                    this.$router.push({path:URL_REVISION_MODIFICACION_ACREEDOR})
+                    break
+                case 5:
+                    this.$router.push({path:URL_REVISION_MODIFICACION_PROHIBICION})
+                    break
+                case 6:
+                    this.$router.push({path:URL_REVISION_MODIFICACION_OTRO})
+                    break               
+            }
+            
         },
 
         clean(){
@@ -219,7 +246,8 @@ export default {
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,
                                 "ID": insc[0],
-                                "Tipo": "I"}
+                                "Tipo": "I",
+                                "Mod": 1}
                         console.log(item)
                         console.log(this.items)
                         this.items.push(item)
@@ -235,7 +263,8 @@ export default {
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,
                                 "ID": insc[0],
-                                "Tipo": "M"}
+                                "Tipo": "M",
+                                "Mod": 2 + insc[1]["tipoModificacion"]}
 
                         this.items.push(item)
                         });
@@ -250,7 +279,8 @@ export default {
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,
                                 "ID": insc[0],
-                                "Tipo": "A"}
+                                "Tipo": "A",
+                                "Mod": 2}
 
                         this.items.push(item)
                         });
