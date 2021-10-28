@@ -196,6 +196,8 @@ export default {
             this.$emit("getFSuscripcion",this.FSuscripcion);
             this.$emit("getFAutorizacion",this.FAutorizacion);
             this.$emit("getFProtocolizacion",this.FProtocolizacion);
+            console.log("AQUI696969")
+            console.log(this.RepNotaria, this.anioRepNotaria)
             this.$emit("getRepNotaria",this.RepNotaria);
             this.$emit("getanioRepNotaria",this.anioRepNotaria);
             this.$emit("getProhibGravEnajenar",this.ProhibGravEnajenar);
