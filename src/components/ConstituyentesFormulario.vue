@@ -136,7 +136,7 @@ export default {
   data() {
       const countries= Countries.default.countries;
         return {
-            option:'natural',
+            option:'Natural',
             countries,
         }
     },

@@ -229,7 +229,7 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            option:'natural',
+            option:'Natural',
 
         }
     },props:{

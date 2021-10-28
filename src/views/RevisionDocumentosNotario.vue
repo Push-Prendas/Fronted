@@ -22,7 +22,7 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
 
-import { collection, getDocs, updateDoc, setDoc,query,where, doc} from "firebase/firestore";
+import { collection, getDocs, updateDoc,query,where, doc} from "firebase/firestore";
 
 
 var username = localStorage.user
