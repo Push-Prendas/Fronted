@@ -6,7 +6,7 @@
             <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
 			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
 			@getFechaRequirente="getFechaRequirente"/>
-            <AntecedentesFormulario :rol="rol" @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
+            <AntecedentesFormulario :rol="rol"  @gettipoDoc="gettipoDoc"  @getFOtorgamiento="getFOtorgamiento"
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria"/>
@@ -141,7 +141,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
                                 console.log(data.inscripcionPrendaRVM)
                                 console.log(data.inscripcionProhibicionGravarEnajenar)
                                 console.log(data.alzamiento)
-                                add(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                                //add(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
                                 //this.option
                             })
 					})
@@ -487,6 +487,10 @@ export default {
 		console.log(contratos_relacionados)
 		console.log(archivos_relacionados)
 		console.log(patentes_relacionadas)
+
+		//CARGAR DATOS
+		
+
 		}, 1500)
   },
   name: 'Dashboard',
