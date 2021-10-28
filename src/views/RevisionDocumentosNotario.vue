@@ -21,25 +21,42 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
+import { collection, getDocs, updateDoc, getDoc,query,where} from "firebase/firestore";
 
+
+
+var total_items = []
+function add(patente,rvm,GoE,estado) {
+        let item = {
+            "patente": patente,
+            "rvm": rvm,
+            "GoE": GoE,
+            "estado": estado}
+
+        total_items.push(item);
+    }
 var solicitud_relacionada;
-var acreedores_relacionados = []
-var constituyentes_relacionados = []
-var deudores_relacionados = []
-var contratos_relacionados = []
-var archivos_relacionados = []	
+var patentes_relacionadas = []
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
+
+    
+    var acreedores_relacionados = []
+    var constituyentes_relacionados = []
+    var deudores_relacionados = []
+    var contratos_relacionados = []
+    var archivos_relacionados = []	
+    
     console.log("ENTREEEEEEEE")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
-					solicitud_relacionada = doc.data();					
+					solicitud_relacionada = doc.data();	
+			
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
@@ -185,12 +202,80 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 }
 
 console.log("MY OPTS")
-console.log(localStorage.my_opts.split(','))
+//console.log(localStorage.my_opts.split(','))
 export default {
   mounted() {
       console.log("MOUNT")
       console.log(localStorage.id_revisar)
-      setTimeout(() => { buscador_especifico_solicitud(localStorage.id_revisar, localStorage.tipo_revisar) }, 1000)
+
+      buscador_especifico_solicitud(localStorage.id_revisar, localStorage.tipo_revisar)
+    setTimeout(() => { 
+
+            console.log("SOLICITUD2")
+            console.log(solicitud_relacionada)	
+
+            var tipo = document.getElementById("tipoDeDocumento");
+
+            tipo.value = solicitud_relacionada.privacidadDocumento
+
+
+            var now = new Date();
+
+            var day = ("0" + now.getDate()).slice(-2);
+            var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+            var today = now.getFullYear()+"-"+(month)+"-"+(day);
+
+
+            if(solicitud_relacionada.privacidadDocumento == "publico"){
+                var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
+                var FechaSubscripcion = document.getElementById("FechaSubscripcion");
+
+
+                FechaOtorgamiento.value = solicitud_relacionada.fechaOtorgamientoEscritura
+
+
+                FechaSubscripcion.value = solicitud_relacionada.fechaSuscripcion
+
+
+                
+
+            }
+            else if(solicitud_relacionada.privacidadDocumento == "privado"){
+                var FechaAutorizacion = document.getElementById("FechaAutorizacion");
+                var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
+
+            }
+
+
+            var check = document.getElementById("defaultCheck1")
+
+            check.checked =  solicitud_relacionada.prohibicionGravarEnajenar
+
+            
+
+
+
+            
+
+
+            var numero_repertorio = solicitud_relacionada.numeroRepertorioNotario.split('-')
+
+
+            var left = document.querySelector(".nrepertorioleft");
+
+            var right = document.querySelector(".nrepertorioright");
+
+            left.value = numero_repertorio[0]
+            right.value = numero_repertorio[1]
+
+            console.log("PATENTE")
+
+            console.log(patentes_relacionadas)
+
+            //console.log(fecha)
+          
+           }, 2000)
   },
   name: 'RevisionDoc',
   data() {
@@ -206,7 +291,6 @@ export default {
     Menu,
     Navbar,
   },
-  
 }
 console.log(localStorage.my_opts)
 </script>
