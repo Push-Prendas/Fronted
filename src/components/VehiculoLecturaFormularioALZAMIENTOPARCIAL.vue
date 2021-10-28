@@ -39,7 +39,6 @@
 
 import {db} from "@/main";
 import { collection, getDocs, query, where} from "firebase/firestore";
-import {id_sol} from "@/views/BusquedaAlzamiento"
 
 var total_items = []
 

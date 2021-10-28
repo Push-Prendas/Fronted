@@ -21,7 +21,7 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc,query,where} from "firebase/firestore";
+import { collection, getDocs,query,where} from "firebase/firestore";
 
 
 
@@ -225,7 +225,7 @@ export default {
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
             var today = now.getFullYear()+"-"+(month)+"-"+(day);
-
+			console.log(today)
 
             if(solicitud_relacionada.privacidadDocumento == "publico"){
                 var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
@@ -244,7 +244,7 @@ export default {
             else if(solicitud_relacionada.privacidadDocumento == "privado"){
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
                 var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
-
+				console.log(FechaAutorizacion, FechaProtocolizacion)
             }
 
 
