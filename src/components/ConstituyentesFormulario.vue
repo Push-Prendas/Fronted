@@ -12,7 +12,7 @@
                             TIPO DE PERSONA
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select id="tipoDePersonaConstituyente" v-model="tipoDePersonaConstituyente" class="form-select" @change ="changeOption(), setData(), clean()">
+                            <select id="tipoDePersonaConstituyente" v-model="tipoDePersonaConstituyente" class="form-select" @change ="changeOption(), setData(), clean(), setVars()">
                                 <option selected value="Natural">Natural</option>
                                 <option value="Juridica">Juridica</option>
                                 <option value="Extranjero">Extranjero</option>
@@ -24,7 +24,7 @@
                             RUN
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="run" id="run">
+                            <input type="text" v-model="run" id="run" @change="setVars()">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -32,7 +32,7 @@
                             ID
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="id" id="id">
+                            <input type="text" v-model="id" id="id" @change="setVars()">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Juridica'">
@@ -40,7 +40,7 @@
                             RUT
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="rut" id="rut">
+                            <input type="text" v-model="rut" id="rut" @change="setVars()">
                         </div>
                     </div>
                     <div class="row" v-if="option == 'Juridica'">
@@ -48,7 +48,7 @@
                             RAZON SOCIAL
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="razonsocial" id="razonsocial">
+                            <input type="text" v-model="razonsocial" id="razonsocial" @change="setVars()">
                         </div>
                     </div>
                     
@@ -59,7 +59,7 @@
                                 APELLIDO PATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="apellidopaterno" type="text" v-model="apellidopaterno">
+                                <input id="apellidopaterno" type="text" v-model="apellidopaterno" @change="setVars()">
                             </div>
                     </div>
                     <div class="col row">
@@ -67,7 +67,7 @@
                                APELLIDO MATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="apellidomaterno" type="text" v-model="apellidomaterno">
+                                <input id="apellidomaterno" type="text" v-model="apellidomaterno" @change="setVars()">
                             </div>
                     </div>
                     <div class="row">
@@ -75,7 +75,7 @@
                             NOMBRES
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombres" type="text" v-model="nombres">
+                            <input id="nombres" type="text" v-model="nombres" @change="setVars()">
                         </div>
                     </div>
                     
@@ -87,7 +87,7 @@
                             NOMBRE COMPLETO
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nonmbrecompleto" type="text" v-model="nombrecompleto">
+                            <input id="nonmbrecompleto" type="text" v-model="nombrecompleto" @change="setVars()">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -95,14 +95,14 @@
                             PAÍS
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select  class="form-select" id="pais"  v-model="pais" @change ="changeOption(), getData()" >
+                            <select  class="form-select" id="pais"  v-model="pais" @change ="changeOption(), getData(), setVars()" >
                                 <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                                 
                             </select>
                         </div>
                     </div>
                 </div>
-                <b-button id="ADDConstituyente" @click="add(), setData(), clean()">Agregar Constituyente</b-button>
+                <b-button id="ADDConstituyente" @click="add(), setData(), clean(), setVars()">Agregar Constituyente</b-button>
                 
             </b-modal>    
         </div>
@@ -140,7 +140,7 @@ export default {
             countries,
             idDocumento:'',
             nombrePersona: '',
-            pais: ''
+            pais: 'Chile'
         }
     },
     props: {
@@ -163,10 +163,6 @@ export default {
         id:{
             type: String,
             default: '',
-            },
-        pais:{
-            type: String,
-            default: 'Chile',
             },
         rut:{
             type: String,
@@ -192,6 +188,24 @@ export default {
     },
 
     methods:{
+        setVars(){
+            if(this.rut!==''){
+                this.idDocumento=this.rut;
+            }else if(this.run!==''){
+                this.idDocumento=this.run;
+            }else if(this.id!==''){
+                this.idDocumento=this.id;
+            }
+            if(this.razonsocial!==''){
+                this.nombrePersona=this.razonsocial;
+            }else if(this.nombrecompleto!==''){
+                this.nombrePersona=this.nombrecompleto;
+            }else if(this.nombres!==''){
+                this.nombrePersona=this.nombres+this.Apaterno+this.Amaterno;
+            }
+
+
+        },
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaConstituyente");
             this.option = selectBox.options[selectBox.selectedIndex].value; 

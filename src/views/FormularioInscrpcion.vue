@@ -123,7 +123,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		var estado_inicial = 0 //GUARDADO
 		console.log("validate")
 		if(send_flag){ ///VERIFICAR SI VIENE O NO DE OFICINA
-			if(rol_oficina)
+			if(parseInt(localStorage.esoficina))
 				estado_inicial = 3 //ENVIADO DESDE OFICINA
 			else
 				estado_inicial = 1 //ENVIADO DESDE NOTARIA
@@ -164,7 +164,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				getDocs(collection(db, "Patente_por_Inscripcion")).then((pat_data) => {
 					var patente_id = pat_data.docs.length + 1;
 					console.log(patente_id)
-					vehiculos.forEach((ve) => {
+					if(vehiculos.length>0){
+						vehiculos.forEach((ve) => {
 						///Vehiculos es una lista de listas que guarda vehiculos
 						///cada indice de la sublista es 0->PPU, 1->InscripcionPrendaRVM, 2->Prohibicion, 3->alzamiento
 						setDoc(doc(collection(db, "Patente_por_Inscripcion"),id.toString()),{
@@ -177,6 +178,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						patente_id+=1;
 					})
 					
+					}
+
 				});
 				getDocs(collection(db, "Persona_Solicitud")).then((per_data) => {
 					var persona_id = per_data.docs.length + 1;
@@ -192,9 +195,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					persona_id+=1;
 					constituyentes.forEach((con) => {
 						let pais = con["pais"]
-						if(pais == ""){
-							pais = "Chile"
-						}
+
 						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 							///Constituyentes es una lista de listas, cada sublista se compone de
 							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
@@ -209,24 +210,27 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						});
 						persona_id+=1;
 					})
-					deudores.forEach((de) => {
-						let pais = de["pais"]
-						if(pais == ""){
-							pais = "Chile"
-						}
-						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
-							///Deudores es una lista de listas, cada sublista se compone de
-							///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
-							///3->pais persona
-							tipoContratante: 2, //Deudores
-							tipoAcreedor: de["Tipo"],
-							runPersona: de["Id"],
-							nombrePersona: de["Name"],
-							idInscripcion: id,
-							paisPersona: pais
-						});
-						persona_id+=1;
-					})
+					if(deudores.length>0){
+						deudores.forEach((de) => {
+							let pais = de["pais"]
+							if(pais == ""){
+								pais = "Chile"
+							}
+							setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
+								///Deudores es una lista de listas, cada sublista se compone de
+								///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
+								///3->pais persona
+								tipoContratante: 2, //Deudores
+								tipoAcreedor: de["Tipo"],
+								runPersona: de["Id"],
+								nombrePersona: de["Name"],
+								idInscripcion: id,
+								paisPersona: pais
+							});
+							persona_id+=1;
+						})
+
+					}
 
 
 				});
@@ -287,6 +291,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						document_id+=1;
 					}
 
+				}).catch((err)=>{
+					console.log(err)
 				});
 
 			}).then(() => {
@@ -302,7 +308,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 
 				//
-			})
+			}).catch((err)=>{
+					console.log(err)
+				});
 
 		})
 		});

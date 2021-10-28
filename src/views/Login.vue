@@ -89,19 +89,19 @@ export default {
                                 notariaGlobal = user.NotariaID
                                 switch(rolGlobal){
                                     case "FUNCIONARIONOTARIA":
-                                        localStorage.esoficina= false
+                                        localStorage.esoficina= 0;
                                         break;
                                     case "NOTARIO":
-                                        localStorage.esoficina= false
+                                        localStorage.esoficina= 0;
                                         break;
                                     case "PAGADOR":
-                                        localStorage.esoficina= false
+                                        localStorage.esoficina= 0;
                                         break;
                                     case "FUNCIONARIOOFICINA":
-                                        localStorage.esoficina= true
+                                        localStorage.esoficina= 1;
                                         break;
                                     default:
-                                        localStorage.esoficina= false
+                                        localStorage.esoficina= 0;
                                         break;
                                  }
                                 localStorage.mail = emailGlobal
