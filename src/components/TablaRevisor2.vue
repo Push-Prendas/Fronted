@@ -3,7 +3,7 @@
         <h1 class="title" style="color:#514BD5">Mis Solicitudes</h1>
         <div style="padding:50px; margin-left:300px">
            <table class="table table-sm table-hover zui-table-rounded" >
-          <thead style="color: white;background-color: #514BD5;" @dblclick="rellenarTabla()">
+          <thead style="color: white;background-color: #514BD5;">
             <tr>
               <th scope="col">N° Documento</th>
               <th scope="col">Oficina</th>
@@ -21,7 +21,7 @@
               <th >{{item.Fecha}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <a class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" :href="'/Dashboard/REVISOR/'+username+'/RevisionDoc'">Revisar</a>
+                      <a class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" :href="'/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'">Revisar</a>
                       <th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey" @click="LiberarSolicitud(index)">Liberar</th>
                   </div>
               </td>
@@ -146,7 +146,7 @@ async function buscar_asignaciones(user_id){
 	getDocs(query(collection(db, "Inspeccion_inscripcion"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			id_inscripciones_asociadas.push(d.id)
+			id_inscripciones_asociadas.push(d.data().solicitudId)
 		})
 	}).then(() => {
 		id_inscripciones_asociadas.forEach((i) => {
@@ -155,15 +155,13 @@ async function buscar_asignaciones(user_id){
         var my_data2 = my_data.data();
         var data = [i,my_data2]
                 inscripciones_encontradasGlobal.push(data)
-                console.log(my_data2)
             });
-      console.log("aja")
 		})
 	})
 	getDocs(query(collection(db, "Inspeccion_modificacion"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			id_modificaciones_asociadas.push(d.id)
+			id_modificaciones_asociadas.push(d.data().solicitudId)
 		})
 	}).then(() => {
 		id_modificaciones_asociadas.forEach((i) => {
@@ -178,7 +176,7 @@ async function buscar_asignaciones(user_id){
 	getDocs(query(collection(db, "Inspeccion_alzamiento"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			id_alzamientos_asociados.push(d.id)
+			id_alzamientos_asociados.push(d.data().solicitudId)
 		})
 	}).then(() => {
 		id_alzamientos_asociados.forEach((i) => {
@@ -198,9 +196,12 @@ function liberar_asignaciones(id_solicitud, tipos_solicitud, user_id){
 			var my_data = hist_data.docs;
 			my_data.forEach((d) => {
 				var data = d.data();
-				if(data.solicitudId == id_solicitud && data.userId == user_id){
-					updateDoc(doc(doc(db, "Inspeccion_inscripcion",d.id)), {
+				if(data.solicitudId == id_solicitud){
+					updateDoc(doc(db, "Inspeccion_inscripcion",d.id), {
 						userId: -1
+					})
+					updateDoc(doc(db, "Inspeccion_inscripcion",d.id), {
+						solicitudId: -1
 					})
 				}
 			})
@@ -235,6 +236,11 @@ function liberar_asignaciones(id_solicitud, tipos_solicitud, user_id){
 	}	
 }
 export default {
+	mounted() {
+      this.clean()
+      this.rellenarTabla()
+      
+    },
   name: 'TablaRevisor',
   data() {
         return {
@@ -251,8 +257,8 @@ export default {
         rellenarTabla() {
             console.log("relleno tabla")
             
-            buscar_asignaciones(this.emailUser).then(() =>
-              {
+            buscar_asignaciones(this.emailUser)
+            setTimeout(() => {
               console.log("esto es lo que busco")
               console.log(this.inscripciones_encontradas.length);
               if(this.inscripciones_encontradas.length>0){
@@ -267,7 +273,7 @@ export default {
                     }
                     let item = {
                       "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
                             "Estado": estad,
@@ -287,7 +293,7 @@ export default {
                     }
                     let item = {
                       "id": insc[0],
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+                            "N° Rep. Notaria": insc[1]["numeroRepertorioContratoPrenda"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
                             "Estado": estad,
@@ -306,7 +312,7 @@ export default {
                     }
                     let item = {
                             "id": insc[0],
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+                            "N° Rep. Notaria": insc[1]["numero_repertorio_RPsD"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
                             "Estado": estad,
@@ -318,7 +324,7 @@ export default {
                 }
             //this.items=i
             console.log(this.items)
-            })
+            },3000)
             //buscador_solicitud(4,1,"T",this.emailUser)
             //buscador_solicitud(1,0,"T", -1)
             
@@ -329,6 +335,13 @@ export default {
           var item = this.items[index];
             liberar_asignaciones(item.id, item.Tipo, this.emailUser);
             this.items.splice(index,1);
+        }        
+        ,clean(){
+            this.items.length = 0;
+            this.inscripciones_encontradas.length = 0;
+            this.modificaciones_encontradas.length = 0;
+            this.alzamientos_encontrados.length = 0;
+            
         }
             
     },
