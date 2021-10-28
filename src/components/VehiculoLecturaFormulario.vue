@@ -63,7 +63,12 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	var deudores_relacionados = []
 	var contratos_relacionados = []
 	var archivos_relacionados = []
+
+
+
+
     console.log("ENTREEEEEEEE AUTOOOOO")
+	console.log(id_inscripcion)
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
@@ -108,13 +113,14 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					})
 					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
+						console.log(all_patentes)
 						all_patentes.forEach((p) => {
 							var my_doc = p.data();
 							patentes_relacionadas.push(my_doc)
 						})
 
 					}).then(() => {
-						console.log("PATENTES")
+						console.log("PATENTESSSSS")
 						console.log(patentes_relacionadas)
 
                         patentes_relacionadas.forEach((data) =>{
@@ -233,12 +239,20 @@ export default {
         }
     },
     mounted() {
-    this.items = []
-	total_items = []
+    //this.items = []
+	//total_items = []
+	
+	console.log("buscardor")
+	console.log(localStorage.id_revisar)
+	setTimeout(() => { 
 
-	buscador_especifico_solicitud(localStorage.id_revisar, "I")
+		buscador_especifico_solicitud(parseInt(localStorage.id_revisar), "I")
+
+	},1000)
+	
     
       setTimeout(() => { 
+
 
 		console.log("AUTOS")
 		console.log(total_items)
