@@ -20,7 +20,7 @@
                     FECHA DE OTORGAMIENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FOtorgamiento" @change ="setData()">
+                    <input type="date" v-model="FOtorgamiento" @change ="setData()" id = "FechaOtorgamiento">
                 </div>
             </div>
             <div class="col row" v-if="option == 'publico'">
@@ -28,7 +28,7 @@
                     FECHA DE SUSCRIPCIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FSuscripcion" placeholder="FSuscripcion" @change ="setData()">
+                    <input type="date" v-model="FSuscripcion" placeholder="FSuscripcion" @change ="setData()" id = "FechaSubscripcion">
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                     FECHA DE AUTORIZACIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FAutorizacion" placeholder="FAutorizacion" @change ="setData()">
+                    <input type="date" v-model="FAutorizacion" placeholder="FAutorizacion" @change ="setData()" id = "FechaAutorizacion">
                 </div>
             </div>
             <div class="col row" v-if="option == 'privado'">
@@ -47,7 +47,7 @@
                     FECHA DE PROTOCOLIZACIÓN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="FProtocolizacion" placeholder="FProtocolizacion" @change ="setData()">
+                    <input type="date" v-model="FProtocolizacion" placeholder="FProtocolizacion" @change ="setData()" id = "FechaProtocolizacion">
                 </div>
             </div>
         </div>
