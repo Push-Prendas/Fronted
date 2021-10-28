@@ -336,7 +336,7 @@ export default {
 			nombreRequirente: '',
             nDocRequirente: '',
             correoRequirente: '',
-            fechaRequirente: '',
+            fechaRequirente: Date.now,
             Bienes: [false, false, false, false],
             constituyentes: [],
             deudores: [],

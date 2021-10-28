@@ -7,7 +7,7 @@
                     NOMBRE COMPLETO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombreCompleto" id="nombrecompleto" @change ="setData()">
+                    <input type="text" v-model="nombreCompleto" id="nombrecompletorequirente" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
                     N DE DOCUMENTO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="NdeDocumento" id="ndedocumento" @change ="setData()">
+                    <input type="text" v-model="NdeDocumento" id="ndedocumentorequirente" @change ="setData()">
                 </div>
             </div>
             
@@ -27,7 +27,7 @@
                     CORREO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="correo" id="correo" @change ="setData()">
+                    <input type="text" v-model="correo" id="correorequirente" @change ="setData()">
                 </div>
             </div>
             <div class="col row">
@@ -35,7 +35,7 @@
                    FECHA
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="date" v-model="fecha" id="fecha" @change ="setData()">
+                    <input type="date" v-model="fecha" id="fecharequirente" @change ="setData()">
                 </div>
             </div>
         </div>

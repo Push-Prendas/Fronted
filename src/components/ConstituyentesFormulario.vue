@@ -119,9 +119,9 @@
                 <td>No data</td>
             </tbody>
             <tbody class="bodyTabla" id="tablaconstituyentes" v-else v-for="(item,index) in items" :key="index" @change =" setData()">
-                <td>{{item.Tipo}}</td>
-                <td>{{item.Id}}</td>
-                <td>{{item.Name}}</td>
+                <td >{{item.Tipo}}</td>
+                <td >{{item.Id}}</td>
+                <td >{{item.Name}}</td>
             </tbody>
  
         </table> 

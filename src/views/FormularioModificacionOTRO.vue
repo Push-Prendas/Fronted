@@ -226,9 +226,7 @@ function  inscripcion_modificacion(
                 GrabarEnagenar: GrabarEnagenar,
                 correo_requirente: correo_requirente,
                 fecha_requirente: fecha_requirente,
-                revisorAsignado :-1,
-                firma:false,
-                tipoModificacion:4
+                revisorAsignado :-1
             })//18
             
             console.log("entros")
@@ -271,7 +269,7 @@ export default {
 			nombreRequirente: '',
             nDocRequirente: '',
             correoRequirente: '',
-            fechaRequirente: '',
+            fechaRequirente: Date.now(),
             Bienes: [],
             constituyentes: [{}],
             deudores: [{}],

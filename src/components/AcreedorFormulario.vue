@@ -21,7 +21,7 @@
                     RUN
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="run" id="run" @change ="setData()" >
+                    <input type="text" v-model="run" id="runacreedor" @change ="setData()" >
                 </div>
             </div>
             <div class="col row" v-if="option == 'Extranjero'">
@@ -29,7 +29,7 @@
                     ID
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="id" id="id" @change ="setData()">
+                    <input type="text" v-model="id" id="runacreedor" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'Extranjero'">
@@ -37,7 +37,7 @@
                     PAÍS
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <select  class="form-select" id="pais"  v-model="pais" @change ="changeOption(), getData()" >
+                    <select  class="form-select" id="paisacreedor"  v-model="pais" @change ="changeOption(), getData()" >
                         <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
                     </select>
@@ -48,7 +48,7 @@
                     RUT
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="rut" id="rut" @change ="setData()">
+                    <input type="text" v-model="rut" id="runacreedor" @change ="setData()">
                 </div>
             </div>
             <div class="col row" v-if="option == 'Juridica'">
@@ -56,7 +56,7 @@
                    RAZÓN SOCIAL
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="razonsocial" id="razonsocial" @change ="setData()">
+                    <input type="text" v-model="razonsocial" id="nombresacreedor" @change ="setData()">
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
                     NOMBRES
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombres" id="nombres" @change ="setData()">
+                    <input type="text" v-model="nombres" id="nombresacreedor" @change ="setData()">
                 </div>
             </div>
         </div>
