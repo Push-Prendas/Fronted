@@ -245,14 +245,18 @@ export default {
 
 
                 FechaOtorgamiento.value = solicitud_relacionada.fechaOtorgamientoEscritura
-
-
                 FechaSubscripcion.value = solicitud_relacionada.fechaSuscripcion
+
+                FechaOtorgamiento.disabled = true;
+                FechaSubscripcion.disabled = true;
             }
-            else if(solicitud_relacionada.privacidadDocumento == "Privado"){
+            else{
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
                 var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
 				console.log(FechaAutorizacion, FechaProtocolizacion)
+
+                FechaAutorizacion.disabled = true;
+                FechaSubscripcion.disabled = true;
             }
 
             var check = document.getElementById("gravaroenajenar")
@@ -271,6 +275,28 @@ export default {
             console.log("PATENTE")
 
             console.log(patentes_relacionadas)
+
+
+            ///READONLY///
+            tipo.disabled = true;
+            check.disabled = true;
+            left.disabled = true;
+            right.disabled = true;
+
+            const act_fijo               = document.getElementById('checkinscactfijo')
+            const bien_agro              = document.getElementById('checkinscbagropec')
+            const derechos_intangibles   = document.getElementById('checkinscderecheint')
+            const vehiculos              = document.getElementById('checkinscvehic')
+
+            act_fijo.checked             = solicitud_relacionada.activoFijo
+            bien_agro.checked            = solicitud_relacionada.bienesAgropecuarios
+            derechos_intangibles.checked = solicitud_relacionada.derechosIntangibles
+            vehiculos.checked            = solicitud_relacionada.prendaVehiculo
+
+            act_fijo.disabled = true
+            bien_agro.disabled = true
+            derechos_intangibles.disbaled = true
+            vehiculos.disabled = true
 
             //console.log(fecha)
           

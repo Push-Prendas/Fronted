@@ -11,6 +11,7 @@
           <MisSolicitudesNotario v-if = "rol == 'NOTARIO'"/>
           <PagosPendientes v-if = "rol == 'PAGADOR'"/>
           <MisSolicitudesFuncionarioNotaria v-if = "rol == 'FUNCIONARIONOTARIA'"/>
+          <MisSolicitudesFuncionarioNotaria v-if = "rol == 'FUNCIONARIOOFICINA'"/>
         </div>
 
     </div>

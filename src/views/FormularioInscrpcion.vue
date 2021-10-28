@@ -107,6 +107,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		validate = false
 		console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
 		//FRONTEND => MOSTRAR ERROR
+		alert("Numero repertorio notario en formato incorrecto")
 
 		//////////////////////////
 	}
@@ -114,6 +115,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	if(!rol_oficina && contratos.length == 0){
 		validate = false
 		console.log("NO HAY CONTRATO")
+		alert("No hay contrato")
 	}
 
 	//ADEMAS DE VER TODAS LAS VALIDACIONES DE TIPO VER CON GRUPO DE SERVICIOS LO DE VERIFICADOR DE PATENTES

@@ -116,7 +116,7 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 	console.log("EVERYTHING ITS SEND SUCCESFULLY")
 	//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
 	
-
+    alert("Todo se envio de forma correcta")
 
 	//
 })
@@ -165,7 +165,7 @@ function  inscripcion_modificacion(
             validate = false
             console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
             //FRONTEND => MOSTRAR ERROR
-    
+            alert("Numero repertorio notario formato incorrecto")
             //////////////////////////
         }
 

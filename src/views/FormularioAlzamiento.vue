@@ -118,7 +118,7 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 }).then(() => {
 	console.log("EVERYTHING ITS SEND SUCCESFULLY")
 	//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
-	
+	alert("ALZAMIENTO SE ENVIO DE FORMA CORRECTA")
 
 
 	//
@@ -178,7 +178,7 @@ function alzamiento(
             validate = false
             console.log("NUMERO REPERTORIO NOTARIO FORMATO INCORRECTO")
             //FRONTEND => MOSTRAR ERROR
-    
+            alert("Numero Repertorio Notario Formato Incorrecto")
             //////////////////////////
         }
 
