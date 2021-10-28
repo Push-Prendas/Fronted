@@ -17,9 +17,7 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            option:'natural',
             headers: ['Tipo', 'Id', 'Name'],
-            items: [{}],
         }
     },
 

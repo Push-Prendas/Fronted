@@ -8,14 +8,14 @@
                 </div>
                 <div class="tamanoTipoDocumento">
                     <select id="tipoDeDocumento" class="form-select"  v-model="tipoDoc"  @change ="changeOption(), setData()">
-                        <option selected value="publico">Público</option>
-                        <option value="privado">Privado</option>
+                        <option selected value="Publico">Público</option>
+                        <option value="Privado">Privado</option>
                     </select>
                 </div>
             </div>
 
-            <!--V-if publico-->
-            <div class="col row" v-if="option == 'publico'">
+            <!--V-if Publico-->
+            <div class="col row" v-if="option == 'Publico'">
                 <div class="titles d-flex justify-content-start" >
                     FECHA DE OTORGAMIENTO
                 </div>
@@ -23,7 +23,7 @@
                     <input type="date" v-model="FOtorgamiento" @change ="setData()">
                 </div>
             </div>
-            <div class="col row" v-if="option == 'publico'">
+            <div class="col row" v-if="option == 'Publico'">
                 <div class="titles d-flex justify-content-start">
                     FECHA DE SUSCRIPCIÓN
                 </div>
@@ -32,9 +32,9 @@
                 </div>
             </div>
 
-            <!--V-if privado-->
+            <!--V-if Privado-->
 
-            <div class="col row" v-if="option == 'privado'" >
+            <div class="col row" v-if="option == 'Privado'" >
                 <div class="titles d-flex justify-content-start" >
                     FECHA DE AUTORIZACIÓN
                 </div>
@@ -42,7 +42,7 @@
                     <input type="date" v-model="FAutorizacion" placeholder="FAutorizacion" @change ="setData()">
                 </div>
             </div>
-            <div class="col row" v-if="option == 'privado'">
+            <div class="col row" v-if="option == 'Privado'">
                 <div class="titles d-flex justify-content-start">
                     FECHA DE PROTOCOLIZACIÓN
                 </div>
@@ -108,7 +108,7 @@ export default {
   data() {
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
-            option:'publico',
+            option:'Publico',
             
         }
     },
