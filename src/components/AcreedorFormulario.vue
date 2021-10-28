@@ -16,7 +16,7 @@
             </div>
 
             <!--V-if Publico-->
-            <div class="col row" v-if="option == 'Natural'">
+            <div class="col row" v-if="tipoPersona == 'Natural'">
                 <div class="titles d-flex justify-content-start" >
                     RUN
                 </div>
@@ -24,7 +24,7 @@
                     <input type="text" v-model="run" id="runacreedor" @change ="setData()" >
                 </div>
             </div>
-            <div class="col row" v-if="option == 'Extranjero'">
+            <div class="col row" v-if="tipoPersona == 'Extranjero'">
                 <div class="titles d-flex justify-content-start" >
                     ID
                 </div>
@@ -32,7 +32,7 @@
                     <input type="text" v-model="id" id="runacreedor" @change ="setData()">
                 </div>
             </div>
-            <div class="col row" v-if="option == 'Extranjero'">
+            <div class="col row" v-if="tipoPersona == 'Extranjero'">
                 <div class="titles d-flex justify-content-start" >
                     PAÍS
                 </div>
@@ -43,7 +43,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col row" v-if="option == 'Juridica'">
+            <div class="col row" v-if="tipoPersona == 'Juridica'">
                 <div class="titles d-flex justify-content-start" >
                     RUT
                 </div>
@@ -51,7 +51,7 @@
                     <input type="text" v-model="rut" id="runacreedor" @change ="setData()">
                 </div>
             </div>
-            <div class="col row" v-if="option == 'Juridica'">
+            <div class="col row" v-if="tipoPersona == 'Juridica'">
                 <div class="titles d-flex justify-content-start" >
                    RAZÓN SOCIAL
                 </div>
@@ -61,7 +61,7 @@
             </div>
         </div>
  
-        <div class="row" v-if="option == 'Natural'">
+        <div class="row" v-if="tipoPersona == 'Natural'">
             <div class="col row" >
                 <div class="titles d-flex justify-content-start" >
                     APELLIDO PATERNO

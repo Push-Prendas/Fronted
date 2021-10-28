@@ -138,6 +138,9 @@ export default {
         return {
             option:'Natural',
             countries,
+            idDocumento:'',
+            nombrePersona: '',
+            pais: ''
         }
     },
     props: {

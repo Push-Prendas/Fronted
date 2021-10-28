@@ -61,9 +61,6 @@
                     
                 </div>
             </div>
-            
-        </div>
-        <div class="row">
             <div class="col row Space">
                 <div class="form-check ">
                     <input class="form-check-input" type="checkbox" value="" id="gravaroenajenar"  @change =" setData()" v-model="ProhibGravEnajenar">
@@ -72,6 +69,10 @@
                     </label>
                 </div>
             </div>
+            
+        </div>
+        <div class="row">
+            
             <div class="row right">
                 <div class="col row">
                     <div class="titles d-flex justify-content-start">
@@ -235,6 +236,13 @@ export default {
 
 .tamanoTipoDocumento{
     width: 10em;
+}
+
+.right{
+    margin-top:0%;
+    margin-right: 4%;
+    margin-left: 64%;
+
 }
 
 .titles{
