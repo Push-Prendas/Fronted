@@ -20,6 +20,13 @@ import ComprobanteSolicutud from './views/ComprobanteSolicitud.vue'
 import RecepcionDocBuscador from './views/BuscadorReceptor.vue'
 import RevisionDocumentoNotario from './views/RevisionDocumentosNotario.vue'
 
+import FormularioInscripcionEdit from './views/FormularioInscrpcionedicion.vue'
+import FormularioAlzamientoEdit from './views/FormularioAlzamientoedicion.vue'
+import FormularioModificacion1Edit from './views/FormularioModificacionALZPARCIALedicion.vue'
+import FormularioModificacion2Edit from "./views/FormularioModificacionCAMBIOACREEDORedicion.vue"
+import FormularioModificacion3Edit from "./views/FormularioModificacionPROHIBACTOedicion.vue"
+import FormularioModificacion4Edit from "./views/FormularioModificacionOTROedicion.vue"
+
 
 const routes = [
     {
@@ -163,6 +170,42 @@ const routes = [
     path: "/Dashboard/RECEPTOR/:username/RecepcionSolicitudes",
     name: "ResumendePagos",
     component: Dashboard,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/InscripciondecontratodeprendasEdit",
+    name: "InscripciondecontratodeprendasEdit",
+    component: FormularioInscripcionEdit,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/solicitudAlzamientoEdit",
+    name: "solicitudAlzamiento",
+    component: FormularioAlzamientoEdit,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/solicitudModificacion1Edit",
+    name: "solicitudModificacion1",
+    component: FormularioModificacion1Edit,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/solicitudModificacion2Edit",
+    name: "solicitudModificacion2",
+    component: FormularioModificacion2Edit,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/solicitudModificacion3Edit",
+    name: "solicitudModificacion3",
+    component: FormularioModificacion3Edit,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/solicitudModificacion4Edit",
+    name: "solicitudModificacion4",
+    component: FormularioModificacion4Edit,
     props: true
   },
   {

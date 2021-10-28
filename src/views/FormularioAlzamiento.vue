@@ -227,7 +227,8 @@ function alzamiento(
             derechos_intangibles: derechos_intangibles,
             año_repertorio_RPsD: año_repertorio_RPsD,
             numero_repertorio_RPsD: numero_repertorio_RPsD,
-            oficina: "mi oficina"
+            oficina: "mi oficina",
+            firma:false
 
 
 

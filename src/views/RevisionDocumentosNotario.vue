@@ -23,8 +23,6 @@ import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
 import { collection, getDocs,query,where} from "firebase/firestore";
 
-
-
 var total_items = []
 function add(patente,rvm,GoE,estado) {
         let item = {
@@ -36,6 +34,11 @@ function add(patente,rvm,GoE,estado) {
         total_items.push(item);
     }
 var solicitud_relacionada;
+var acreedores_relacionados = []
+var constituyentes_relacionados = []
+var deudores_relacionados = []
+var contratos_relacionados = []
+var archivos_relacionados = []	
 var patentes_relacionadas = []
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
