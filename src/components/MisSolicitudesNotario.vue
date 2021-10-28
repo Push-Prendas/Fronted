@@ -222,9 +222,8 @@ export default {
             setTimeout(() => { 
                 //localStorage.notaria
             this.funcionarios_notaria.forEach((insc)=>{
-                buscador_solicitud(0,0,"T",insc)
                 buscador_solicitud(1,0,"T",insc)
-                buscador_solicitud(2,0,"T",insc)
+
             
             })
 
