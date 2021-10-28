@@ -117,6 +117,7 @@ export default {
             setTimeout(() => { 
             console.log("TIMEOUT")
             console.log(id_sol)
+            localStorage.idSol = id_sol
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{

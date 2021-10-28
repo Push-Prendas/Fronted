@@ -283,7 +283,9 @@ export default {
     mounted(){
         console.log("ID FORMULARIO")
         console.log(localStorage.idSol)
-        setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
+        buscador_especifico_solicitud(localStorage.idSol, "I")
+        setTimeout(() => { 
+
         console.log("LA SOLICITUD ES:")
         console.log(solicitud_relacionada)
         const a_fijo = document.getElementById("actfijo")
@@ -296,6 +298,12 @@ export default {
         b_agrop.checked = solicitud_relacionada.bienesAgropecuarios
         d_int.checked = solicitud_relacionada.derechosIntangibles
         vehic.checked = solicitud_relacionada.prendaVehiculo
+
+
+
+
+        }, 1000)
+
     },
 
   name: 'AntecedentesFormularioMODIF-ALZA',

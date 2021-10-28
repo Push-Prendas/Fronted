@@ -152,6 +152,10 @@ function  inscripcion_modificacion(
     ){
 
 
+        
+
+
+
         var validate = true;
 
 
@@ -202,6 +206,10 @@ function  inscripcion_modificacion(
             ids = pat_data.docs.length;
             console.log(ids)
             console.log("submit")
+            console.log(activo_fijo)
+            console.log(bienes_agropecuarios)
+            console.log(derechos_intangibles)
+            console.log(vehiculos )
             
         }).then(() => {
             setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),ids.toString()),{
@@ -373,7 +381,9 @@ export default {
         this.nombres = data
         },
         getBienes(data) {
-			this.Bienes = data        
+			this.Bienes = data
+            
+       
         },
         getConstituyentes(data) {
         this.constituyentes = data
