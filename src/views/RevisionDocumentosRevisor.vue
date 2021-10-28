@@ -258,16 +258,16 @@ export default {
             var check = document.getElementById("gravaroenajenar")
             check.checked =  solicitud_relacionada.prohibicionGravarEnajenar
 
-            var check = document.getElementById("checkinscactfijo")
+            check = document.getElementById("checkinscactfijo")
             check.checked =  solicitud_relacionada.activoFijo
 
-            var check = document.getElementById("checkinscbagropec")
+            check = document.getElementById("checkinscbagropec")
             check.checked =  solicitud_relacionada.bienesAgropecuarios
 
-            var check = document.getElementById("checkinscderecheint")
+            check = document.getElementById("checkinscderecheint")
             check.checked =  solicitud_relacionada.derechosIntangibles
 
-            var check = document.getElementById("checkinscvehic")
+            check = document.getElementById("checkinscvehic")
             check.checked =  solicitud_relacionada.prendaVehiculo
 
             var numero_repertorio = solicitud_relacionada.numeroRepertorioNotario.split('-')
@@ -310,40 +310,40 @@ export default {
             updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
             estadoPrimario: 5,
         }).then(() => {
-        	getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then((data)=>{
-        		            updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
-            	aprovRevisor: true
-            	,}).then(()=>this.$router.push({path: VOLVER}) )
-        	})
-            
-        })
+			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
+							updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
+				aprovRevisor: true
+				,}).then(()=>this.$router.push({path: VOLVER}) )
+			})
+			
+		})
 
     }
     else if(localStorage.tipo_judge.toString() == "M"){
-       	updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
-            estadoPrimario: 5,
-        }).then(() => {
-        	getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then((data)=>{
-        		            updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
-            	aprovRevisor: true
-            	,}).then(()=>this.$router.push({path: VOLVER}) )
-        	})
-            
-        })
+		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
+			estadoPrimario: 5,
+		}).then(() => {
+			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
+							updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
+				aprovRevisor: true
+				,}).then(()=>this.$router.push({path: VOLVER}) )
+			})
+			
+		})
 
     }
 
     else if(localStorage.tipo_judge.toString() == "A"){
-       	updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
-            estadoPrimario: 5,
-        }).then(() => {
-        	getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then((data)=>{
-        		            updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
-            	aprovRevisor: true
-            	,}).then(()=>this.$router.push({path: VOLVER}) )
-        	})
-            
-        })
+		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
+			estadoPrimario: 5,
+		}).then(() => {
+			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
+							updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
+				aprovRevisor: true
+				,}).then(()=>this.$router.push({path: VOLVER}) )
+			})
+			
+		})
 
     }
 
@@ -359,40 +359,40 @@ rechazar(){
             updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
             estadoPrimario: 6,
         }).then(() => {
-        	getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then((data)=>{
-        		            updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
-            	aprovRevisor: false
-            	,}).then(()=>this.$router.push({path: VOLVER}) )
-        	})
+			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
+							updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
+				aprovRevisor: false
+				,}).then(()=>this.$router.push({path: VOLVER}) )
+			})
             
         })
 
     }
     else if(localStorage.tipo_judge.toString() == "M"){
-       	updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
-            estadoPrimario: 6,
-        }).then(() => {
-        	getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then((data)=>{
-        		            updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
-            	aprovRevisor: false
-            	,}).then(()=>this.$router.push({path: VOLVER}) )
-        	})
-            
-        })
+		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
+			estadoPrimario: 6,
+		}).then(() => {
+			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
+							updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
+				aprovRevisor: false
+				,}).then(()=>this.$router.push({path: VOLVER}) )
+			})
+			
+		})
 
     }
 
     else if(localStorage.tipo_judge.toString() == "A"){
-       	updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
-            estadoPrimario: 6,
-        }).then(() => {
-        	getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then((data)=>{
-        		            updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
-            	aprovRevisor: false
-            	,}).then(()=>this.$router.push({path: VOLVER}) )
-        	})
-            
-        })
+		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
+			estadoPrimario: 6,
+		}).then(() => {
+			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
+							updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
+				aprovRevisor: false
+				,}).then(()=>this.$router.push({path: VOLVER}) )
+			})
+			
+		})
 
     }
 

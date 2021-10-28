@@ -460,10 +460,12 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 			}).then(() => {
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
-				if (send_flag==true){
+				if (send_flag==false){
 					alert("Solicitud Guardada Exitosamente")
 				}else{
 					alert("Solicitud Enviada Exitosamente")
+					this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`})
+
 				}
 				
 				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -548,7 +550,7 @@ export default {
 		
 		}
 		catch{
-
+			console.log(" CATCH FORM EDICIONINSCRIP")
 		}
 
 		try{
@@ -556,6 +558,7 @@ export default {
 			document.getElementById('runacreedor').value = acreedores_relacionados[0].runPersona
 		}
 		catch{
+			console.log(" CATCH FORM EDICIONINSCRIP")
 
 		}
 
@@ -564,6 +567,7 @@ export default {
 			document.getElementById('paisacreedor').value = acreedores_relacionados[0].paisPersona
 		}
 		catch{
+			console.log(" CATCH FORM EDICIONINSCRIP")
 
 		}
 
@@ -635,15 +639,12 @@ export default {
 			vehiculos: [],
 			contrato: null,
 			anexos: null,
-			notaria:''
+			notaria:'',
+			rol:localStorage.rol
         }
     },
   props: {
 
-        rol :  {
-            type: String,
-            default: localStorage.rol
-        }
   },
   methods: {
 		getNotaria(data){
@@ -754,7 +755,7 @@ export default {
                 this.FOtorgamiento.toString(),
                 this.FProtocolizacion.toString(),
                 this.FAutorizacion.toString(), 
-                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),
+                solicitud_relacionada.numeroRepertorioNotario,
                 this.ProhibGravEnajenar,
                 this.notaria, 
                 this.nombreRequirente, 
