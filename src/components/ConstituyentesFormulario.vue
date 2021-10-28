@@ -137,11 +137,14 @@ export default {
       const countries= Countries.default.countries;
         return {
             option:'natural',
-            items: [],
             countries,
         }
     },
     props: {
+        items: {
+            type: Array,
+            default: new Array(),
+        },
          nombrecompleto:{
             type: String,
             default: '',
