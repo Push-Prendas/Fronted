@@ -53,15 +53,67 @@ export default {
       const countries= Countries.default.countries;
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
-            option:'natural',
-            countries,
-            nombreCompleto: "",
-            NdeDocumento: "",
-            correo: "",
-            fecha: "",
-
-            
+            countries, 
         }
+    },
+    props:{
+        nombreCompleto:{
+            type: String,
+            default: '',
+        },
+        NdeDocumento:{
+            type: String,
+            default: '',
+        },
+        correo:{
+            type: String,
+            default: '',
+        },
+        fecha:{
+            type: String,
+            default: '',
+        }, 
+        nombrecompleto:{
+            type: String,
+            default: '',
+        },
+        tipoPersona:{
+            type: String,
+            default: 'Natural',
+            },
+        run:{
+            type: String,
+            default: '',
+            },
+        id:{
+            type: String,
+            default: '',
+            },
+        pais:{
+            type: String,
+            default: 'Chile',
+            },
+        rut:{
+            type: String,
+            default: '',
+            },
+        razonsocial:{
+            type: String,
+            default: '',
+            },
+        Apaterno:{
+            type: String,
+            default: '',
+            },
+        Amaterno:{
+            type: String,
+            default: '',
+            },
+        nombres:{
+            type: String,
+            default: '',
+            },
+
     },
 
     methods:{

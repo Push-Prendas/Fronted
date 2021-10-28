@@ -49,7 +49,6 @@ function add(patente,rvm,GoE,estado) {
             "rvm": rvm,
             "GoE": GoE,
             "estado": estado}
-
         total_items.push(item);
     }
 
@@ -236,12 +235,7 @@ export default {
   name: 'AcreedorFormularios',
   data() {
         return {
-            items: total_items,  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            option:'natural',
-            patente:"",
-            GoE:false,
-            rvm:false,
-            estado:""
+            hola:''
         }
     },
     mounted() {
@@ -273,6 +267,26 @@ export default {
         tipoSolicitud:{
             type: String,
             default: 'Modificacion'
+        },
+		items:{
+            type: Array,
+            default: new Array,
+        },
+		patente:{
+            type: String,
+            default: ''
+        },
+		GoE:{
+            type: Boolean,
+            default: false,
+        },
+		rvm:{
+            type: Boolean,
+            default: false
+        },
+		estado:{
+            type: String,
+            default: ''
         },
     },
     methods:{

@@ -230,14 +230,29 @@ export default {
   data() {
         return {
             option:'natural',
-            patente:"",
-            GoE:false,
-            rvm:false
+
         }
     },props:{
-         items:{
+
+        items:{
             type: Array,
-            default: new Array
+            default: new Array,
+        },
+		patente:{
+            type: String,
+            default: ''
+        },
+		GoE:{
+            type: Boolean,
+            default: false,
+        },
+		rvm:{
+            type: Boolean,
+            default: false
+        },
+		estado:{
+            type: String,
+            default: ''
         },
 
     },

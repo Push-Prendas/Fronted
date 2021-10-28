@@ -136,7 +136,6 @@ export default {
         return {
             option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
-            items: [],
             idDocumento:"",
             nombrePersona: "",
             razonsocial: "",
@@ -146,6 +145,10 @@ export default {
     },
 
     methods:{
+        items: {
+            type: Array,
+            default: new Array(),
+        },
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaDeudor");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
