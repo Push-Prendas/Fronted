@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">     
         <table class="table">
-            <thead class="encabezadoTabla" @dblclick="rellenarTabla()">
+            <thead class="encabezadoTabla">
                 <tr>
                 <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
                 <th scope="col"></th>
@@ -12,7 +12,6 @@
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
                 <td>{{item.Rep}}</td>
-                <td>{{item.Notaria}}</td>
                 <td>{{item.Fecha}}</td>
                 <td>{{item.Monto}}</td>
                 <td class="d-flex justify-content-center">
@@ -71,7 +70,6 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 	///			LOS CRITERIOS ANTERIORES EL ARGUMENTO ES -1
 
 	
-
 	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
@@ -88,7 +86,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(inscripciones_encontradasGlobal)
 			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-			
+			console.log(inscripciones_encontradasGlobal.length)
 			///////
 		})
 
@@ -108,7 +106,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			console.log("MODIFICACIONES ENCONTRADAS")
 			console.log(modificaciones_encontradasGlobal)
 			//UNA VEZ LOS MODIFICACIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-
+            console.log(inscripciones_encontradasGlobal.length)
 			///////
 		})
 
@@ -128,7 +126,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(alzamientos_encontradosGlobal)
 			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-
+            console.log(alzamientos_encontradosGlobal.length)
 			///////
 		})
 	}
@@ -143,9 +141,14 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 
 	////////OJO: REVISAR NUMERO REPERTORIO DE PRENDA/////////////////
 	///GUARDAR EN UNA TABLA APARTE O EN ALGO EL NUMERO DE REPEROTRIO DE PRENDA ACTUAL Y ASIGNAR
+    console.log("Datos recibidos")
+    console.log(tipo_de_solicitud +"-" + id_solicitud + "-" + estado_secundario + "-" + estado_secundario + "-" + user_id)
+
+
 	var change_message = ["El pago no se realizo", "Hubo intencion de pagar", "Pagado"]
 	if (tipo_de_solicitud == "I"){
 		updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+            estadoPrimario: 4,
 			estadoSecundario: estado_secundario,
 			numeroRepertorioContratoPrenda: id_solicitud
 
@@ -156,12 +159,14 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 	}
 	else if (tipo_de_solicitud == "M"){
 		updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+            estadoPrimario: 4,
 			estadoSecundario: estado_secundario,
 			numeroRepertorioContratoPrenda: id_solicitud
 		});
 	}
 	else if (tipo_de_solicitud == "A"){
 		updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+            estadoPrimario: 4,
 			estadoSecundario: estado_secundario,
 			numeroRepertorioContratoPrenda: id_solicitud
 		});
@@ -194,10 +199,13 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 }
 export default {
   name: 'PagosPendientes',
+  mounted() {
+      this.rellenarTabla()
+      },
   data() {
         return {
             items: [],  //AQUI HAY QUE PONER LO QUE ENTRE DE LA REQUEST CON JSON
-            thread : ['N° Documento','Notaria', 'Fecha','Monto', 'Estado'],
+            thread : ['N° Repertorio Notaria', 'Fecha','Monto', 'Estado'],
             username: localStorage.user,
             inscripciones_encontradas: inscripciones_encontradasGlobal,
             modificaciones_encontradas : modificaciones_encontradasGlobal,
@@ -215,13 +223,18 @@ export default {
     
         
   },
-  methods:{
+  methods:{ 
       rellenarTabla() {
             console.log("relleno tabla")
-            
-            buscador_solicitud(4,0,"T", -1)
-            //buscador_solicitud(1,0,"T", -1)
+            //EstPrimario 1 y EstSecundario 0 y firma true
+
+            //buscador_solicitud(4,0,"T", -1) 
+            buscador_solicitud(1,0,"T", -1)
+            console.log("PHASE 1")
+
+            setTimeout(() => { 
             if(this.inscripciones_encontradas.length>0){
+                console.log("CHECKING")
                 console.log(this.inscripciones_encontradas);
                 var estad;
                 this.inscripciones_encontradas.forEach((insc)=>{
@@ -230,23 +243,25 @@ export default {
                     }else{
                         estad="Pagado"
                     }
-                    if (insc[1]["nombre_notaria"] != ""){
+                    if (insc[1]["firma"]){ //TODOS LOS DATOS TIENEN ESTE VALOR VACIO
                         let item = {
                             "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequiriente"],
                             "Monto": insc[1]["montoTotal"],
-                            "Notaria": insc[1]["nombre_notaria"],
+                            "Notaria": insc[1]["notaria"],
                             "Estado": estad,
                             "Tipo":"I"}
                         this.items.push(item)
+                        console.log(insc[1])
                         this.monto+= parseFloat(insc[1]["montoTotal"]);
                     }
                                         
                     });
 
-                }
+            }
+            console.log("PHASE 2")
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoPrimario"]==1){
@@ -254,21 +269,29 @@ export default {
                     }else{
                         estad="Notif. Rechazo"
                     }
-                    if (insc[1]["nombre_notaria"] != ""){
+                    if (insc[1]["firma"]){
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Monto": insc[1]["montoTotal"],
-                            "Notaria": insc[1]["nombre_notaria"],
+                            "Rep": insc[1]["numero_repertorio_notaria"], //numero repertorio notaria
+                            "Funcionario": insc[1]["usuarioCreador"], 
+                            "Fecha": insc[1]["fecha_requirente"],
+                            "Monto": 0,//insc[1]["montoTotal"], CERO POR AHORA
+                            "Notaria": insc[1]["notaria"],
                             "Estado": estad,
                             "Tipo":"M"}
+                        ///console.log(insc[1]) //undefined values
+                        /*
+                        <td>{{item.Rep}}</td>
+                        <td>{{item.Notaria}}</td>
+                        <td>{{item.Fecha}}</td>
+                        <td>{{item.Monto}}</td>
+                        */
                         this.items.push(item)
                     }
                     });
 
                 }
+            console.log("PHASE 3")
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
                     if(insc[1]["estadoPrimario"]==1){
@@ -276,13 +299,13 @@ export default {
                     }else{
                         estad="Notif. Rechazo"
                     }
-                    if (insc[1]["nombre_notaria"] != ""){
+                    if (insc[1]["firma"]){
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Rep": insc[1]["numero_repertorio_notaria"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Monto": insc[1]["montoTotal"],
+                            "Fecha": insc[1]["fecha_requiriente"], //NO EXISTE TODAVIA
+                            "Monto": 0,//insc[1]["montoTotal"], CERO POR AHORA
                             "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
                             "Tipo":"A"}
@@ -293,7 +316,7 @@ export default {
                 }
             //this.items=i
             console.log(this.items)
-            
+            },2000);
             },
     pagar(){
         var i = 0;
@@ -310,6 +333,11 @@ export default {
         var w = 0
         while (w<indexCheck.length){
             var item = this.items[indexCheck[w]]
+            console.log(item)
+            //Tipo
+            //id
+            //1
+            //emailUser?
             modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
             this.items.splice(indexCheck[w],1)
             w++

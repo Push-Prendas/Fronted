@@ -23,7 +23,7 @@ import Navbar from '../components/Navbar.vue'
 
 
 console.log("MY OPTS")
-console.log(localStorage.my_opts.split(','))
+//console.log(localStorage.my_opts.split(','))
 export default {
   name: 'RevisionDoc',
   data() {
