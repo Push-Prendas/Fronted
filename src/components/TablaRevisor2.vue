@@ -147,7 +147,9 @@ async function buscar_asignaciones(user_id){
 	getDocs(query(collection(db, "Inspeccion_inscripcion"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			id_inscripciones_asociadas.push(d.data().solicitudId)
+			if (d.data().aprovRevisor==null) {
+				id_inscripciones_asociadas.push(d.data().solicitudId)
+			}
 		})
 	}).then(() => {
 		id_inscripciones_asociadas.forEach((i) => {
@@ -162,7 +164,9 @@ async function buscar_asignaciones(user_id){
 	getDocs(query(collection(db, "Inspeccion_modificacion"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			id_modificaciones_asociadas.push(d.data().solicitudId)
+			if (d.data().aprovRevisor==null) {
+				id_modificaciones_asociadas.push(d.data().solicitudId)
+			}
 		})
 	}).then(() => {
 		id_modificaciones_asociadas.forEach((i) => {
@@ -177,7 +181,9 @@ async function buscar_asignaciones(user_id){
 	getDocs(query(collection(db, "Inspeccion_alzamiento"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			id_alzamientos_asociados.push(d.data().solicitudId)
+			if (d.data().aprovRevisor==null) {
+				id_alzamientos_asociados.push(d.data().solicitudId)
+			}
 		})
 	}).then(() => {
 		id_alzamientos_asociados.forEach((i) => {

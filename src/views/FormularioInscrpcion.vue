@@ -297,10 +297,14 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 			}).then(() => {
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
-				if (send_flag==true){
+				if (send_flag==false){
 					alert("Solicitud Guardada Exitosamente")
 				}else{
 					alert("Solicitud Enviada Exitosamente")
+
+					this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`})
+
+
 				}
 				
 				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
