@@ -392,14 +392,14 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        modificar(flag, oficina=false){//agregar flags
+        modificar(flag){//agregar flags
             var est_p = 0
             if(flag){
-               if(oficina){
-                   est_p = 3
+               if(localStorage.rol == "FUNCIONARIONOTARIA"){
+                   est_p = 1
                } 
                else{
-                   est_p = 1
+                   est_p = 3
                }
             }
             inscripcion_modificacion(

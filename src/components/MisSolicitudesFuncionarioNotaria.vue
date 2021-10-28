@@ -15,7 +15,7 @@
                     <p class="titleFormulario">{{item.Estado}} </p>
                 </td>
                 <td>
-                    <a class="logout" :href="'/Dashboard/NOTARIO/'+username+'/RevisionDoc'"><font-awesome-icon style= "margin-right:5px" icon="file-download" /> </A>
+                    <a class="logout" @click="obtain_id_go(item.ID, item.Tipo)"><font-awesome-icon style= "margin-right:5px" icon="file-download" /> </A>
                 </td>
             </tbody>
  
@@ -30,7 +30,10 @@ import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
+
 var username = localStorage.user
+
+const URL_REVISION = "/Dashboard/" + localStorage.rol + "/" + username + "/Inscripciondecontratodeprendas"
 
 function firmarDocumento(tipo_de_solicitud, id_solicitud){
 	if (tipo_de_solicitud == "I"){
@@ -171,117 +174,92 @@ export default {
     },
     methods:{
 
+        obtain_id_go(id, tipo){
+            console.log("NOIZ ID")
+            console.log(id)
+            localStorage.id_revisar = id
+            localStorage.tipo_revisar = tipo
+            location.href = URL_REVISION
+        },
+
         clean(){
             this.items.length = 0;
             this.inscripciones_encontradas.length = 0;
             this.modificaciones_encontradas.length = 0;
             this.alzamientos_encontrados.length = 0;
-            console.log("-----------------------------------")
-            console.log(this.items)
-            console.log(this.inscripciones_encontradas)
-            console.log(this.modificaciones_encontradas)
-            console.log(this.alzamientos_encontrados)
-            console.log("-----------------------------------")
+            
         },
 
 
         rellenarTabla(){
 
             console.log("DATADTA")
-            console.log(username)
-             buscador_solicitud(1,0,"T",username)
-            //this.items = []
+            console.log(localStorage.mail)
+            buscador_solicitud(0,0,"T",localStorage.mail)
 
             console.log(this.items)
-
             console.log("DATADTA")
-
-
-             setTimeout(() => { 
-
-
-                            console.log("relleno tabla")
-
-
-
- 
-            
-           
-
-            
-
-            if(this.inscripciones_encontradas.length>0){
-                console.log(this.inscripciones_encontradas);
-                var estad;
-                this.inscripciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
-                    }else{
-                        estad="Notif. Rechazo"
-                    }
-                    let item = {
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
-                    console.log(item)
-                    console.log(this.items)
-                    this.items.push(item)
-                    });
-
-                }
-            if(this.modificaciones_encontradas.length>0){
-                this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
-                    }else{
-                        estad="Notif. Rechazo"
-                    }
-                    let item = {
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
-
-                    this.items.push(item)
-                    });
-
-                }
-            if(this.alzamientos_encontrados.length>0){
-                this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
-                    }else{
-                        estad="Notif. Rechazo"
-                    }
-                    let item = {
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad}
-
-                    this.items.push(item)
-                    });
-
-                }
-            //this.items=i
-            console.log("MY ITEMS")
+            console.log("-----------------------------------")
             console.log(this.items)
+            console.log(this.inscripciones_encontradas)
+            console.log(this.modificaciones_encontradas)
+            console.log(this.alzamientos_encontrados)
+            console.log("-----------------------------------")
 
+            setTimeout(() => { 
+                console.log("relleno tabla")
+                if(this.inscripciones_encontradas.length>0){
+                    console.log(this.inscripciones_encontradas);
+                    var estad;
+                    this.inscripciones_encontradas.forEach((insc)=>{
+                        estad="En Edicion"
+                        let item = {
+                                "Rep": insc[1]["numeroRepertorioNotario"],
+                                "Funcionario": insc[1]["usuarioCreador"],
+                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Estado": estad,
+                                "ID": insc[0],
+                                "Tipo": "I"}
+                        console.log(item)
+                        console.log(this.items)
+                        this.items.push(item)
+                        });
 
+                    }
+                if(this.modificaciones_encontradas.length>0){
+                    this.modificaciones_encontradas.forEach((insc)=>{
+                        estad="En Edicion"
+                        let item = {
+                                "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+                                "Funcionario": insc[1]["usuarioCreador"],
+                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Estado": estad,
+                                "ID": insc[0],
+                                "Tipo": "M"}
 
+                        this.items.push(item)
+                        });
 
+                    }
+                if(this.alzamientos_encontrados.length>0){
+                    this.alzamientos_encontrados.forEach((insc)=>{
+                        estad="En Edicion"
+                        let item = {
+                                "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+                                "Funcionario": insc[1]["usuarioCreador"],
+                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Estado": estad,
+                                "ID": insc[0],
+                                "Tipo": "A"}
 
+                        this.items.push(item)
+                        });
 
-
-
-
-
-
-
-
-
-              }, 1000);
+                    }
+                //this.items=i
+                console.log("MY ITEMS")
+                console.log(this.items)}, 
+            1000);
 
             
         },
