@@ -22,9 +22,8 @@
               </td>
               <td class="d-flex justify-content-center"> 
                   <div class="tamanoTipoDocumento ">
-                      <select id="asignado" class="form-select" v-model="tipoDoc" @change="changeOption()">
-                          <option selected value="Revisor #1">Revisor #1</option>
-                          <option value="revisor #2">Revisor #2</option>
+                      <select id="asignado" class="form-select" v-model="tipoDoc" @change="changeOption(index,$event)" >
+                          <option :value="rev.mail"    v-for="(rev,index2) in revisores" :key="index2" >{{rev.mail}}</option>
                       </select>
                   </div>
               </td>
@@ -38,13 +37,80 @@
 
 <script>
 import {db} from "@/main";
-import { collection, getDocs,query,where,} from "firebase/firestore";
+import { collection, getDocs,setDoc,doc,query,where,} from "firebase/firestore";
 var inscripciones_encontradasGlobal = []
 var inscripciones_encontradasGlobalFiltered = []
 var modificaciones_encontradasGlobal = []
 var modificaciones_encontradasGlobalFiltered = []
 var alzamientos_encontradosGlobal = []
 var alzamientos_encontradosGlobalFiltered = []
+
+var revisores_encontradosGlobal = []
+
+
+function asignar_solicitud(id_solicitud, tipo_solicitud, user_id){
+    if(tipo_solicitud == "I"){
+        console.log("Subir "+id_solicitud)
+        getDocs(collection(db, "Inspeccion_inscripcion")).then((hist_data) => {
+            var id = hist_data.docs.length+1;
+            setDoc(doc(collection(db, "Inspeccion_inscripcion"),id.toString()), {
+                solicitudId: id_solicitud,
+                userId: user_id,
+                comment: "",
+                fechaRevision: ""
+            })
+        })
+    }
+    else if (tipo_solicitud == "M"){
+        getDocs(collection(db, "Inspeccion_modificacion")).then((hist_data) => {
+            var id = hist_data.docs.length+1;
+            setDoc(doc(collection(db, "Inspeccion_modificacion"),id.toString()), {
+                solicitudId: id_solicitud,
+                userId: user_id,
+                comment: "",
+                fechaRevision: ""
+            })
+        })
+
+    }
+    else if (tipo_solicitud == "A"){
+        getDocs(collection(db, "Inspeccion_alzamiento")).then((hist_data) => {
+            var id = hist_data.docs.length+1;
+            setDoc(doc(collection(db, "Inspeccion_alzamiento"),id.toString()), {
+                solicitudId: id_solicitud,
+                userId: user_id,
+                comment: "",
+                fechaRevision: ""
+            }
+            
+            )
+        })
+
+    }
+    
+
+}
+
+
+function buscar_usuario_de_revisores(){
+    getDocs(collection(db, "Usuario")).then((sol_data) => {
+
+
+        sol_data.docs.forEach((users) =>{
+
+            //var insc_data = users.data();
+
+            if(users.data().rol == "REVISOR"){
+
+                
+                    revisores_encontradosGlobal.push(users.data())
+            }
+
+        })
+
+    })
+
+}
 async function buscador_solicitud(tipo_de_solicitud){
 
     ///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
@@ -163,6 +229,8 @@ export default {
     mounted() {
       this.clean()
       this.rellenarTabla()
+      console.log("START->")
+      buscar_usuario_de_revisores()
     },
     data() {
         return {
@@ -172,7 +240,8 @@ export default {
             inscripciones_encontradas: inscripciones_encontradasGlobalFiltered,
             modificaciones_encontradas : modificaciones_encontradasGlobalFiltered,
             alzamientos_encontrados : alzamientos_encontradosGlobalFiltered,
-            emailUser: localStorage.mail
+            emailUser: localStorage.mail,
+            revisores: revisores_encontradosGlobal
         }
     },
   name: 'TablaRevisor',
@@ -188,6 +257,39 @@ export default {
         }
   },
   methods:{
+      changeOption(index,value){
+          console.log("POG")
+          var item = this.items[index];
+
+          
+
+
+          
+          asignar_solicitud(item.id,item.Tipo,value.target.value)
+
+          //this.items.splice(index,1);
+
+          setTimeout(() => {
+
+              this.$router.go()
+          },1000)
+
+          console.log(value.target.value)
+
+          
+
+
+
+
+          
+
+  
+        
+
+
+
+
+      },
         rellenarTabla() {
             console.log("relleno tabla")
             
