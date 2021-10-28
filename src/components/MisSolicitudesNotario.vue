@@ -76,6 +76,7 @@ function buscar_usuario_de_notaria(id_notaria){
                 
                     funcionarios_notaria_encontradosGlobal.push(users.data().mail.toString())
 
+          
 
                    
                     console.log(users.data().mail.toString())
@@ -223,6 +224,7 @@ export default {
         },
         rellenarTabla() {
             console.log("relleno tabla")
+            console.log(localStorage.notaria)
 
             
 

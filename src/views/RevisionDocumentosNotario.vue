@@ -8,8 +8,8 @@
             <VehiculosLectura :tipoSolicitud="Alzamiento" />
             <!-- FALTA COLOCALAR LOS ARCHIVOS -->
             <div class="row d-flex justify-content-center" id="contenedor">
-                <button class="col-2 titleButton">Rechazar</button>
-                <button class="col-2 titleButton">Firmar FEA</button>
+                <button class="col-2 titleButton"  @click="rechazar()">Rechazar</button>
+                <button class="col-2 titleButton" @click="aceptar()">Firmar FEA</button>
             </div>
         </div>
         
@@ -21,7 +21,18 @@ import VehiculosLectura from '../components/VehiculoLecturaFormulario.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc,query,where} from "firebase/firestore";
+import { collection, getDocs, updateDoc, setDoc,query,where, doc} from "firebase/firestore";
+
+
+var username = localStorage.user
+const VOLVER= "/Dashboard/" + localStorage.rol + "/" + username + "/MisSolicitudes"
+
+
+
+
+
+
+
 
 
 
@@ -290,6 +301,86 @@ export default {
     VehiculosLectura,
     Menu,
     Navbar,
+  },
+  methods:{
+    aceptar(){
+
+    if(localStorage.tipo_revisar.toString() == "I"){
+
+
+
+            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 5,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+
+
+    }
+    else if(localStorage.tipo_revisar.toString() == "M"){
+
+            updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 5,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+    else if(localStorage.tipo_revisar.toString() == "A"){
+
+            updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 5,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+
+},
+
+rechazar(){
+
+
+
+    if(localStorage.tipo_revisar.toString() == "I"){
+
+            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 6,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+    else if(localStorage.tipo_revisar.toString() == "M"){
+
+            updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 6,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+    else if(localStorage.tipo_revisar.toString() == "A"){
+
+            updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_revisar.toString()),{
+            estadoPrimario: 6,
+        }).then(() => {
+            this.$router.push({path: VOLVER})
+        })
+
+    }
+
+
+},
+
+
+
+
+
   },
 }
 console.log(localStorage.my_opts)
