@@ -303,8 +303,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					alert("Solicitud Guardada Exitosamente")
 				}else{
 					alert("Solicitud Enviada Exitosamente")
-					this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`})
-					
+					this.redirect()
 				}
 				
 				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -366,6 +365,14 @@ export default {
         }
   },
   methods: {
+		redirect(){
+			document.getElementById("tabladeudores").value =[]
+			document.getElementById("tablaconstituyentes").value =[]
+			document.getElementById("tablapatentesinscripcion").value =[]
+
+			this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`})
+
+		},
 		currentDateTime() {
 		const current = new Date();
 		const date = current.getDate()+'-'+(current.getMonth()+1)+'-'+current.getFullYear();

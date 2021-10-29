@@ -24,7 +24,7 @@
                             RUN
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="run">
+                            <input type="text" v-model="run" id="run">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -32,7 +32,7 @@
                             ID
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="id">
+                            <input type="text" v-model="id" id="id">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Juridica'">
@@ -40,7 +40,7 @@
                             RUT
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="rut">
+                            <input type="text" v-model="rut" id="rut">
                         </div>
                     </div>
                     <div class="row" v-if="option == 'Juridica'">
@@ -48,7 +48,7 @@
                             RAZON SOCIAL
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="idDocumento" id="rut">
+                            <input type="text" v-model="razonsocial" id="razonsocial">
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                                 APELLIDO PATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="nombrePersona">
+                                <input  type="text" v-model="apellidopaterno" id="apellidopaterno">
                             </div>
                     </div>
                     <div class="col row">
@@ -66,7 +66,7 @@
                                APELLIDO MATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="nombre" type="text" v-model="nombrePersona">
+                                <input type="text" v-model="apellidomaterno" id="apellidomaterno">
                             </div>
                     </div>
                     <div class="row">
@@ -74,7 +74,7 @@
                             NOMBRES
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrePersona">
+                            <input type="text" v-model="nombres" id="nombres">
                         </div>
                     </div>
                     
@@ -86,7 +86,7 @@
                             NOMBRE COMPLETO
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombre" type="text" v-model="nombrePersona">
+                            <input id="nonmbrecompleto" type="text" v-model="nombrecompleto">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -94,7 +94,7 @@
                             PAÍS
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <select  class="form-select"  v-model="pais" @change ="changeOption(), getData()" >
+                            <select  class="form-select"  v-model="pais" id="pais" @change ="changeOption(), getData()" >
                                 <option :value="country.name" v-for="(country,index) in countries" :key="index">{{country.name}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                                 
                             </select>
@@ -111,6 +111,7 @@
                 <th scope="col">TIPO DE PERSONA</th>
                 <th scope="col">IDENTIFICADOR</th>
                 <th scope="col">NOMBRE/RAZON</th>
+                <th scope="col">PAIS</th>
                 </tr>
             </thead>
             <tbody class="bodyTabla" v-if="items.length == 0">
@@ -120,6 +121,7 @@
                 <td>{{item.Tipo}}</td>
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>
+                <td>{{item.Pais}}</td>
             </tbody>
  
         </table> 
@@ -138,35 +140,57 @@ export default {
             items: [],
             option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
-            idDocumento:"",
-            nombrePersona: "",
+            run:"",
+            id:'',
+            rut:"",
+            nombres: "",
             razonsocial: "",
             countries,
-            pais:"",
+            pais:"Chile",
+            apellidopaterno:'',
+            apellidomaterno:'',
+            nombrecompleto:'',
         }
     },
 
     methods:{
-
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaDeudor");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
         },
         add() {
-            let item = {
-                "Tipo": this.option,
-                "Id": this.idDocumento,
-                "Name": this.nombrePersona,
-                "pais": this.pais}
-            this.items.push(item);
+            if(this.option=="Natural"){
+                let item = {
+                    "Tipo": this.option,
+                    "Id": this.run,
+                    "Name": this.nombres+' '+this.apellidopaterno+' '+this.apellidomaterno,
+                    "Pais": this.pais}
+                this.items.push(item);
+            }else if(this.option=="Juridica"){
+                let item = {
+                    "Tipo": this.option,
+                    "Id": this.rut,
+                    "Name": this.razonsocial,
+                    "Pais": this.pais}
+                this.items.push(item);
+            }else if(this.option=="Extranjero"){
+                let item = {
+                    "Tipo": this.option,
+                    "Id": this.id,
+                    "Name": this.nombrecompleto,
+                    "Pais": this.pais}
+                this.items.push(item);
+            }
+            this.run ="";
+            this.nombres="";
+            this.apellidopaterno="";
+            this.apellidomaterno="";
+            this.pais="Chile";
             this.option="Natural";
-            this.idDocumento="";
-            this.nombrePersona="";
-            this.pais="";
-        },
-        clean(){
-            console.log("limpiar campos aqui")
-
+            this.rut="";
+            this.razonsocial="";
+            this.id="";
+            this.nombrecompleto="";
         },
         setData(){
             this.$emit("getDeudores",this.items);

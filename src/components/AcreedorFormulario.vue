@@ -87,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div class="row" v-if="option == 'Extranjero'">
+        <div class="row" v-if="tipoPersona == 'Extranjero'">
             <div class="col row" >
                 <div class="titles d-flex justify-content-start" >
                     NOMBRE COMPLETO
