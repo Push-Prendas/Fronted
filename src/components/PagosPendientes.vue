@@ -466,10 +466,10 @@ export default {
             console.log("PHASE 2")
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
+                   if(insc[1]["estadoSecundario"]==0){
+                        estad="Por pagar"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Pagado"
                     }
                     if (insc[1]["firma"]){
                         let item = {
@@ -496,10 +496,10 @@ export default {
             console.log("PHASE 3")
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
+                    if(insc[1]["estadoSecundario"]==0){
+                        estad="Por pagar"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Pagado"
                     }
                     if (insc[1]["firma"]){
                         let item = {

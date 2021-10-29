@@ -176,7 +176,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 				}
 			})
 		}).then(() => {
-			console.log("INSCRIPCIONES ENCONTRADAS")
+			console.log("ALZAMIENTOD ENCONTRADAS")
 			console.log(alzamientos_encontradosGlobal)
 			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
 
@@ -216,6 +216,7 @@ export default {
             location.href = URL_REVISION
         },
         clean(){
+            this.items =[]
             this.items.length = 0;
             this.inscripciones_encontradas.length = 0;
             this.modificaciones_encontradas.length = 0;
@@ -223,6 +224,7 @@ export default {
             this.funcionarios_notaria.length = 0;
         },
         rellenarTabla() {
+            this.items=[]
             console.log("relleno tabla")
             console.log(localStorage.notaria)
 
@@ -237,8 +239,8 @@ export default {
 
             setTimeout(() => { 
                 //localStorage.notaria
-            this.funcionarios_notaria.forEach((insc)=>{
-                buscador_solicitud(1,0,"T",insc)
+            this.funcionarios_notaria.forEach(()=>{
+                buscador_solicitud(1,0,"T",-1)
             
             })
 
@@ -293,9 +295,9 @@ export default {
                         estad="Rechazo Notaria"
                     }
                     let item = {
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Rep": insc[1]["numero_repertorio_notaria"],
+                            "Funcionario": "funcionarionotaria@funcionarionotaria.cl",
+                            "Fecha": insc[1]["fecha_requirente"],
                             "Estado": estad,
                             "ID": insc[0],
                             "Tipo": "M"}
@@ -316,9 +318,9 @@ export default {
                         estad="Rechazo Notaria"
                     }
                     let item = {
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Rep": insc[1]["numero_repertorio_notaria"],
+                            "Funcionario": "funcionarionotaria@funcionarionotaria.cl",
+                            "Fecha": insc[1]["fecha_requirente"],
                             "Estado": estad,
                             "ID": insc[0],
                             "Tipo": "A"}
@@ -330,6 +332,7 @@ export default {
 
                 }
             //this.items=i
+            console.log("ESTOS SON TODOS")
             console.log(this.items)
              },3000);
             

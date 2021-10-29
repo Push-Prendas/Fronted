@@ -63,6 +63,7 @@
             </div>
             
         </div>
+
         <div class="row right">
             <div class="col row">
                 <div class="titles d-flex justify-content-start">
@@ -86,7 +87,9 @@
                     <label class="form-check-label d-flex justify-content-start" for="vehic">VEHICULOS</label>
                 </div>
             </div>
-            <div class="col row" v-if="rol == 'FUNCIONARIOOFICINA'">
+            
+        </div>
+        <div class="row" v-if="rol == 'FUNCIONARIOOFICINA'">
                 <div class="titles d-flex justify-content-start">
                     NOTARIAS
                 </div>
@@ -95,9 +98,7 @@
                     <option :value="notaria.organizacion" v-for="(notaria,index) in notariasP" :key="index">{{notaria.organizacion}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
                         
                 </select>
-            </div>
         </div>
-
        
     </div>
 </template>

@@ -205,9 +205,7 @@ function liberar_asignaciones(id_solicitud, tipos_solicitud, user_id){
 					updateDoc(doc(db, "Inspeccion_inscripcion",d.id), {
 						userId: -1
 					})
-					updateDoc(doc(db, "Inspeccion_inscripcion",d.id), {
-						solicitudId: -1
-					})
+					
 				}
 			})
 		})
@@ -261,7 +259,7 @@ export default {
     methods:{
         rellenarTabla() {
             console.log("relleno tabla")
-            
+            var today = new Date
             buscar_asignaciones(this.emailUser)
             setTimeout(() => {
               console.log("esto es lo que busco")
@@ -298,13 +296,13 @@ export default {
                         estad="Pagado"
                     }
                     let item = {
-                      "id": insc[0],
-                            "N° Rep. Notaria": insc[1]["numeroRepertorioContratoPrenda"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad,
-                            "Tipo": "M",
-							"nombre_oficina": insc[1]["oficina"]}
+						"id": insc[0],
+						"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+						"Funcionario": 'funcionarionotaria@funcionarionotaria.cl',
+						"Fecha": today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
+						"Estado": estad,
+						"Tipo": "M",
+						"nombre_oficina": insc[1]["oficina"]}
 
                     this.items.push(item)
                     });
@@ -319,9 +317,9 @@ export default {
                     }
                     let item = {
                             "id": insc[0],
-                            "N° Rep. Notaria": insc[1]["numero_repertorio_RPsD"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
                             "Estado": estad,
                             "Tipo": "A",
 							"nombre_oficina": insc[1]["oficina"]}
