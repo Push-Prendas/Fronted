@@ -53,7 +53,7 @@
               <th scope="row">10/08/2021</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="status">En Revision</th>
+                      <th class="status">En Revisión</th>
                   </div>
               </td>
               <td> 
