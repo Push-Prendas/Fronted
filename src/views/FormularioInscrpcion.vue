@@ -81,6 +81,11 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	console.log("loading")
 	//VALIDACION DE DATOS
 	var validate = true;
+	console.log("PERSONAS DE LA SOLICITUD")
+	console.log(constituyentes)
+	console.log(deudores)
+	console.log(vehiculos)
+	
 	///Personas es una lista de listas, cada sublista se compone de
 	///0->tipo_contratante, 1->run o rut de persona, 2 -> Nombre
 	///3->pais persona
@@ -196,7 +201,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					});
 					persona_id+=1;
 					constituyentes.forEach((con) => {
-						let pais = con["pais"]
+						let pais = con["Pais"]
 
 						setDoc(doc(collection(db, "Persona_Solicitud"),persona_id.toString()),{
 							///Constituyentes es una lista de listas, cada sublista se compone de
@@ -214,7 +219,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					})
 					if(deudores.length>0){
 						deudores.forEach((de) => {
-							let pais = de["pais"]
+							let pais = de["Pais"]
 							if(pais == ""){
 								pais = "Chile"
 							}
