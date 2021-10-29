@@ -6,7 +6,7 @@
           <thead style="color: white;background-color: #514BD5;">
             <tr>
               <th scope="col">N° Contrato Prenda</th>
-              <th scope="col">Oficina</th>
+              <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
               <th scope="col">Acciones</th>
               <th></th>
@@ -153,8 +153,8 @@ async function buscar_asignaciones(user_id){
 		id_inscripciones_asociadas.forEach((i) => {
       
 			getDoc(doc(db, "Solicitud_Inscripcion_Prenda",i)).then((my_data) => {
-        var my_data2 = my_data.data();
-        var data = [i,my_data2]
+				var my_data2 = my_data.data();
+				var data = [i,my_data2]
                 inscripciones_encontradasGlobal.push(data)
             });
 		})
@@ -277,13 +277,13 @@ export default {
                         estad="Pagado"
                     }
                     let item = {
-                      "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad,
-                            "Tipo": "I",
-							"nombre_oficina": insc[1]["oficina"]}
+						"id": insc[0],
+						"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+						"Funcionario": insc[1]["usuarioCreador"],
+						"Fecha": insc[1]["fechaSuscripcion"],
+						"Estado": estad,
+						"Tipo": "I",
+						"nombre_oficina": insc[1]["oficina"]}
                     console.log(item)
                     console.log(this.items)
                     this.items.push(item)
@@ -344,13 +344,15 @@ export default {
             liberar_asignaciones(item.id, item.Tipo, this.emailUser);
             this.items.splice(index,1);
         }        
-        ,clean(){
+        ,
+		clean(){
             this.items.length = 0;
             this.inscripciones_encontradas.length = 0;
             this.modificaciones_encontradas.length = 0;
             this.alzamientos_encontrados.length = 0;
             
-        },obtain_id_judge(id, tipo){
+        },
+		obtain_id_judge(id, tipo){
             console.log("NOIZ ID")
             console.log(id)
             localStorage.id_judge = id

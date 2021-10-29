@@ -30,13 +30,6 @@ const VOLVER= "/Dashboard/" + localStorage.rol + "/" + username + "/MisSolicitud
 
 
 
-
-
-
-
-
-
-
 var total_items = []
 function add(patente,rvm,GoE,estado) {
         let item = {

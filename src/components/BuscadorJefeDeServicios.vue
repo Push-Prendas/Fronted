@@ -9,7 +9,7 @@
           <thead style="color: black;">
             <tr>
                 <th scope="col">
-                    N° Documento
+                    Folio Repertorio Prenda
                     <div class="d-flex justify-content-center">
                         
                         <input type="text"  placeholder="N° Documento">      
@@ -39,9 +39,8 @@
                
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Documento</th>
-              <th scope="col">Oficina</th>
-              <th scope="col">N° Oficina</th>
+              <th scope="col">N° Repertorio Prenda</th>
+              <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignada</th>
@@ -49,9 +48,8 @@
           </thead>
           <tbody>
             <tr>
-              <th scope="row">N° Documento</th>
+              <th scope="row">2349-2021</th>
               <th scope="row">Oficina SA</th>
-              <th scope="row">N° Oficina</th>
               <th scope="row">10/08/2021</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">

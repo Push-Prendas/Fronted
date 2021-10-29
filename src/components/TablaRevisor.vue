@@ -6,7 +6,7 @@
           <thead style="color: white;background-color: #514BD5;">
             <tr>
               <th scope="col">N° Contrato Prenda</th>
-              <th scope="col">Oficina</th>
+              <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignada</th>

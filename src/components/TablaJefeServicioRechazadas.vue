@@ -5,7 +5,7 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;" @dblclick="rellenarTabla()">
             <tr>
-              <th scope="col">N° Documento</th>
+              <th scope="col">N° Repertorio Prenda</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignadar</th>
@@ -247,10 +247,6 @@ export default {
   name: 'TablaRevisor',
   props: {
         opcion:Array,
-        username:{
-            type: String,
-            default: 'Hola!'
-        },
         rol :  {
             type: String,
             default: "REVISOR"
