@@ -234,14 +234,14 @@ export default {
     
             tipo.dispatchEvent(event);
 
-
+				/*
             var now = new Date();
 
             var day = ("0" + now.getDate()).slice(-2);
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
             var today = now.getFullYear()+"-"+(month)+"-"+(day);
-
+				*/
             console.log("ESTADO")
 			console.log(solicitud_relacionada.privacidadDocumento )
 
