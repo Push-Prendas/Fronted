@@ -5,9 +5,8 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Documento</th>
+              <th scope="col">N° Contrato Prenda</th>
               <th scope="col">Oficina</th>
-              <th scope="col">N° Oficina</th>
               <th scope="col">Fecha</th>
               <th scope="col">Acciones</th>
               <th></th>
@@ -16,8 +15,7 @@
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
               <th >{{item.Rep}}</th>
-              <th >Oficina FS</th>
-              <th >32</th>
+              <th >{{item.nombre_oficina}}</th>
               <th >{{item.Fecha}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
@@ -284,7 +282,8 @@ export default {
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
                             "Estado": estad,
-                            "Tipo": "I"}
+                            "Tipo": "I",
+							"nombre_oficina": insc[1]["oficina"]}
                     console.log(item)
                     console.log(this.items)
                     this.items.push(item)
@@ -304,7 +303,8 @@ export default {
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
                             "Estado": estad,
-                            "Tipo": "M"}
+                            "Tipo": "M",
+							"nombre_oficina": insc[1]["oficina"]}
 
                     this.items.push(item)
                     });
@@ -323,7 +323,8 @@ export default {
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaSuscripcion"],
                             "Estado": estad,
-                            "Tipo": "A"}
+                            "Tipo": "A",
+							"nombre_oficina": insc[1]["oficina"]}
 
                     this.items.push(item)
                     });

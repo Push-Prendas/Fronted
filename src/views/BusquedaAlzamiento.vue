@@ -117,13 +117,11 @@ export default {
             setTimeout(() => { 
             console.log("TIMEOUT")
             console.log(id_sol)
+            localStorage.mod_want = id_sol
             if(id_sol==-1){
                 alert("No se encontraron Coincidencias")
             }else{
                 this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/solicitudAlzamiento`, params: {username: localStorage.user, rol: localStorage.rol}})
-
-
-
             }
             },1000)
         }

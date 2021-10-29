@@ -136,41 +136,239 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 
 }
 
+function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
+	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
+	///CON TODAS SUS DEPENDEDNCIAS
+	var solicitud_relacionada;
+	var acreedores_relacionados = []
+	var constituyentes_relacionados = []
+	var deudores_relacionados = []
+	var contratos_relacionados = []
+	var archivos_relacionados = []
+	var patentes_relacionadas = []
+	if(tipo_de_solicitud == "I"){
+		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+			all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();					
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						all_personas = persona_data.docs;
+						all_personas.forEach((d) => {
+							my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONAS")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						console.log(deudores_relacionados)
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
+						all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
+
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("INSCRIPCION")
+			console.log(solicitud_relacionada)
+			///INSCRIPCION ENCONTRADA
+			///FRONTEND -> MODIFICAR ACA
+
+
+
+
+			///
+
+		})
+	}
+	else if(tipo_de_solicitud == "M"){
+		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+			all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+
+
+				}
+			})
+		}).then(() => {
+			console.log("MODIFICACION")
+			console.log(solicitud_relacionada)
+			///MODIFICACION ENCONTRADA
+			///FRONTEND MODIFICAR ACA
+
+
+
+			///
+
+		})
+		
+	}
+	else if (tipo_de_solicitud == "A"){
+		//VER COMO ESTA CONSTITUIDO ALZAMIENTO
+		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+			all_insc = sol_data.docs
+			all_insc.forEach((doc) => {
+				if(id_inscripcion == doc.id){
+					solicitud_relacionada = doc.data();
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+						all_docs = file_data.docs;
+						all_docs.forEach((d) => {
+							my_doc = d.data();
+							if (my_doc.contrato){
+								contratos_relacionados.push(my_doc)
+							}
+							else{
+								archivos_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("ARCHIVOS")
+						console.log(contratos_relacionados)
+						console.log(archivos_relacionados)
+					})
+				}
+			})
+		}).then(() => {
+			console.log("ALZAMIENTO")
+			console.log(solicitud_relacionada)
+
+			///ALZAMIENTO ENCONTRADO
+			///FRONTEND MODIFICAR DE ACA
+
+
+			//////////////////////
+		})
+	}
+}
+
 function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
 	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
 
 	////////OJO: REVISAR NUMERO REPERTORIO DE PRENDA/////////////////
 	///GUARDAR EN UNA TABLA APARTE O EN ALGO EL NUMERO DE REPEROTRIO DE PRENDA ACTUAL Y ASIGNAR
-    console.log("Datos recibidos")
-    console.log(tipo_de_solicitud +"-" + id_solicitud + "-" + estado_secundario + "-" + estado_secundario + "-" + user_id)
-
-
 	var change_message = ["El pago no se realizo", "Hubo intencion de pagar", "Pagado"]
-	if (tipo_de_solicitud == "I"){
-		updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
-            estadoPrimario: 4,
-			estadoSecundario: estado_secundario,
-			numeroRepertorioContratoPrenda: id_solicitud
+	getDocs(collection(db, "Counter_N_RPsD")).then((n) => {
+		var counter_data = n.docs[0].data();
+		var counter = counter_data.counter;
+		if(counter < 10){
+			counter = "000" + counter.toString()
+		}
+		else if (counter < 100){
+			counter = "00" + counter.toString()
+		}
+		else if (counter < 1000){
+			counter = "0" + counter.toString()
+		}
+		else{
+			counter = counter.toString()
+		}
+		var year = counter_data.year;
+		if(estado_secundario == 1){
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 
-		}).then(() => {
-			console.log("ACTUALIZADO")
-		})
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
 
-	}
-	else if (tipo_de_solicitud == "M"){
-		updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
-            estadoPrimario: 4,
-			estadoSecundario: estado_secundario,
-			numeroRepertorioContratoPrenda: id_solicitud
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+		}
+		else{
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+				});
+			}
+		}
+		updateDoc(doc(db, "Counter_N_RPsD","0"),{
+			counter: counter_data.counter + 1
 		});
-	}
-	else if (tipo_de_solicitud == "A"){
-		updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
-            estadoPrimario: 4,
-			estadoSecundario: estado_secundario,
-			numeroRepertorioContratoPrenda: id_solicitud
-		});
-	}
+
+	})
 	var today = new Date();
 	getDocs(collection(db, "Bitacora")).then((bit_data) => {
 		var id_bit = bit_data.docs.length;
@@ -197,6 +395,9 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 	})
 	
 }
+
+
+
 export default {
   name: 'PagosPendientes',
   mounted() {
