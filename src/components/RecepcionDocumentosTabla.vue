@@ -298,6 +298,12 @@ export default {
       rellenarTabla() {
             console.log("relleno tabla")
             //this.items.length = 0;
+			this.items = []
+			this.items.length = 0
+
+			inscripciones_encontradasGlobal = []
+			modificaciones_encontradasGlobal = []
+			alzamientos_encontradosGlobal = []
             
             //buscador_solicitud(3,1,"T",-1)
             buscador_solicitud(3,0,"T", -1)
