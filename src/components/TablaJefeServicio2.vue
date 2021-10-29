@@ -9,6 +9,7 @@
               <th scope="col">Notaria</th>
               <th scope="col">Tipo</th>
               <th scope="col">Fecha</th>
+              <th></th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
@@ -19,6 +20,7 @@
               <th v-if="item.Tipo == 'M'">Modificación</th>
               <th v-if="item.Tipo == 'A'">Alzamiento</th>
               <th>{{item.Fecha}}</th>
+             <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" @click="obtain_id_judge(item.id, item.Tipo)" >Revisar</th>
     
             </tr>
           </tbody>
@@ -34,104 +36,86 @@ import { collection, getDocs} from "firebase/firestore";
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
-async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
 
-	///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
-	///ESTEN EN UN ESTADO ESPECIFICO, LOS PARAMETROS SE OCUPAN DE LA SIGUIENTE FORMA
 
-	///ESTADO PRIMARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO PRIMARIO ESPECIFICO
-	///0 -> EN EDICION
-	///1 -> ENVIADO a NOTARIO
-	///2 -> RECHAZO DE NOTARIO
-	///3 -> ADJUNTAR DOCUMENTOS DE OFICINA
-	///4 -> EN REVISION
-	///5 -> ACEPTADO
-	///6 -> RECHAZO POR REVISOR
-	///7 -> RECHAZO POR JEFE DE UNIDAD DE PRENDA
-	///8 -> RECHAZO NOTIFICADO
+var username = localStorage.user
+const IR= "/Dashboard/" + localStorage.rol + "/" + username + "/RevisionDocumentosJefeRevisor"
 
-	///ESTADO SECUNDARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO SECUNDARIO EN ESPECIFICO
-	///0 -> NO PAGADO
-	///1 ->	HUBO INTENCION DE PAGAR PERO NO ESTA CONFIRMADO
-	///2 -> PAGADO
 
-	///TIPO DE SOLICITUD: BUSCA ALGUNA CLASE DE SOLICITUD EN ESPECIFICA
-	///I -> INSCRIPCION
-	///M -> MODIFICACION
-	///A -> ALZAMIENTO
-	///T -> TODAS
 
-	///USER ID: BUSCA LAS SOLICITUDES CREADAS POR EL USER ID, SI NO SE QUIERE BUSCAR POR USER ID Y SE QUIERE SOLO CON
-	///			LOS CRITERIOS ANTERIORES EL ARGUMENTO ES -1
+async function buscador_solicitud(tipo_de_solicitud){
 
-	
+    ///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
+    ///ESTEN EN UN ESTADO ESPECIFICO, LOS PARAMETROS SE OCUPAN DE LA SIGUIENTE FORMA
 
-	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "I"){
-		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
-			var all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				var insc_data = doc.data();
-				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
-					if(insc_data.usuarioCreador == user_id || user_id == -1){		
-						inscripciones_encontradasGlobal.push([doc.id, insc_data])
+    ///ESTADO PRIMARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO PRIMARIO ESPECIFICO
+    ///0 -> EN EDICION
+    ///1 -> ENVIADO a NOTARIO
+    ///2 -> RECHAZO DE NOTARIO
+    ///3 -> ADJUNTAR DOCUMENTOS DE OFICINA
+    ///4 -> EN REVISION
+    ///5 -> ACEPTADO
+    ///6 -> RECHAZO POR REVISOR
+    ///7 -> RECHAZO POR JEFE DE UNIDAD DE PRENDA
+    ///8 -> RECHAZO NOTIFICADO
 
-					}
-				}
-			})
-		}).then(() => {
-			console.log("INSCRIPCIONES ENCONTRADAS")
-			console.log(inscripciones_encontradasGlobal)
-			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-			
-			///////
-		})
+    ///ESTADO SECUNDARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO SECUNDARIO EN ESPECIFICO
+    ///0 -> NO PAGADO
+    ///1 -> HUBO INTENCION DE PAGAR PERO NO ESTA CONFIRMADO
+    ///2 -> PAGADO
 
-	}
-	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "M"){
-		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
-			var all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				var insc_data = doc.data();
-				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
-					if(insc_data.usuarioCreador == user_id || user_id == -1){		
-						modificaciones_encontradasGlobal.push([doc.id, insc_data])
-					}
-				}
-			})
-		}).then(() => {
-			console.log("MODIFICACIONES ENCONTRADAS")
-			console.log(modificaciones_encontradasGlobal)
-			//UNA VEZ LOS MODIFICACIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
+    ///TIPO DE SOLICITUD: BUSCA ALGUNA CLASE DE SOLICITUD EN ESPECIFICA
+    ///I -> INSCRIPCION
+    ///M -> MODIFICACION
+    ///A -> ALZAMIENTO
+    ///T -> TODAS
 
-			///////
-		})
-
-	}
-	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "A"){
-		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
-			var all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				var insc_data = doc.data();
-				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
-					if(insc_data.usuarioCreador == user_id || user_id == -1){		
-						alzamientos_encontradosGlobal.push([doc.id, insc_data])
-					}
-				}
-			})
-		}).then(() => {
-			console.log("INSCRIPCIONES ENCONTRADAS")
-			console.log(alzamientos_encontradosGlobal)
-			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-
-			///////
-		})
-	}
+    ///USER ID: BUSCA LAS SOLICITUDES CREADAS POR EL USER ID, SI NO SE QUIERE BUSCAR POR USER ID Y SE QUIERE SOLO CON
+    ///         LOS CRITERIOS ANTERIORES EL ARGUMENTO ES -1
 
     
 
+    if(tipo_de_solicitud == "T" || tipo_de_solicitud == "I"){
+        getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+            var all_insc = sol_data.docs
+            all_insc.forEach((doc) => {
+                var insc_data = doc.data();
+                if(insc_data.estadoPrimario == 6 && insc_data.estadoSecundario >= 1){
+                    inscripciones_encontradasGlobal.push([doc.id, insc_data])
+                }
+            })
+        })
 
+    }
+    if(tipo_de_solicitud == "T" || tipo_de_solicitud == "M"){
+        getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+            var all_insc = sol_data.docs
+            all_insc.forEach((doc) => {
+                var insc_data = doc.data();
+                if(insc_data.estadoPrimario == 6 && insc_data.estadoSecundario >= 1){       
+                    modificaciones_encontradasGlobal.push([doc.id, insc_data])
+                }
+            })
+        })
+
+    }
+    if(tipo_de_solicitud == "T" || tipo_de_solicitud == "A"){
+        getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+            var all_insc = sol_data.docs
+            all_insc.forEach((doc) => {
+                var insc_data = doc.data();
+                if(insc_data.estadoPrimario == 6 && insc_data.estadoSecundario >= 1){       
+                    alzamientos_encontradosGlobal.push([doc.id, insc_data])
+                }
+            })
+        })
+    }
 }
 export default {
+    mounted() {
+      this.clean()
+      this.rellenarTabla()
+    },
   name: 'TablaRevisor',
   props: {
         opcion:Array,
@@ -153,10 +137,11 @@ export default {
         }
     },
   methods:{
-        rellenarTabla() {
+rellenarTabla() {
             console.log("relleno tabla")
             
-            buscador_solicitud(4,0,"T", this.emailUser)
+            buscador_solicitud("T")
+            setTimeout(() => {
             if(this.inscripciones_encontradas.length>0){
                 console.log(this.inscripciones_encontradas);
                 var estad;
@@ -166,18 +151,16 @@ export default {
                     }else{
                         estad="Notif. Rechazo"
                     }
-                    if (insc[1]["nombre_notaria"] != ""){
-                      let item = {
-                              "Rep": insc[1]["numeroRepertorioNotario"],
-                              "Funcionario": insc[1]["usuarioCreador"],
-                              "Fecha": insc[1]["fechaSuscripcion"],
-                              "Notaria": insc[1]["nombre_notaria"],
-                              "Estado": estad,
-                              "Tipo":"I"}
-                      console.log(item)
-                      console.log(this.items)
-                      this.items.push(item)
-                    }
+                    let item = {
+                            "id" : insc[0],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Tipo":"I"}
+                    console.log(item)
+                    console.log(this.items)
+                    this.items.push(item)
                     });
 
                 }
@@ -188,18 +171,15 @@ export default {
                     }else{
                         estad="Notif. Rechazo"
                     }
-                    if (insc[1]["nombre_notaria"] != ""){
-                      let item = {
-                              "Rep": insc[1]["numeroRepertorioNotario"],
-                              "Funcionario": insc[1]["usuarioCreador"],
-                              "Fecha": insc[1]["fechaSuscripcion"],
-                              "Notaria": insc[1]["nombre_notaria"],
-                              "Estado": estad,
-                              "Tipo":"I"}
-                      console.log(item)
-                      console.log(this.items)
-                      this.items.push(item)
-                    }
+                    let item = {
+                            "id" : insc[0],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Tipo":"I"}
+
+                    this.items.push(item)
                     });
 
                 }
@@ -210,25 +190,40 @@ export default {
                     }else{
                         estad="Notif. Rechazo"
                     }
-                    if (insc[1]["nombre_notaria"] != ""){
-                      let item = {
-                              "Rep": insc[1]["numeroRepertorioNotario"],
-                              "Funcionario": insc[1]["usuarioCreador"],
-                              "Fecha": insc[1]["fechaSuscripcion"],
-                              "Notaria": insc[1]["nombre_notaria"],
-                              "Estado": estad,
-                              "Tipo":"I"}
-                      console.log(item)
-                      console.log(this.items)
-                      this.items.push(item)
-                    }
+                    let item = {
+                            "id" : insc[0],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Tipo":"I"}
+
+                    this.items.push(item)
                     });
 
                 }
             //this.items=i
             console.log(this.items)
+            },3000)
+            }        
+        ,clean(){
+            this.items.length = 0;
+            this.inscripciones_encontradas.length = 0;
+            this.modificaciones_encontradas.length = 0;
+            this.alzamientos_encontrados.length = 0;
+        },obtain_id_judge(id, tipo){
+            console.log("NOIZ ID")
+            console.log(id)
+            localStorage.id_judge = id
+            localStorage.tipo_judge = tipo
+
+
+
+            this.$router.push({path: IR})
+            //location.href = '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'
             
-            }
+        },
+            
             
         },
 }

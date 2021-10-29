@@ -355,7 +355,9 @@ export default {
             console.log(id)
             localStorage.id_judge = id
             localStorage.tipo_judge = tipo
-            location.href = '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'
+
+
+			this.$router.push({path: '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'})
             
         }
             
