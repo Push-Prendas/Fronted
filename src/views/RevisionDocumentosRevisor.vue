@@ -229,6 +229,10 @@ export default {
             console.log(tipo)
 
             tipo.value = solicitud_relacionada.privacidadDocumento
+            var event = new Event('change');
+
+    
+            tipo.dispatchEvent(event);
 
 
             var now = new Date();
@@ -237,7 +241,12 @@ export default {
             var month = ("0" + (now.getMonth() + 1)).slice(-2);
 
             var today = now.getFullYear()+"-"+(month)+"-"+(day);
-			console.log(today)
+
+            console.log("ESTADO")
+			console.log(solicitud_relacionada.privacidadDocumento )
+
+            setTimeout(() => {
+
 
             if(solicitud_relacionada.privacidadDocumento == "Publico"){
                 var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
@@ -252,8 +261,24 @@ export default {
             else if(solicitud_relacionada.privacidadDocumento == "Privado"){
                 var FechaAutorizacion = document.getElementById("FechaAutorizacion");
                 var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
+
+                //console.log(solicitud_relacionada.fechaAutorizacionContratoPrivado)
+
+
+                FechaAutorizacion.value = solicitud_relacionada.fechaAutorizacionContratoPrivado
+
+
+                FechaProtocolizacion.value = solicitud_relacionada.fechaProtocolizacionContratoPrivado
+
+
+
 				console.log(FechaAutorizacion, FechaProtocolizacion)
             }
+
+
+            },500)
+
+
 
             var check = document.getElementById("gravaroenajenar")
             check.checked =  solicitud_relacionada.prohibicionGravarEnajenar
@@ -271,20 +296,25 @@ export default {
             check.checked =  solicitud_relacionada.prendaVehiculo
 
             var numero_repertorio = solicitud_relacionada.numeroRepertorioNotario.split('-')
+    
+            setTimeout(() => {
 
 
-            var left = document.querySelector(".nrepertorioleft");
+            var left = document.getElementById("foliorepnontaria");
 
-            var right = document.querySelector(".nrepertorioright");
+            var right = document.getElementById("anorepnotaria");
 
             left.value = numero_repertorio[0]
             right.value = numero_repertorio[1]
 
+
+
+            },500)
+
+
             console.log("PATENTE")
 
             console.log(patentes_relacionadas)
-
-            //console.log(fecha)
           
            }, 2000)
   },

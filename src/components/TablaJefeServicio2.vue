@@ -36,6 +36,13 @@ import { collection, getDocs} from "firebase/firestore";
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
+
+
+var username = localStorage.user
+const IR= "/Dashboard/" + localStorage.rol + "/" + username + "/RevisionDocumentosJefeRevisor"
+
+
+
 async function buscador_solicitud(tipo_de_solicitud){
 
     ///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
@@ -209,6 +216,10 @@ rellenarTabla() {
             console.log(id)
             localStorage.id_judge = id
             localStorage.tipo_judge = tipo
+
+
+
+            this.$router.push({path: IR})
             //location.href = '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'
             
         },
