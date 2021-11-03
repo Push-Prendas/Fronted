@@ -5,10 +5,10 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;" @dblclick="rellenarTabla()">
             <tr>
-              <th scope="col">N° Documento</th>
+              <th scope="col">N° Repertorio Prenda</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
-              <th scope="col">Asignadar</th>
+              <th scope="col">Asignar</th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
@@ -17,7 +17,7 @@
               <th scope="row">{{item.Fecha}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:#B9AA23">Esperando revisor</th>
+                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:#B9AA23; color: white">Esperando revisor</th>
                   </div>
               </td>
               <td class="d-flex justify-content-center"> 
@@ -247,10 +247,6 @@ export default {
   name: 'TablaRevisor',
   props: {
         opcion:Array,
-        username:{
-            type: String,
-            default: 'Hola!'
-        },
         rol :  {
             type: String,
             default: "REVISOR"

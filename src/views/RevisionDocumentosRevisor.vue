@@ -304,7 +304,20 @@ export default {
             var left = document.getElementById("foliorepnontaria");
 
             var right = document.getElementById("anorepnotaria");
+			const act_fijo               = document.getElementById('checkinscactfijo')
+            const bien_agro              = document.getElementById('checkinscbagropec')
+            const derechos_intangibles   = document.getElementById('checkinscderecheint')
+            const vehiculos              = document.getElementById('checkinscvehic')
 
+            act_fijo.checked             = solicitud_relacionada.activoFijo
+            bien_agro.checked            = solicitud_relacionada.bienesAgropecuarios
+            derechos_intangibles.checked = solicitud_relacionada.derechosIntangibles
+            vehiculos.checked            = solicitud_relacionada.prendaVehiculo
+
+            act_fijo.disabled = true
+            bien_agro.disabled = true
+            derechos_intangibles.disbaled = true
+            vehiculos.disabled = true
             left.value = numero_repertorio[0]
             right.value = numero_repertorio[1]
 
@@ -341,9 +354,11 @@ export default {
             updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
             estadoPrimario: 5,
         }).then(() => {
-			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
-							updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
-				aprovRevisor: true
+			console.log("AQUI DEBERIA PASAR A TRUE")
+			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+				console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
+				updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
+					aprovRevisor: true
 				,}).then(()=>this.$router.push({path: VOLVER}) )
 			})
 			
@@ -354,9 +369,9 @@ export default {
 		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 5,
 		}).then(() => {
-			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
-							updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
-				aprovRevisor: true
+			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+				updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
+					aprovRevisor: true
 				,}).then(()=>this.$router.push({path: VOLVER}) )
 			})
 			
@@ -368,9 +383,9 @@ export default {
 		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 5,
 		}).then(() => {
-			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
-							updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
-				aprovRevisor: true
+			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+				updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
+					aprovRevisor: true
 				,}).then(()=>this.$router.push({path: VOLVER}) )
 			})
 			

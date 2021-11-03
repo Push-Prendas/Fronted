@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">
         <div class="row">
-            <div class="titleFormulario col">Recepción Solicitudes</div> 
+            <div class= "col-8">Recepción Solicitudes</div> 
             <div class="container" >
                 <div class="row">
                     <div class="col-lg-4"  style="background-color:white">
@@ -61,6 +61,18 @@ export default {
     margin-left: 34%;
     margin-top: 2%;
 }
+.col-8{
+    color: #514BD5;
+    font-size: 25px;
+    font-family: Roboto;
+    font-weight: bold;
+    background: white;
+    border-radius: 15em;
+    width: 25em;
+    margin-bottom: 2em;
+    text-align: center; 
+}
+
 
 .titleFormulario{
     color: #514BD5;

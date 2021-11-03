@@ -135,7 +135,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 
 
 }
-
+/*
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
@@ -290,6 +290,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 		})
 	}
 }
+*/
 
 function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
 	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
@@ -465,10 +466,10 @@ export default {
             console.log("PHASE 2")
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
+                   if(insc[1]["estadoSecundario"]==0){
+                        estad="Por pagar"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Pagado"
                     }
                     if (insc[1]["firma"]){
                         let item = {
@@ -495,10 +496,10 @@ export default {
             console.log("PHASE 3")
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
+                    if(insc[1]["estadoSecundario"]==0){
+                        estad="Por pagar"
                     }else{
-                        estad="Notif. Rechazo"
+                        estad="Pagado"
                     }
                     if (insc[1]["firma"]){
                         let item = {

@@ -6,7 +6,7 @@
           <thead style="color: white;background-color: #514BD5;">
             <tr>
               <th scope="col">N° Contrato Prenda</th>
-              <th scope="col">Oficina</th>
+              <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignada</th>
@@ -104,8 +104,7 @@ async function buscador_solicitud(tipo_de_solicitud){
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(inscripciones_encontradasGlobal)
 			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-			
-			///////
+
 		})
 
 	}
@@ -285,7 +284,7 @@ export default {
 							}
 							let item = {
 									"id": insc[0],
-									"Rep": insc[1]["numero_repertorio_RPsD"],
+									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 									"Funcionario": insc[1]["usuarioCreador"],
 									"Fecha": insc[1]["fechaSuscripcion"],
 									"Estado": estad,

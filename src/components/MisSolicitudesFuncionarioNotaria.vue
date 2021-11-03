@@ -258,7 +258,7 @@ export default {
                     this.modificaciones_encontradas.forEach((insc)=>{
                         estad="En Edicion"
                         let item = {
-                                "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+                                "Rep": insc[1]["numero_repertorio_notaria"],
                                 "Funcionario": insc[1]["usuarioCreador"],
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,
@@ -274,7 +274,7 @@ export default {
                     this.alzamientos_encontrados.forEach((insc)=>{
                         estad="En Edicion"
                         let item = {
-                                "N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+                                "Rep": insc[1]["numero_repertorio_notaria"],
                                 "Funcionario": insc[1]["usuarioCreador"],
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,

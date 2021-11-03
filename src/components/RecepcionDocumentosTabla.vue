@@ -226,6 +226,111 @@ function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PE
 
 
 }
+
+function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
+	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
+
+	////////OJO: REVISAR NUMERO REPERTORIO DE PRENDA/////////////////
+	///GUARDAR EN UNA TABLA APARTE O EN ALGO EL NUMERO DE REPEROTRIO DE PRENDA ACTUAL Y ASIGNAR
+	var change_message = ["El pago no se realizo", "Hubo intencion de pagar", "Pagado"]
+	getDocs(collection(db, "Counter_N_RPsD")).then((n) => {
+		var counter_data = n.docs[0].data();
+		var counter = counter_data.counter;
+		if(counter < 10){
+			counter = "000" + counter.toString()
+		}
+		else if (counter < 100){
+			counter = "00" + counter.toString()
+		}
+		else if (counter < 1000){
+			counter = "0" + counter.toString()
+		}
+		else{
+			counter = counter.toString()
+		}
+		var year = counter_data.year;
+		if(estado_secundario == 2){
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+		}
+		else{
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+				});
+			}
+		}
+		updateDoc(doc(db, "Counter_N_RPsD","0"),{
+			counter: counter_data.counter + 1
+		});
+
+	})
+	var today = new Date();
+	getDocs(collection(db, "Bitacora")).then((bit_data) => {
+		var id_bit = bit_data.docs.length;
+		var id_insc = ""
+		var id_mod = ""
+		var id_alz = ""
+		if(tipo_de_solicitud == "I"){
+			id_insc = id_solicitud
+		}
+		else if(tipo_de_solicitud == "M"){
+			id_mod = id_solicitud
+		}
+		else if(tipo_de_solicitud == "A"){
+			id_alz = id_solicitud
+		}
+		setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+			idInscripcion: id_insc,
+			idModificacion: id_mod,
+			idAlzamiento: id_alz,
+			idUser: user_id,
+			comment: change_message[estado_secundario],
+			fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+		})
+	})
+	
+}
 function modifyPrimaryStatus(tipo_de_solicitud, id_solicitud, estado_primario, user_id){
 	var change_message = ["La solicitud fue guardada","La solicitud fue enviada desde notaria",
 						"La solicitud fue rechazada de notaria", "La solicitud fue enviada desde oficina",
@@ -339,7 +444,7 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"N° Rep. Notaria": insc[1]["numero_repertorio_notaria"],
+								"Rep": insc[1]["numero_repertorio_notaria"],
 								"Fecha": insc[1]["fecha_requirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "M"}
@@ -356,7 +461,7 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"N° Rep. Notaria": insc[1]["numeroRepertorioNotario"],
+								"Rep": insc[1]["numero_repertorio_notaria"],
 								"Fecha": insc[1]["fecha_requirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "A"}
@@ -376,6 +481,7 @@ export default {
         var contrato = document.getElementById("contrato")
         Subir_archivos_en_oficina(contrato,anexo,item.id,item.Tipo)
         modifyPrimaryStatus(item.Tipo, item.id, 4, this.emailUser)
+		modifySecondaryStatus(item.Tipo, item.id, 2, this.emailUser)
         this.items.splice(this.indexSelect,1);
       },
       changeIndex(index){

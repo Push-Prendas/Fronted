@@ -3,9 +3,9 @@
         <Navbar :username= username />
         <Menu :opciones= opcion />
         <div  class="d-flex justify-content-center contenedor right row">
-        <h1 class="title">Solicitud de ALZAMIENTO de Contrato de Prendas</h1>
+        <h1 class="title">Solicitud de <strong>Alzamiento </strong> de Contrato de Prendas</h1>
         <div class="row d-flex justify-content-center item">
-            <div class="col-2">
+            <div class="col-3">
                     FOLIO REP. PRENDA
                     <input type="text"  placeholder="Folio" v-model="folio">
             </div>
@@ -25,7 +25,7 @@
                     IDENTIFICADOR DE ALGUN CONSTITUYENTE
                 </div>
                 <div class="d-flex justify-content-center">
-                    <input type="text" class="nrepertorioleft" placeholder="ID DE CONSTITUYENTE" v-model="id">
+                    <input type="text" class="nrepertorioleft" placeholder="ID de constituyente" v-model="id">
                     
                 </div>
             </div>

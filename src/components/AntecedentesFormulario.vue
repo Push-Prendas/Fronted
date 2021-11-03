@@ -80,32 +80,23 @@
                     </div>
                     <div class="form-check"  >
                         <input class="form-check-input" type="checkbox" value="ACTIVO FIJO" id="checkinscactfijo" >
-                        <label class="form-check-label d-flex justify-content-start" for="actfijo">ACTIVO FIJO</label>
+                        <label class="form-check-label d-flex justify-content-start" for="checkinscactfijo">ACTIVO FIJO</label>
                         
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="BIENES AGROPECUARIOS"  id="checkinscbagropec" >
-                        <label class="form-check-label d-flex justify-content-start" for="bagropec">BIENES AGROPECUARIOS</label>
+                        <label class="form-check-label d-flex justify-content-start" for="checkinscbagropec">BIENES AGROPECUARIOS</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="DERECHIS E INTANGIBLES"  id="checkinscderecheint" >
-                        <label class="form-check-label d-flex justify-content-start" for="derecheint">DERECHIS E INTANGIBLES</label>
+                        <label class="form-check-label d-flex justify-content-start" for="checkinscderecheint">DERECHOS E INTANGIBLES</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="VEHICULOS"  id="checkinscvehic" >
-                        <label class="form-check-label d-flex justify-content-start" for="vehic">VEHICULOS</label>
+                        <label class="form-check-label d-flex justify-content-start" for="checkinscvehic">VEHICULOS</label>
                     </div>
                 </div>
-                <div class="col row" v-if="rol == 'FUNCIONARIOOFICINA'">
-                    <div class="titles d-flex justify-content-start">
-                        NOTARIAS
-                    </div>
-                    <select id="notaria" class="form-select" v-model="notaria"  @change ="changeOption(), setData()" >
-                            
-                        <option :value="notaria.organizacion" v-for="(notaria,index) in notariasP" :key="index">{{notaria.organizacion}}</option>  <!--CREAR UNA LISTA CON TODOS LOS PAISES-->
-                            
-                    </select>
-                </div>
+                
             </div>
             <div class="col row" v-if="rol == 'FUNCIONARIOOFICINA'">
                 <div class="titles d-flex justify-content-start">
