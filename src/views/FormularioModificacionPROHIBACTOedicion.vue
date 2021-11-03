@@ -365,29 +365,31 @@ function  inscripcion_modificacion(
             
         }).then(() => {
             setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),ids.toString()),{
-                tipo_de_documento: tipo_de_documento,
-                fecha_de_suscripcion: fecha_de_suscripcion,
-                fecha_de_otorgamiento: fecha_de_otorgamiento,
-                fecha_de_protocolizacion: fecha_de_protocolizacion,
-                fecha_de_autorizacion: fecha_de_autorizacion,
-                numero_repertorio_notaria: numero_repertorio_notaria,
+                privacidadDocumento: tipo_de_documento,
+                fechaSuscripcion: fecha_de_suscripcion,
+                fechaOtorgamientoEscritura: fecha_de_otorgamiento,
+                fechaProtocolizacionContratoPrivado: fecha_de_protocolizacion,
+                fechaAutorizacionContratoPrivado: fecha_de_autorizacion,
+                numeroRepertorioNotario: numero_repertorio_notaria,
                 parrafo_modificacion_generica: parrafo_modificacion_generica,
                 tipo_de_persona: tipo_de_persona,
                 nombre_acreedor: nombre_acreedor,
                 rut_acreedor: rut_acreedor,
-                nombre_requirente: nombre_requirente,
-                run_requiriente: run_requiriente,
+                nombreRequiriente: nombre_requirente,
+                runRequiriente: run_requiriente,
                 estadoPrimario: estadoPrimario,
                 estadoSecundario: 0,
-                activo_fijo: activo_fijo,
-                bienes_agropecuarios: bienes_agropecuarios,
-                derechos_intangibles: derechos_intangibles,
-                vehiculos: vehiculos,
-                notaria: notaria,
-                GrabarEnagenar: GrabarEnagenar,
-                correo_requirente: correo_requirente,
-                fecha_requirente: fecha_requirente,
-                revisorAsignado :-1
+                activoFijo: activo_fijo,
+                bienesAgropecuarios: bienes_agropecuarios,
+                derechosIntangibles: derechos_intangibles,
+                prendaVehiculo: vehiculos,
+                nombre_notaria: notaria,
+                prohibicionGravarEnajenar: GrabarEnagenar,
+                correoRequiriente: correo_requirente,
+                fechaRequiriente: fecha_requirente,
+                revisorAsignado :-1,
+                firma:false,
+                tipoModificacion:3
             })//18
             
             console.log("entros")
