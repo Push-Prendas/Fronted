@@ -115,6 +115,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 
 	}
 	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "M"){
+
 		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
 			all_insc.forEach((doc) => {
@@ -147,7 +148,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 				}
 			})
 		}).then(() => {
-			console.log("INSCRIPCIONES ENCONTRADAS")
+			console.log("ALZAMIENTOS ENCONTRADOS")
 			console.log(alzamientos_encontradosGlobal)
             return
 			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
@@ -258,7 +259,7 @@ export default {
                     this.modificaciones_encontradas.forEach((insc)=>{
                         estad="En Edicion"
                         let item = {
-                                "Rep": insc[1]["numero_repertorio_notaria"],
+                                "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,
@@ -274,7 +275,7 @@ export default {
                     this.alzamientos_encontrados.forEach((insc)=>{
                         estad="En Edicion"
                         let item = {
-                                "Rep": insc[1]["numero_repertorio_notaria"],
+                                "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
                                 "Fecha": insc[1]["fechaSuscripcion"],
                                 "Estado": estad,

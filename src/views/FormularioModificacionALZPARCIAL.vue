@@ -302,7 +302,7 @@ function  inscripcion_modificacion(
     vehiculos,//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
     GrabarEnagenar,//
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-    fecha_requirente=""//
+    fecha_requirente="",//
     ){
 
 
@@ -391,7 +391,8 @@ function  inscripcion_modificacion(
                 fechaRequiriente: fecha_requirente,
                 revisorAsignado :-1,
                 firma:false,
-                tipoModificacion:1
+                tipoModificacion:1,
+                usuarioCreador: localStorage.mail
             })//18
             
             console.log("entros")

@@ -392,7 +392,8 @@ function alzamiento(
             año_repertorio_RPsD: año_repertorio_RPsD,
             numeroRepertorioContratoPrenda: numero_repertorio_RPsD,
             oficina: "mi oficina",
-            firma:false
+            firma:false,
+            usuarioCreador: localStorage.mail
 
 
 
@@ -589,6 +590,7 @@ export default {
                 this.Bienes[1], 
                 this.Bienes[2], 
                 this.Bienes[3],
+                -1,-1,
                 flags,
                 localStorage.esoficina,
                 "Mi oficina"

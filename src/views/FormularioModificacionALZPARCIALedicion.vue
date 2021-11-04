@@ -392,7 +392,8 @@ function  inscripcion_modificacion(
                 fechaRequiriente: fecha_requirente,
                 revisorAsignado :-1,
                 firma:false,
-                tipoModificacion:1
+                tipoModificacion:1,
+                usuarioCreador: localStorage.mail
             })//18
             
             console.log("entros")

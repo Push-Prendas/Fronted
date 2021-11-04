@@ -185,6 +185,7 @@ function alzamiento(
     if(validate){
     var estado_inicial = 0 //GUARDADO
     console.log("validate")
+    console.log("SOLICIUTD DE ALZAMIENTO PRENDA SE ENVIA: " + send_flag)
     if(send_flag){ ///VERIFICAR SI VIENE O NO DE OFICINA
         if(rol_oficina)
             estado_inicial = 3 //ENVIADO DESDE OFICINA
@@ -228,7 +229,8 @@ function alzamiento(
             año_repertorio_RPsD: año_repertorio_RPsD,
             numeroRepertorioContratoPrenda: numero_repertorio_RPsD,
             oficina: "mi oficina",
-            firma:false
+            firma:false,
+            usuarioCreador: localStorage.mail
 
 
 
@@ -410,6 +412,7 @@ export default {
                 this.Bienes[1], 
                 this.Bienes[2], 
                 this.Bienes[3],
+                -1,-1,
                 flags,
                 localStorage.esoficina,
                 "Mi oficina"
