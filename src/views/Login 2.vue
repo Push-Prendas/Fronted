@@ -28,7 +28,7 @@
             <form v-on:submit.prevent="Login">
                 <input type="text" id="username" class="fadeIn second" name="login" placeholder="Usuario" v-model="username">
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
-                <input type="submit" class="fadeIn fourth" value="Entrar" >
+                <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias()">
             </form>              
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
@@ -45,8 +45,11 @@ import {auth, db} from "@/main";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 
-
-
+var usernameGlobal;
+var emailGlobal;
+var rolGlobal;
+var notarias = [];
+var notariaGlobal;
 export default {
   name: 'App',
   components: {
@@ -71,22 +74,45 @@ export default {
                 this.error = true
                 this.error_msg="Debe llenar todos los campos"
             }else{
-                signInWithEmailAndPassword(auth, username, password).then((error) => {
-                    console.log("aqui deberia ir el error:")
-                    console.log(error)
+                signInWithEmailAndPassword(auth, username, password).then(() => {
                     getDocs(collection(db, "Usuario")).then((docs)=>
                     docs.forEach((doc) => {
                             const user = doc.data();
                             if(user.mail == username){
                                 //Usuario:{abogado_activo,mail,nombre,rol}
                                 //TEST SAVE
-                                localStorage.setItem('user_rol', user.rol)
-                                localStorage.setItem('user_loged', user.mail)
+                                this.username = user.username
+                                this.rol = user.rol
+                                emailGlobal = user.mail
+                                usernameGlobal = user.nombre
+                                rolGlobal = user.rol
+                                notariaGlobal = user.NotariaID
+                                switch(rolGlobal){
+                                    case "FUNCIONARIONOTARIA":
+                                        localStorage.esoficina= 0;
+                                        break;
+                                    case "NOTARIO":
+                                        localStorage.esoficina= 0;
+                                        break;
+                                    case "PAGADOR":
+                                        localStorage.esoficina= 0;
+                                        break;
+                                    case "FUNCIONARIOOFICINA":
+                                        localStorage.esoficina= 1;
+                                        break;
+                                    default:
+                                        localStorage.esoficina= 0;
+                                        break;
+                                 }
+                                localStorage.mail = emailGlobal
+                                localStorage.user = usernameGlobal
+                                localStorage.rol = rolGlobal
+                                localStorage.notaria = notariaGlobal
                                 //TEST LOAD
-                                const rol_load = localStorage.getItem('user_rol')
-                                console.log(rol_load)
+                                //const rol_load = localStorage.getItem('user_rol')
+                                //console.log(rol_load)
                                 this.username=user.nombre
-                                this.$router.push({path: `/Dashboard/${this.rol}/${this.username}`, params: {username: this.username, rol: this.rol}})
+                                this.$router.push({path: `/Dashboard/${rolGlobal}/${usernameGlobal}`, params: {username: usernameGlobal, rol: rolGlobal}})
 
                                 //loginForm.reset();
                                 //Logeado
@@ -112,7 +138,7 @@ export default {
                             msg = "Tu cuenta ha sido bloqueada temporalmente por muchos intentos de ingreso fallidos."
                             break
                     }
-                    console.log(msg)
+                    //console.log(msg)
                     this.error_msg= msg
                 });}
             
@@ -121,10 +147,27 @@ export default {
 
             //console.log(this.rol)
             //return this.rol
+        },
+        getNotarias(){
+            getDocs(collection(db, "Notarias")).then((users_data) => {
+            var data = users_data.docs
+            data.forEach((doc) => {
+                    var not = doc.data();
+                    let item = {
+                        "direccion": not["direccion"],
+                        "id_comuna": not["id_comuna"],
+                        "notario": not["nombre_notario"],
+                        "rut": not["rut_notario"],
+                        "organizacion": not["nombre_organizacion"]
+                    }
+                    notarias.push(item)
+                })
+            })
         }
     }
-    
 }
+export{notarias}
+
 </script>
 
 <style scoped>
