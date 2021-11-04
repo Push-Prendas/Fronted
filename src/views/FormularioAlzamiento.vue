@@ -185,6 +185,7 @@ function alzamiento(
     if(validate){
     var estado_inicial = 0 //GUARDADO
     console.log("validate")
+    console.log("SOLICIUTD DE ALZAMIENTO PRENDA SE ENVIA: " + send_flag)
     if(send_flag){ ///VERIFICAR SI VIENE O NO DE OFICINA
         if(rol_oficina)
             estado_inicial = 3 //ENVIADO DESDE OFICINA
@@ -208,27 +209,28 @@ function alzamiento(
     }).then(() => {
 
         setDoc(doc(collection(db,"Solicitud_Alzamiento_Prenda"),ids.toString()),{//se le hace un camino extra, no pude acortar, pero es con el mismo id asi que no deberia haber problemas
-            tipo_de_documento: tipo_de_documento,
-            fecha_de_otorgamiento: fecha_de_otorgamiento,
-            fecha_de_suscripcion: fecha_de_suscripcion,
+            privacidadDocumento: tipo_de_documento,
+            fechaOtorgamientoEscritura: fecha_de_otorgamiento,
+            fechaSuscripcion: fecha_de_suscripcion,
             fecha_de_autorizacion: fecha_de_autorizacion,
-            fecha_de_protocolizacion: fecha_de_protocolizacion,
-            notaria: notaria,
-            numero_repertorio_notaria: numero_repertorio_notaria,
-            numero_requiriente: numero_requiriente,
-            nombre_requiriente: nombre_requirente,
-            correo: correo,
-            fecha: fecha,
+            fechaProtocolizacionContratoPrivado: fecha_de_protocolizacion,
+            nombre_notaria: notaria,
+            numeroRepertorioNotario: numero_repertorio_notaria,
+            runRequiriente: numero_requiriente,
+            nombreRequiriente: nombre_requirente,
+            correoRequiriente: correo,
+            fechaRequiriente: fecha,
             estadoPrimario: estado_inicial,
             estadoSecundario: 0,
-            activo_fijo: activo_fijo,
-            bienes_agropecuarios: bienes_agropecuarios,
+            activoFijo: activo_fijo,
+            bienesAgropecuarios: bienes_agropecuarios,
             prendaVehiculo: vehiculos,
-            derechos_intangibles: derechos_intangibles,
+            derechosIntangibles: derechos_intangibles,
             año_repertorio_RPsD: año_repertorio_RPsD,
-            numero_repertorio_RPsD: numero_repertorio_RPsD,
+            numeroRepertorioContratoPrenda: numero_repertorio_RPsD,
             oficina: "mi oficina",
-            firma:false
+            firma:false,
+            usuarioCreador: localStorage.mail
 
 
 
@@ -410,6 +412,7 @@ export default {
                 this.Bienes[1], 
                 this.Bienes[2], 
                 this.Bienes[3],
+                -1,-1,
                 flags,
                 localStorage.esoficina,
                 "Mi oficina"

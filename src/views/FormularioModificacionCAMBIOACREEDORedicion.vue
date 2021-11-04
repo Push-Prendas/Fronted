@@ -369,30 +369,33 @@ function  inscripcion_modificacion(
             console.log("submit")
             
         }).then(() => {
-            setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),ids.toString()),{
-                tipo_de_documento: tipo_de_documento,
-                fecha_de_suscripcion: fecha_de_suscripcion,
-                fecha_de_otorgamiento: fecha_de_otorgamiento,
-                fecha_de_protocolizacion: fecha_de_protocolizacion,
-                fecha_de_autorizacion: fecha_de_autorizacion,
-                numero_repertorio_notaria: numero_repertorio_notaria,
+            setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),localStorage.id_revisar.toString()),{
+                privacidadDocumento: tipo_de_documento,
+                fechaSuscripcion: fecha_de_suscripcion,
+                fechaOtorgamientoEscritura: fecha_de_otorgamiento,
+                fechaProtocolizacionContratoPrivado: fecha_de_protocolizacion,
+                fechaAutorizacionContratoPrivado: fecha_de_autorizacion,
+                numeroRepertorioNotario: numero_repertorio_notaria,
                 parrafo_modificacion_generica: parrafo_modificacion_generica,
                 tipo_de_persona: tipo_de_persona,
                 nombre_acreedor: nombre_acreedor,
                 rut_acreedor: rut_acreedor,
-                nombre_requirente: nombre_requirente,
-                run_requiriente: run_requiriente,
+                nombreRequiriente: nombre_requirente,
+                runRequiriente: run_requiriente,
                 estadoPrimario: estadoPrimario,
                 estadoSecundario: 0,
-                activo_fijo: activo_fijo,
-                bienes_agropecuarios: bienes_agropecuarios,
-                derechos_intangibles: derechos_intangibles,
-                vehiculos: vehiculos,
-                notaria: notaria,
-                GrabarEnagenar: GrabarEnagenar,
-                correo_requirente: correo_requirente,
-                fecha_requirente: fecha_requirente,
-                revisorAsignado :-1
+                activoFijo: activo_fijo,
+                bienesAgropecuarios: bienes_agropecuarios,
+                derechosIntangibles: derechos_intangibles,
+                prendaVehiculo: vehiculos,
+                nombre_notaria: notaria,
+                prohibicionGravarEnajenar: GrabarEnagenar,
+                correoRequiriente: correo_requirente,
+                fechaRequiriente: fecha_requirente,
+                revisorAsignado :-1,
+                firma:false,
+                tipoModificacion:2,
+                usuarioCreador: localStorage.mail
             })//18
             
             console.log("entros")
@@ -589,7 +592,7 @@ export default {
                 (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
                 "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
                 this.tipoPersona,//
-                this.nombres,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+                this.nombres  + " " + this.Apaterno + " " + this.Amaterno,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.run,//
                 this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.nDocRequirente,//
