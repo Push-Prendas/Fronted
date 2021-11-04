@@ -411,7 +411,7 @@ export default {
                 (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
                 "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
                 this.tipoPersona,//
-                this.nombres,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+                this.nombres  + " " + this.Apaterno + " " + this.Amaterno,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.run,//
                 this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.nDocRequirente,//

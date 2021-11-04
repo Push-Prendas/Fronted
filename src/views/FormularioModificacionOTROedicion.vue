@@ -575,6 +575,7 @@ export default {
                    est_p = 3
                }
             }
+            const razon = document.getElementById('textoOTRO').value
             inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
@@ -583,7 +584,7 @@ export default {
                 this.FAutorizacion.toString(),//
                 this.notaria,//
                 (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
-                "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
+                razon,//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
                 this.tipoPersona,//
                 this.nombres,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
                 this.run,//
