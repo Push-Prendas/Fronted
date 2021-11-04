@@ -3,16 +3,16 @@ import App from './App.vue'
 import router from "./router";
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faDoorOpen } from '@fortawesome/free-solid-svg-icons';
+import { faDoorOpen, faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import {getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-//import { doc, setDoc } from "firebase/firestore";
-//import {  createUserWithEmailAndPassword } from "firebase/auth";
-library.add(faDoorOpen)
+
+library.add(faDoorOpen, faFileDownload)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false;
@@ -31,10 +31,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+const storage = getStorage();
+export {auth, db, storage}
+     /*
+	TIPOS DE USUARIO/ROL
+		0 -> ADMIN
+		1 -> FUNCIONARIONOTARIA
+		2 -> NOTARIO
+		3 -> PAGADOR
+		4 -> REVISOR
+		5 -> JEFEDESERVICIO
+		6 -> FUNCIONARIOOFICINA
+		7 -> RECEPTOR
+*/
 /*
-async function create_user2(email="notario@notario.cl", password="notario",nombre_usuario="NOTARIO-001",
-rol_usuario="NOTARIO"){
+import { doc, setDoc } from "firebase/firestore";
+import {  createUserWithEmailAndPassword } from "firebase/auth";
+async function create_user2(email="receptor@receptor.cl", password="receptor",nombre_usuario="RECEPTOR-001",
+rol_usuario="RECEPTOR"){
     var user;
     createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         user = userCredential.user
@@ -57,7 +71,7 @@ rol_usuario="NOTARIO"){
 }
 create_user2()
 */
-export {auth, db}
+
 
 new Vue({
   router,
