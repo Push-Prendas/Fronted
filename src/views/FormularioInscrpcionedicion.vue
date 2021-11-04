@@ -304,7 +304,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 			var id = sol_data.docs.length + 1;
 			console.log(id)
 			//INSCRIPCION
-			setDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),id.toString()), {
+			setDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_revisar.toString()), {
 				privacidadDocumento: tipo_documento,
 				fechaSuscripcion: fecha_suscripcion,
 				fechaOtorgamientoEscritura: fecha_otorgamiento_escritura,

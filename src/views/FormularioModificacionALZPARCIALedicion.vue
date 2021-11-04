@@ -367,7 +367,7 @@ function  inscripcion_modificacion(
             console.log("submit")
             
         }).then(() => {
-            setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),ids.toString()),{
+            setDoc(doc(collection(db,"Solicitud_Modificacion_Prenda"),localStorage.id_revisar.toString()),{
                 privacidadDocumento: tipo_de_documento,
                 fechaSuscripcion: fecha_de_suscripcion,
                 fechaOtorgamientoEscritura: fecha_de_otorgamiento,

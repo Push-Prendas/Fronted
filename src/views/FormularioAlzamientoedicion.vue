@@ -371,7 +371,7 @@ function alzamiento(
 
     }).then(() => {
 
-        setDoc(doc(collection(db,"Solicitud_Alzamiento_Prenda"),ids.toString()),{//se le hace un camino extra, no pude acortar, pero es con el mismo id asi que no deberia haber problemas
+        setDoc(doc(collection(db,"Solicitud_Alzamiento_Prenda"),localStorage.id_revisar.toString()),{//se le hace un camino extra, no pude acortar, pero es con el mismo id asi que no deberia haber problemas
             privacidadDocumento: tipo_de_documento,
             fechaOtorgamientoEscritura: fecha_de_otorgamiento,
             fechaSuscripcion: fecha_de_suscripcion,
