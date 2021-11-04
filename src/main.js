@@ -47,8 +47,7 @@ export {auth, db, storage}
 /*
 import { doc, setDoc } from "firebase/firestore";
 import {  createUserWithEmailAndPassword } from "firebase/auth";
-async function create_user2(email="receptor@receptor.cl", password="receptor",nombre_usuario="RECEPTOR-001",
-rol_usuario="RECEPTOR"){
+async function create_user2(email, password,nombre_usuario,rol_usuario){
     var user;
     createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
         user = userCredential.user
@@ -61,15 +60,17 @@ rol_usuario="RECEPTOR"){
         mail: email,
         nombre: nombre_usuario,
         rol: rol_usuario,
+        NotariaID: -1,
+        OficinaID: -1
         }).then(() => {
-        console.log("USER CREATED")
+        console.log("USER CREATED "+email)
 
         }).catch((error) => {
         console.log(error.message)
         }) 
 
 }
-create_user2()
+create_user2("receptor1@receptor1.cl","receptor1", "RECEPTO 1", "RECEPTOR" )
 */
 
 
