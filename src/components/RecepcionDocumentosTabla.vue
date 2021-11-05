@@ -87,10 +87,13 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 
 	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
+			console.log("I FOUND THIS INSCRIPTION")
 			var all_insc = sol_data.docs
 			all_insc.forEach((doc) => {
+				console.log("LOL TIME")
 				var insc_data = doc.data();
 				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
+					console.log("MOMENTOSO")
 					if(insc_data.usuarioCreador == user_id || user_id == -1){		
 						inscripciones_encontradasGlobal.push([doc.id, insc_data])
 
@@ -108,10 +111,13 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 	}
 	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "M"){
 		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
+			console.log("I FOUND THIS MODIFICATION")
 			var all_insc = sol_data.docs
 			all_insc.forEach((doc) => {
+				console.log("LOL TIME")
 				var insc_data = doc.data();
 				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
+					console.log("MOMENTOSO")
 					if(insc_data.usuarioCreador == user_id || user_id == -1){		
 						modificaciones_encontradasGlobal.push([doc.id, insc_data])
 					}
@@ -128,10 +134,13 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 	}
 	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "A"){
 		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
+			console.log("I FOUND THIS ALZ")
 			var all_insc = sol_data.docs
 			all_insc.forEach((doc) => {
 				var insc_data = doc.data();
+				console.log("LOL TIME")
 				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
+					console.log("MOMENTOSO")
 					if(insc_data.usuarioCreador == user_id || user_id == -1){		
 						alzamientos_encontradosGlobal.push([doc.id, insc_data])
 					}
@@ -444,8 +453,8 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"Rep": insc[1]["numero_repertorio_notaria"],
-								"Fecha": insc[1]["fecha_requirente"],
+								"Rep": insc[1]["numeroRepertorioNotario"],
+								"Fecha": insc[1]["fechaRequiriente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "M"}
 
@@ -461,8 +470,8 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"Rep": insc[1]["numero_repertorio_notaria"],
-								"Fecha": insc[1]["fecha_requirente"],
+								"Rep": insc[1]["numeroRepertorioNotario"],
+								"Fecha": insc[1]["fechaRequiriente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "A"}
 
@@ -478,7 +487,7 @@ export default {
       add(){
         var item = this.items[this.indexSelect]
         var anexo = document.getElementById("anexos").files
-        var contrato = document.getElementById("contrato")
+        var contrato = document.getElementById("contrato").files
         Subir_archivos_en_oficina(contrato,anexo,item.id,item.Tipo)
         modifyPrimaryStatus(item.Tipo, item.id, 4, this.emailUser)
 		modifySecondaryStatus(item.Tipo, item.id, 2, this.emailUser)

@@ -452,7 +452,7 @@ export default {
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaRequiriente"],
                             "Monto": insc[1]["montoTotal"],
-                            "Notaria": insc[1]["notaria"],
+                            "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
                             "Tipo":"I"}
                         this.items.push(item)
@@ -474,11 +474,11 @@ export default {
                     if (insc[1]["firma"]){
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numero_repertorio_notaria"], //numero repertorio notaria
+                            "Rep": insc[1]["numeroRepertorioNotario"], //numero repertorio notaria
                             "Funcionario": insc[1]["usuarioCreador"], 
-                            "Fecha": insc[1]["fecha_requirente"],
-                            "Monto": 0,//insc[1]["montoTotal"], CERO POR AHORA
-                            "Notaria": insc[1]["notaria"],
+                            "Fecha": insc[1]["fechaRequiriente"],
+                            "Monto": insc[1]["montoTotal"], 
+                            "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
                             "Tipo":"M"}
                         ///console.log(insc[1]) //undefined values
@@ -504,10 +504,10 @@ export default {
                     if (insc[1]["firma"]){
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numero_repertorio_notaria"],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fecha_requiriente"], //NO EXISTE TODAVIA
-                            "Monto": 0,//insc[1]["montoTotal"], CERO POR AHORA
+                            "Fecha": insc[1]["fechaRequiriente"], //NO EXISTE TODAVIA
+                            "Monto": insc[1]["montoTotal"],
                             "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
                             "Tipo":"A"}

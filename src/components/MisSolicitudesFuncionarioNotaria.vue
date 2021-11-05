@@ -224,6 +224,7 @@ export default {
             console.log("DATADTA")
             console.log(localStorage.mail)
             buscador_solicitud(0,0,"T",localStorage.mail)
+            buscador_solicitud(2,0,"T",localStorage.mail)
 
             console.log(this.items)
             console.log("DATADTA")
@@ -240,7 +241,12 @@ export default {
                     console.log(this.inscripciones_encontradas);
                     var estad;
                     this.inscripciones_encontradas.forEach((insc)=>{
-                        estad="En Edicion"
+                        console.log("ESTADO SOLICIUTD: " + insc[1]["estadoPrimario"])
+                        if(insc[1]["estadoPrimario"]==0){
+                            estad="Edicion"
+                        }else{
+                            estad="Rechazo Notaria"
+                        }
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
@@ -257,7 +263,11 @@ export default {
                     }
                 if(this.modificaciones_encontradas.length>0){
                     this.modificaciones_encontradas.forEach((insc)=>{
-                        estad="En Edicion"
+                        if(insc[1]["estadoPrimario"]==0){
+                            estad="Edicion"
+                        }else{
+                            estad="Rechazo Notaria"
+                        }
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
@@ -273,7 +283,11 @@ export default {
                     }
                 if(this.alzamientos_encontrados.length>0){
                     this.alzamientos_encontrados.forEach((insc)=>{
-                        estad="En Edicion"
+                        if(insc[1]["estadoPrimario"]==0){
+                            estad="Edicion"
+                        }else{
+                            estad="Rechazo Notaria"
+                        }
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],

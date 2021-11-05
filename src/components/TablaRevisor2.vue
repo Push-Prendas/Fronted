@@ -145,7 +145,7 @@ async function buscar_asignaciones(user_id){
 	getDocs(query(collection(db, "Inspeccion_inscripcion"), where("userId", "==", user_id))).then((hist_data) => {
 		var my_data = hist_data.docs;
 		my_data.forEach((d) => {
-			if (d.data().aprovRevisor==null) {
+			if (d.data().aprovRevisor==null ) {
 				id_inscripciones_asociadas.push(d.data().solicitudId)
 			}
 		})
