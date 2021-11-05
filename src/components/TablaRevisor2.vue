@@ -358,7 +358,7 @@ export default {
 
 
 			this.$router.push({path: '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'})
-            
+            //this.$router.push({path: '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor', props:{id: id, Tipo: tipo}})
         }
             
     },

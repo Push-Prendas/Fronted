@@ -9,7 +9,7 @@
                 <th scope="col">RVM</th>
                 <th scope="col">GRAVAR/ENAJENAR</th>
                 <th scope="col">ESTADO</th>
-                <th scope="col">COSTO</th>
+                <th scope="col" v-if="tipoSolicitud != 'RevisionDoc'">COSTO</th>
                 <th scope="col" v-if="tipoSolicitud == 'Moficacion'"></th>
                 </tr>
             </thead>
@@ -21,7 +21,7 @@
                 <td>{{item.rvm}}</td>
                 <td>{{item.GoE}}</td>
                 <td>{{item.estado}}</td>
-                <td>$10000</td>
+                <td v-if="tipoSolicitud != 'RevisionDoc'">$10000</td>
                 <td v-if="tipoSolicitud == 'Moficacion'"> 
                     <div class="form-check ">
                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck" >
@@ -36,14 +36,14 @@
 
 <script>
 
-import {db} from "@/main";
-import { collection, getDocs, query, where} from "firebase/firestore";
+//import {db} from "@/main";
+//import { collection, getDocs, query, where} from "firebase/firestore";
 
-var total_items = []
+//var total_items = []
 
 
 
-function add(patente,rvm,GoE,estado) {
+/*function add(patente,rvm,GoE,estado) {
         let item = {
             "patente": patente,
             "rvm": rvm,
@@ -227,7 +227,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			//////////////////////
 		})
 	}
-}
+}*/
 
 export default {
 
@@ -242,7 +242,7 @@ export default {
     //this.items = []
 	//total_items = []
 	
-	console.log("buscardor")
+	/*console.log("buscardor")
 	console.log(localStorage.id_revisar)
 	setTimeout(() => { 
 
@@ -257,7 +257,7 @@ export default {
 		console.log("AUTOS")
 		console.log(total_items)
 		}, 1000)
-      //add("1","1","1","12")
+      //add("1","1","1","12")*/
 
     
 
@@ -292,7 +292,7 @@ export default {
     methods:{
         getPatentes(){
             console.log("DATA")
-            buscador_especifico_solicitud(12,'I')
+            //buscador_especifico_solicitud(12,'I')
             //this.items=patentes_relacionadas
         
         },

@@ -2,9 +2,9 @@
     <div id="contenedor" class="row">
         <div class="row">
             <div class="titleFormulario col">Constituyentes </div> 
-            <b-button v-b-modal.modal-1 class="col buttonAdd">+</b-button>
+            <b-button v-b-modal.modal-1 class="col buttonAdd" v-if="modo == 'Escribir'">+</b-button>
 
-            <b-modal id="modal-1" hide-footer>
+            <b-modal id="modal-1" hide-footer v-if="modo == 'Escribir'">
                 <div class="row">
                     <div class="d-flex justify-content-center titleModal">CONSTITUYENTE </div> 
                     <div class="col row">
@@ -156,6 +156,7 @@ export default {
             type: String,
             default: '',
         },
+        modo:String,
         tipoPersona:{
             type: String,
             default: 'Natural',

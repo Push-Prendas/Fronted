@@ -2,9 +2,9 @@
     <div id="contenedor" class="row">
         <div class="row">
             <div class="titleFormulario col">Deudores </div> 
-            <b-button v-b-modal.modal-3 class="col buttonAdd">+</b-button>
+            <b-button v-b-modal.modal-3 class="col buttonAdd" v-if="modo == 'Escribir'">+</b-button>
 
-            <b-modal id="modal-3" hide-footer>
+            <b-modal id="modal-3" hide-footer v-if="modo == 'Escribir'">
                 <div class="row">
                     <div class="d-flex justify-content-center titleModal">DEUDOR </div> 
                    <div class="col row">
@@ -137,7 +137,6 @@ export default {
   data() {
       const countries= Countries.default.countries;
         return {
-            items: [],
             option:'Natural',
             headers: ['Tipo', 'Id', 'Name'],
             run:"",
@@ -152,7 +151,13 @@ export default {
             nombrecompleto:'',
         }
     },
-
+    props: {
+        items: {
+            type: Array,
+            default: new Array(),
+        },
+        modo: String
+    },
     methods:{
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaDeudor");
