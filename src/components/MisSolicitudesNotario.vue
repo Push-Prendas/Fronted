@@ -295,9 +295,9 @@ export default {
                         estad="Rechazo Notaria"
                     }
                     let item = {
-                            "Rep": insc[1]["numero_repertorio_notaria"],
-                            "Funcionario": "funcionarionotaria@funcionarionotaria.cl",
-                            "Fecha": insc[1]["fecha_requirente"],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "ID": insc[0],
                             "Tipo": "M"}
@@ -318,9 +318,9 @@ export default {
                         estad="Rechazo Notaria"
                     }
                     let item = {
-                            "Rep": insc[1]["numero_repertorio_notaria"],
-                            "Funcionario": "funcionarionotaria@funcionarionotaria.cl",
-                            "Fecha": insc[1]["fecha_requirente"],
+                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "ID": insc[0],
                             "Tipo": "A"}
