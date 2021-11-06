@@ -4,7 +4,7 @@
             <div class="titleFormulario col" @change ="setData()">Contrato</div> 
             <div class="row ">
                 <div class="col d-flex justify-content-start" @change ="setData()" v-for="(item,index) in items" :key="index">
-                    <a :href="item.href"><font-awesome-icon style= "margin-right:5px" icon="file-download" /></a>
+                    <a :href="item.href" target="black"><font-awesome-icon style= "margin-right:5px" icon="file-download" /></a>
                 </div>
             </div>
             
@@ -14,7 +14,7 @@
             <div class="titleFormulario col" @change ="setData()">Anexos</div> 
             <div class="row">
                 <div class="col d-flex justify-content-start" @change ="setData()" v-for="(item,index) in itemsAnexos" :key="index">
-                <a :href="item.href"><font-awesome-icon style= "margin-right:5px" icon="file-download" /></a>
+                <a :href="item.href" target="black"><font-awesome-icon style= "margin-right:5px" icon="file-download" /></a>
                 </div>
             </div>
             

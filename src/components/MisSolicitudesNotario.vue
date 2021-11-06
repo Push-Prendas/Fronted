@@ -209,10 +209,10 @@ export default {
     },
     methods:{
         obtain_id_go(id, tipo){
-            console.log("NOIZ ID")
+            console.log("NOIZ ID, estamso aqui")
             console.log(id)
-            localStorage.id_revisar = id
-            localStorage.tipo_revisar = tipo
+            localStorage.id_judge = id
+            localStorage.tipo_judge = tipo
             location.href = URL_REVISION
         },
         clean(){

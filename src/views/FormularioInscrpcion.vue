@@ -13,8 +13,8 @@
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <ConstituyentesFormulario @getConstituyentes="getConstituyentes" />
-            <DeudoresFormulario @getDeudores="getDeudores"/>
+            <ConstituyentesFormulario @getConstituyentes="getConstituyentes" :modo="'Escribir'"/>
+            <DeudoresFormulario @getDeudores="getDeudores" :modo="'Escribir'"/>
 			<VehiculosFormulario @getVehiculos="getVehiculos"/>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>

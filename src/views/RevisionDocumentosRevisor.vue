@@ -218,10 +218,65 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					}).then(() => {
 						console.log("ARCHIVOS")
 						console.log(contratos_relacionados)
+                        contratos_relacionados.forEach((data) => {
+							addContrato(data.url)
+				
+						})
 						console.log(archivos_relacionados)
+						archivos_relacionados.forEach((data) => {
+							addAnexos(data.url)
+				
+						})
 					})
+                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						console.log("per")
+						console.log(persona_data.docs)
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONASs")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						constituyentes_relacionados.forEach((data) => {
+							addConstituyente(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+						console.log(deudores_relacionados)
+						deudores_relacionados.forEach((data) => {
+							addDeudores(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
 
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
 
+                        patentes_relacionadas.forEach((data) =>{
+                                console.log(data.patente)
+                                console.log(data.inscripcionPrendaRVM)
+                                console.log(data.inscripcionProhibicionGravarEnajenar)
+                                console.log(data.alzamiento)
+                                addVehiculo(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                            })
+					})
 				}
 			})
 		}).then(() => {
@@ -258,7 +313,64 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					}).then(() => {
 						console.log("ARCHIVOS")
 						console.log(contratos_relacionados)
+                        contratos_relacionados.forEach((data) => {
+							addContrato(data.url)
+				
+						})
 						console.log(archivos_relacionados)
+						archivos_relacionados.forEach((data) => {
+							addAnexos(data.url)
+				
+						})
+					})
+                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						console.log("per")
+						console.log(persona_data.docs)
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONASs")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						constituyentes_relacionados.forEach((data) => {
+							addConstituyente(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+						console.log(deudores_relacionados)
+						deudores_relacionados.forEach((data) => {
+							addDeudores(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
+
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
+
+                        patentes_relacionadas.forEach((data) =>{
+                                console.log(data.patente)
+                                console.log(data.inscripcionPrendaRVM)
+                                console.log(data.inscripcionProhibicionGravarEnajenar)
+                                console.log(data.alzamiento)
+                                addVehiculo(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                            })
 					})
 				}
 			})
