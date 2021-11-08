@@ -3,7 +3,8 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class ="right">
-          <RepcionDocumentosBuscador/>
+          <BuscadorJefeDeServicios v-if="rol == 'JEFEDESERVICIO'"/>
+          <RepcionDocumentosBuscador v-if="rol == 'RECEPTOR'"/>
         </div>
 
     </div>
@@ -12,9 +13,16 @@
   
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+//import TablaRevisor from '../components/TablaRevisor.vue'
+//import TablaRevisor2 from '../components/TablaRevisor2.vue'
+//import TablaJefeServicioRechazadas from '../components/TablaJefeServicioRechazadas.vue'
+//import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import RepcionDocumentosBuscador from '../components/RecepcionDocumentosBuscador.vue'
+import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
+
+
 export default {
-  name: 'BuscadorReceptor',
+  name: 'Buscador',
   data() {
         return {
             opcion: localStorage.my_opts.split(','),
@@ -25,9 +33,13 @@ export default {
   components: {
     Menu,
     Navbar,
-    RepcionDocumentosBuscador
-  },
-  
+    //TablaRevisor,
+    //TablaRevisor2,
+    //TablaJefeServicioRechazadas,
+    //TablaJefeServicio2,
+    RepcionDocumentosBuscador,
+    BuscadorJefeDeServicios
+  }
 }
 </script>
 

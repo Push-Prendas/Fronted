@@ -1,8 +1,5 @@
 <template>
     <div id="TablaRevisor">
-        
-        
-
         <div style="padding:50px; margin-left:300px">
         <table class="table table-sm table-hover zui-table-rounded" >
                
@@ -85,7 +82,6 @@ var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
 
-var username = localStorage.user
 
 async function buscar_solcitud_por_requisito(tipo_solicitud = "", year = "", folio = "", estado_solicitud = ""){
 	////DETALLE: USAR ESTADO Y ID ES NUMERO REPERTORIO PRENDA

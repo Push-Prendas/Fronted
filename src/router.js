@@ -15,9 +15,8 @@ import FormularioModificacionOTRO from "./views/FormularioModificacionOTRO.vue"
 import FormularioModificacionPROHIBACTO from "./views/FormularioModificacionPROHIBACTO.vue"
 
 import BuscadorModificacion from "./views/BusquedaModificacion.vue"
-import BuscadorJefeServicio from './views/BuscadorJefeServicio.vue'
 import ComprobanteSolicutud from './views/ComprobanteSolicitud.vue'
-import RecepcionDocBuscador from './views/BuscadorReceptor.vue'
+import Buscador from './views/Buscador.vue'
 import RevisionDocumentoNotario from './views/RevisionDocumentosNotario.vue'
 import RevisionDocumentosRevisor from './views/RevisionDocumentosRevisor.vue'
 import RevisionDocumentosJefeRevisor from './views/RevisionDocumentosJefeRevisor.vue'
@@ -111,7 +110,7 @@ const routes = [
   {
     path: "/Dashboard/:rol/:username/Buscador",
     name: "ModificaciondecontratodeprendasBuscador",
-    component: BuscadorJefeServicio,
+    component: Buscador,
     props: true
   },
   {
@@ -122,14 +121,14 @@ const routes = [
   },
   {
     path: "/Dashboard/:rol/:username/RecepcionSolicitudes",
-    name: "RecepcionDocBuscador",
-    component: RecepcionDocBuscador,
+    name: "Buscador",
+    component: Buscador,
     props: true
   },
   {
     path: "/Dashboard/:rol/:username/Busqueda",
-    name: "RecepcionDocBuscador",
-    component: RecepcionDocBuscador,
+    name: "Buscador",
+    component: Buscador,
     props: true
   },
   {
