@@ -3,9 +3,7 @@
         <Menu :opciones= opcion />
         <Navbar :username= username />
         <div class ="right">
-          <BuscadorJefeDeServicios v-if="rol == 'JEFEDESERVICIO'"/>
-          <BuscadorReceptor v-if="rol == 'RECEPTOR'"/>
-          <BuscadorRevisor v-if="rol == 'REVISOR'"/>
+          <RepcionDocumentosBuscador v-if="rol == 'RECEPTOR'"/>
         </div>
 
     </div>
@@ -14,9 +12,7 @@
   
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
-import BuscadorReceptor from '../components/BuscadorReceptor.vue'
-import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
-import BuscadorRevisor from '../components/BuscadorRevisor.vue'
+import RepcionDocumentosBuscador from '../components/RecepcionDocumentosBuscador.vue'
 
 
 export default {
@@ -35,9 +31,7 @@ export default {
     //TablaRevisor2,
     //TablaJefeServicioRechazadas,
     //TablaJefeServicio2,
-    BuscadorReceptor,
-    BuscadorJefeDeServicios,
-    BuscadorRevisor
+    RepcionDocumentosBuscador,
   }
 }
 </script>
