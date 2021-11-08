@@ -24,7 +24,11 @@
                 <th scope="col">
                     Tipo de actuación
                     <div class="d-flex justify-content-center">
-                        <input type="text" id="tipoact" placeholder="Tipo de actuación">      
+                        <select id="tipoact" class="form-select">
+                            <option selected value="Inscripcion">Inscripcion</option>
+                            <option value="Modificacion">Modificacion</option>
+                            <option value="Alzamiento">Alzamiento</option>
+                        </select>   
                     </div>
                 </th>
                     <th scope="col">
@@ -75,7 +79,7 @@
 <script>
 
 import {db} from "@/main";
-import { collection, getDocs, updateDoc, getDoc} from "firebase/firestore";
+import { collection, getDocs} from "firebase/firestore";
 
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
@@ -83,110 +87,153 @@ var alzamientos_encontradosGlobal = []
 
 var username = localStorage.user
 
-async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
-
-	///ESTA FUNCION BUSCARA CUALQUIER CLASE DE SOLICITUD (SEA MODIFICACION, ALZAMIENTO O INSCRIPCION) EN LAS QUE
-	///ESTEN EN UN ESTADO ESPECIFICO, LOS PARAMETROS SE OCUPAN DE LA SIGUIENTE FORMA
-
-	///ESTADO PRIMARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO PRIMARIO ESPECIFICO
-	///0 -> EN EDICION
-	///1 -> ENVIADO a NOTARIO
-	///2 -> RECHAZO DE NOTARIO
-	///3 -> ADJUNTAR DOCUMENTOS DE OFICINA
-	///4 -> EN REVISION
-	///5 -> ACEPTADO
-	///6 -> RECHAZO POR REVISOR
-	///7 -> RECHAZO POR JEFE DE UNIDAD DE PRENDA
-	///8 -> RECHAZO NOTIFICADO
-
-	///ESTADO SECUNDARIO: BUSCARA LOS QUE ESTEN EN ALGUN ESTADO SECUNDARIO EN ESPECIFICO
-	///0 -> NO PAGADO
-	///1 ->	HUBO INTENCION DE PAGAR PERO NO ESTA CONFIRMADO
-	///2 -> PAGADO
-
-	///TIPO DE SOLICITUD: BUSCA ALGUNA CLASE DE SOLICITUD EN ESPECIFICA
-	///I -> INSCRIPCION
-	///M -> MODIFICACION
-	///A -> ALZAMIENTO
-	///T -> TODAS
-
-	///USER ID: BUSCA LAS SOLICITUDES CREADAS POR EL USER ID, SI NO SE QUIERE BUSCAR POR USER ID Y SE QUIERE SOLO CON
-	///			LOS CRITERIOS ANTERIORES EL ARGUMENTO ES -1
-
-	
-
-	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "I"){
-		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
-			console.log("I FOUND THIS INSCRIPTION")
-			var all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				console.log("LOL TIME")
-				var insc_data = doc.data();
-				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
-					console.log("MOMENTOSO")
-					if(insc_data.usuarioCreador == user_id || user_id == -1){		
-						inscripciones_encontradasGlobal.push([doc.id, insc_data])
-
-					}
-				}
+async function buscar_solcitud_por_requisito(tipo_solicitud = "", year = "", folio = "", estado_solicitud = ""){
+	////DETALLE: USAR ESTADO Y ID ES NUMERO REPERTORIO PRENDA
+	//DEVUELVE EL ID DE LA SOLICITUD QUE CUMPLA CON LOS REQUISITOS ANTES MENCIONADOS
+    console.log("PARAMETROS")
+    console.log("FOLIO: " + folio)
+    console.log("YEAR: " + year)
+	if(tipo_solicitud == "I" || tipo_solicitud == ""){
+        console.log("buscar inscripciones")	
+		await getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((per_data) => {
+			var my_docs = per_data.docs
+            console.log("Largo documento inscricpion: " + my_docs.length)
+			my_docs.forEach((d) => {
+				var my_sol = d.data();
+				var my_id = my_sol.numeroRepertorioContratoPrenda
+                if(my_sol.estadoSecundario > 0){
+                    var folio_prenda = my_id.split("-")[0]
+                    var year_prenda = my_id.split("-")[1]
+                    if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
+                        if(my_sol.estadoPrimario == estado_solicitud || estado_solicitud == ""){
+                            inscripciones_encontradasGlobal.push([d.id,my_sol])
+                        }
+                    }
+                }
 			})
-		}).then(() => {
-			console.log("INSCRIPCIONES ENCONTRADAS")
-			console.log(inscripciones_encontradasGlobal)
-			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-			
-			///////
+		})
+	}
+	if (tipo_solicitud == "M" || tipo_solicitud == ""){
+        console.log("buscar modificaciones")	
+		await getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((per_data) => {
+			var my_docs = per_data.docs
+            console.log("Largo documento modificacion: " + my_docs.length)
+			my_docs.forEach((d) => {
+				var my_sol = d.data();
+				var my_id = my_sol.numeroRepertorioContratoPrenda
+                if(my_sol.estadoSecundario > 0){
+                    var folio_prenda = my_id.split("-")[0]
+                    var year_prenda = my_id.split("-")[1]
+                    if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
+                        if(my_sol.estadoPrimario == estado_solicitud || estado_solicitud == ""){
+                            modificaciones_encontradasGlobal.push([d.id,my_sol])
+                        }
+                    }
+                }
+			})
 		})
 
 	}
-	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "M"){
-		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
-			console.log("I FOUND THIS MODIFICATION")
-			var all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				console.log("LOL TIME")
-				var insc_data = doc.data();
-				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
-					console.log("MOMENTOSO")
-					if(insc_data.usuarioCreador == user_id || user_id == -1){		
-						modificaciones_encontradasGlobal.push([doc.id, insc_data])
-					}
-				}
+	if (tipo_solicitud == "A" || tipo_solicitud == ""){
+        console.log("buscar alzamientos")
+		await getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((per_data) => {
+			var my_docs = per_data.docs
+            console.log("Largo documento alzamiento: " + my_docs.length)
+			my_docs.forEach((d) => {
+				var my_sol = d.data();
+				var my_id = my_sol.numeroRepertorioContratoPrenda
+                if(my_sol.estadoSecundario > 0){
+                    var folio_prenda = my_id.split("-")[0]
+                    var year_prenda = my_id.split("-")[1]
+                    if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
+                        if(my_sol.estadoPrimario == estado_solicitud || estado_solicitud == ""){
+                            alzamientos_encontradosGlobal.push([d.id,my_sol])
+                        }
+                    }
+                }
 			})
-		}).then(() => {
-			console.log("MODIFICACIONES ENCONTRADAS")
-			console.log(modificaciones_encontradasGlobal)
-			//UNA VEZ LOS MODIFICACIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-
-			///////
-		})
-
-	}
-	if(tipo_de_solicitud == "T" || tipo_de_solicitud == "A"){
-		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
-			console.log("I FOUND THIS ALZ")
-			var all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				var insc_data = doc.data();
-				console.log("LOL TIME")
-				if(insc_data.estadoPrimario == estado_primario && insc_data.estadoSecundario == estado_secundario && (notaria == "" || insc_data.notaria == notaria) && (oficina == "" || insc_data.oficina == oficina)){	
-					console.log("MOMENTOSO")
-					if(insc_data.usuarioCreador == user_id || user_id == -1){		
-						alzamientos_encontradosGlobal.push([doc.id, insc_data])
-					}
-				}
-			})
-		}).then(() => {
-			console.log("INSCRIPCIONES ENCONTRADAS")
-			console.log(alzamientos_encontradosGlobal)
-			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-
-			///////
 		})
 	}
+	//TODAS LAS COSAS ENCONTRADAS
+	//FRONTEND MODIFIQUE DE AQUI
+
+
+	///////////////////////////
 }
 
 export default {
+  mounted(){
+      buscar_solcitud_por_requisito()
+      setTimeout(() => {
+              if(this.inscripciones_encontradas.length > 0){
+                  this.inscripciones_encontradas.forEach((insc)=>{
+                        var estad;
+                        if (insc[1]["estadoPrimario"] == 4)
+                            estad = "En revision"
+                        else if (insc[1]["estadoPrimario"] == 5)
+                            estad = "Aceptado"
+                        else if (insc[1]["estadoPrimario"] == 6)
+                            estad = "Rechazado"
+                        else if (insc[1]["estadoPrimario"] > 6)
+                            estad = "Rechazado Definitivo"
+                        let item = {
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Oficina": insc[1]["oficina"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Asignada": "",
+                            "ID": insc[0],
+                            "Tipo": "I"}
+                        this.items.push(item)               
+                  })
+              }
+              if(this.modificaciones_encontradas.length > 0){
+                  this.modificaciones_encontradas.forEach((insc)=>{
+                        var estad;
+                        if (insc[1]["estadoPrimario"] == 4)
+                            estad = "En revision"
+                        else if (insc[1]["estadoPrimario"] == 5)
+                            estad = "Aceptado"
+                        else if (insc[1]["estadoPrimario"] == 6)
+                            estad = "Rechazado"
+                        else if (insc[1]["estadoPrimario"] > 6)
+                            estad = "Rechazado Definitivo"
+                        let item = {
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Oficina": insc[1]["oficina"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Asignada": "",
+                            "ID": insc[0],
+                            "Tipo": "M"}
+                        this.items.push(item)               
+                  })
+              }
+              if(this.alzamientos_encontrados.length > 0){
+                  this.alzamientos_encontrados.forEach((insc)=>{
+                        var estad;
+                        if (insc[1]["estadoPrimario"] == 4)
+                            estad = "En revision"
+                        else if (insc[1]["estadoPrimario"] == 5)
+                            estad = "Aceptado"
+                        else if (insc[1]["estadoPrimario"] == 6)
+                            estad = "Rechazado"
+                        else if (insc[1]["estadoPrimario"] > 6)
+                            estad = "Rechazado Definitivo"
+                        let item = {
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Oficina": insc[1]["oficina"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Asignada": "",
+                            "ID": insc[0],
+                            "Tipo": "A"}
+                        this.items.push(item)               
+                  })
+              }
+          }, 1500)
+
+  },
   name: 'TablaRevisor',
   props: {
         opcion:Array,
@@ -209,7 +256,95 @@ export default {
     },
   methods:{
       busqueda(){
+          this.items = []
+          inscripciones_encontradasGlobal = []
+          modificaciones_encontradasGlobal = []
+          alzamientos_encontradosGlobal = []
           console.log("BUSCANDO...")
+          const folioRep = document.getElementById('foliorep').value
+          const yearRep = document.getElementById('yearrep').value
+          const tipoAct = document.getElementById('tipoact').value
+          console.log(folioRep + "," + yearRep + "," +  tipoAct)
+          var my_type = "T"
+          if (tipoAct == "Modificacion")
+            my_type = "M"
+          else if (tipoAct == "Alzamiento")
+            my_type = "A"
+          else if (tipoAct == "Inscripcion")
+            my_type = "I"
+          console.log(my_type)
+          buscar_solcitud_por_requisito(my_type, yearRep, folioRep)
+          setTimeout(() => {
+              console.log("INSCRIPCIONES ENCONTRADAS: " + inscripciones_encontradasGlobal.length)
+              if(inscripciones_encontradasGlobal.length > 0){
+                  inscripciones_encontradasGlobal.forEach((insc)=>{
+                        var estad;
+                        if (insc[1]["estadoPrimario"] == 4)
+                            estad = "En revision"
+                        else if (insc[1]["estadoPrimario"] == 5)
+                            estad = "Aceptado"
+                        else if (insc[1]["estadoPrimario"] == 6)
+                            estad = "Rechazado"
+                        else if (insc[1]["estadoPrimario"] > 6)
+                            estad = "Rechazado Definitivo"
+                        let item = {
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Oficina": insc[1]["oficina"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Asignada": "",
+                            "ID": insc[0],
+                            "Tipo": "I"}
+                        this.items.push(item)               
+                  })
+              }
+              console.log("MODIFICACIONES ENCONTRADAS: " + modificaciones_encontradasGlobal.length)
+              if(modificaciones_encontradasGlobal.length > 0){
+                  modificaciones_encontradasGlobal.forEach((insc)=>{
+                        var estad;
+                        if (insc[1]["estadoPrimario"] == 4)
+                            estad = "En revision"
+                        else if (insc[1]["estadoPrimario"] == 5)
+                            estad = "Aceptado"
+                        else if (insc[1]["estadoPrimario"] == 6)
+                            estad = "Rechazado"
+                        else if (insc[1]["estadoPrimario"] > 6)
+                            estad = "Rechazado Definitivo"
+                        let item = {
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Oficina": insc[1]["oficina"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Asignada": "",
+                            "ID": insc[0],
+                            "Tipo": "M"}
+                        this.items.push(item)               
+                  })
+              }
+              console.log("ALZAMIENTOS ENCONTRADAS: " + alzamientos_encontradosGlobal.length)
+              if(alzamientos_encontradosGlobal.length > 0){
+                  alzamientos_encontradosGlobal.forEach((insc)=>{
+                        var estad;
+                        if (insc[1]["estadoPrimario"] == 4)
+                            estad = "En revision"
+                        else if (insc[1]["estadoPrimario"] == 5)
+                            estad = "Aceptado"
+                        else if (insc[1]["estadoPrimario"] == 6)
+                            estad = "Rechazado"
+                        else if (insc[1]["estadoPrimario"] > 6)
+                            estad = "Rechazado Definitivo"
+                        let item = {
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Oficina": insc[1]["oficina"],
+                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Estado": estad,
+                            "Asignada": "",
+                            "ID": insc[0],
+                            "Tipo": "A"}
+                        this.items.push(item)               
+                  })
+              }
+          }, 1500)
 
       }
   }
