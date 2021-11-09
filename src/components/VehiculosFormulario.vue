@@ -225,7 +225,22 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 		})
 	}
 }
+var preciosGlobal = []
+function see_prices(){
+	getDocs(collection(db,"Precios")).then((price_Data) => { 
+		var my_prices = price_Data.docs
+		my_prices.forEach((p) => {
+			var p_data = p.data();
+			preciosGlobal.push(p_data)
+		})
+		console.log(preciosGlobal)
+	})
+}
+
 export default {
+  mounted(){
+      see_prices()
+  },
   name: 'AcreedorFormularios',
   data() {
         return {
@@ -275,6 +290,13 @@ export default {
                 "GoE": this.GoE}
 
             this.items.push(item);
+            const monto = document.getElementById('monto')
+            var valor = parseInt(monto.innerHTML.substring(1))
+            valor += preciosGlobal[7]["precio"]
+            if(this.rvm){
+                valor += preciosGlobal[8]["precio"]
+            }
+            monto.innerHTML = "$" + valor
             this.patente ="";
             this.rvm =false;
             this.GoE=false;

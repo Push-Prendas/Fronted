@@ -54,6 +54,7 @@ import Navbar from '../components/Navbar.vue'
 
   
 //const app = initializeApp(firebaseConfig);
+var preciosGlobal = []
 
 
 
@@ -326,7 +327,27 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 }
 
+
+function see_prices(){
+	getDocs(collection(db,"Precios")).then((price_Data) => { 
+		var my_prices = price_Data.docs
+		my_prices.forEach((p) => {
+			var p_data = p.data();
+			preciosGlobal.push(p_data)
+		})
+		console.log(preciosGlobal)
+	})
+}
+
 export default {
+  mounted(){
+	see_prices()
+	setTimeout(() => {
+		console.log("DINERO")
+		const monto = document.getElementById('monto')
+		monto.innerHTML = "$" + preciosGlobal[0]["precio"]
+	}, 1500);
+  },
   name: 'Dashboard',
   data() {
         return {

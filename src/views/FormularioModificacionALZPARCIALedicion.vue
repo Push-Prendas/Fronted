@@ -410,6 +410,18 @@ function  inscripcion_modificacion(
     }
     }
 
+var preciosGlobal = []
+function see_prices(){
+	getDocs(collection(db,"Precios")).then((price_Data) => { 
+		var my_prices = price_Data.docs
+		my_prices.forEach((p) => {
+			var p_data = p.data();
+			preciosGlobal.push(p_data)
+		})
+		console.log(preciosGlobal)
+	})
+}
+
 export default {
   name: 'formularioModificacion',
   mounted(){
@@ -417,7 +429,10 @@ export default {
         console.log(localStorage.id_revisar)
         console.log(localStorage.tipo_revisar)
         buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
+        see_prices()
         setTimeout(() => {
+        const monto = document.getElementById('monto')
+		monto.innerHTML = "$" + preciosGlobal[2]["precio"]
         console.log(solicitud_relacionada)
         console.log(acreedores_relacionados)
         console.log(constituyentes_relacionados)

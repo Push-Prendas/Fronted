@@ -409,15 +409,30 @@ function  inscripcion_modificacion(
     }
     }
 
+var preciosGlobal = []
+function see_prices(){
+	getDocs(collection(db,"Precios")).then((price_Data) => { 
+		var my_prices = price_Data.docs
+		my_prices.forEach((p) => {
+			var p_data = p.data();
+			preciosGlobal.push(p_data)
+		})
+		console.log(preciosGlobal)
+	})
+}
+
 export default {
   name: 'formularioModificacion',
   mounted(){
       console.log("ROL")
       console.log(localStorage.rol)
       buscador_especifico_solicitud(localStorage.mod_want,"I")
+      see_prices()
       setTimeout(() => {
-          console.log("SOLICITUD DE INSCRIPCION ENCONTRADA EN ESTOS LUGARES")
-          console.log(solicitud_relacionada)
+            console.log("SOLICITUD DE INSCRIPCION ENCONTRADA EN ESTOS LUGARES")
+            console.log(solicitud_relacionada)
+            const monto = document.getElementById('monto')
+            monto.innerHTML = "$" + preciosGlobal[2]["precio"]
       },1000)
       
       

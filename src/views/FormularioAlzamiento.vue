@@ -244,7 +244,26 @@ function alzamiento(
     }
 }
 
+var preciosGlobal = []
+function see_prices(){
+	getDocs(collection(db,"Precios")).then((price_Data) => { 
+		var my_prices = price_Data.docs
+		my_prices.forEach((p) => {
+			var p_data = p.data();
+			preciosGlobal.push(p_data)
+		})
+		console.log(preciosGlobal)
+	})
+}
+
 export default {
+  mounted(){
+      see_prices()
+      setTimeout(() => {
+        const monto = document.getElementById('monto')
+		monto.innerHTML = "$" + preciosGlobal[1]["precio"]
+      }, 1500);
+  },
   name: 'Dashboard',
   data() {
         return {
