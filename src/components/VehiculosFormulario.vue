@@ -284,22 +284,56 @@ export default {
             //console.log(this.option);
         },
         add() {
-            let item = {
-                "patente": this.patente,
-                "rvm": this.rvm,
-                "GoE": this.GoE}
-
-            this.items.push(item);
-            const monto = document.getElementById('monto')
-            var valor = parseInt(monto.innerHTML.substring(1))
-            valor += preciosGlobal[7]["precio"]
+			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates'
+            var params = '{"patente": "' + this.patente + '"}'
+            console.log("LOL")
             if(this.rvm){
-                valor += preciosGlobal[8]["precio"]
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: params
+                }).then((response)=>{
+                    response.json().then((reqResult) => {
+                        if(reqResult.valid){
+                            console.log(reqResult.valid)
+                            let item = {
+                                "patente": this.patente,
+                                "rvm": this.rvm,
+                                "GoE": this.GoE}
+
+                            this.items.push(item);
+                            const monto = document.getElementById('monto')
+                            var valor = parseInt(monto.innerHTML.substring(1))
+                            valor += preciosGlobal[7]["precio"]
+                            valor += preciosGlobal[8]["precio"]
+                            monto.innerHTML = "$" + valor
+                            this.patente ="";
+                            this.rvm =false;
+                            this.GoE=false;
+                        }
+                        else{
+                            alert("Este vehiculo no esta registrado en el RVM")
+                        }
+                    })
+                })
             }
-            monto.innerHTML = "$" + valor
-            this.patente ="";
-            this.rvm =false;
-            this.GoE=false;
+            else{
+                let item = {
+                    "patente": this.patente,
+                    "rvm": this.rvm,
+                    "GoE": this.GoE}
+
+                this.items.push(item);
+                const monto = document.getElementById('monto')
+                var valor = parseInt(monto.innerHTML.substring(1))
+                valor += preciosGlobal[7]["precio"]
+                monto.innerHTML = "$" + valor
+                this.patente ="";
+                this.rvm =false;
+                this.GoE=false;
+            }            
         },
         clean(){
             console.log("limpiar campos aqui")
