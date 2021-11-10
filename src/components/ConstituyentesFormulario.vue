@@ -199,38 +199,66 @@ export default {
             //console.log(this.option);
         },
         add() {
-            if(this.option=="Natural"){
-                let item = {
-                    "Tipo": this.option,
-                    "Id": this.run,
-                    "Name": this.nombres+' '+this.apellidopaterno+' '+this.apellidomaterno,
-                    "Pais": this.pais}
-                this.items.push(item);
-            }else if(this.option=="Juridica"){
-                let item = {
-                    "Tipo": this.option,
-                    "Id": this.rut,
-                    "Name": this.razonsocial,
-                    "Pais": this.pais}
-                this.items.push(item);
-            }else if(this.option=="Extranjero"){
-                let item = {
-                    "Tipo": this.option,
-                    "Id": this.id,
-                    "Name": this.nombrecompleto,
-                    "Pais": this.pais}
-                this.items.push(item);
+            var oReq = new XMLHttpRequest();
+            var url = ""
+            if(this.option == "Natural"){
+                url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.run
             }
-            this.run ="";
-            this.nombres="";
-            this.apellidopaterno="";
-            this.apellidomaterno="";
-            this. pais="Chile";
-            this.option="Natural";
-            this.rut="";
-            this.razonsocial="";
-            this.id="";
-            this.nombrecompleto="";
+            else if(this.option == "Juridica"){
+                url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.rut
+            }
+            else if(this.option == "Extranjero"){
+                url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.id
+            }           
+            oReq.open("GET", url);
+            oReq.send();
+            oReq.onload = ()=>{
+                if(oReq.status == 200){
+                    var reqResult = JSON.parse(oReq.response);
+                    if (reqResult.valid){
+                        if(this.option=="Natural"){
+                        let item = {
+                            "Tipo": this.option,
+                            "Id": this.run,
+                            "Name": this.nombres+' '+this.apellidopaterno+' '+this.apellidomaterno,
+                            "Pais": this.pais}
+                        this.items.push(item);
+                        }else if(this.option=="Juridica"){
+                            let item = {
+                                "Tipo": this.option,
+                                "Id": this.rut,
+                                "Name": this.razonsocial,
+                                "Pais": this.pais}
+                            this.items.push(item);
+                        }else if(this.option=="Extranjero"){
+                            let item = {
+                                "Tipo": this.option,
+                                "Id": this.id,
+                                "Name": this.nombrecompleto,
+                                "Pais": this.pais}
+                            this.items.push(item);
+                        }
+                        this.run ="";
+                        this.nombres="";
+                        this.apellidopaterno="";
+                        this.apellidomaterno="";
+                        this. pais="Chile";
+                        this.option="Natural";
+                        this.rut="";
+                        this.razonsocial="";
+                        this.id="";
+                        this.nombrecompleto="";
+                    }
+                    else{
+                        alert(reqResult.msg)
+                    }
+                }
+                else{
+                    alert("No se mando correctamente la persona, intentelo de nuevo")
+                }
+
+            }
+            
         },
         clean(){
             console.log("MYDATA")

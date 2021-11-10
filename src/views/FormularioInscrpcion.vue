@@ -124,6 +124,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		alert("No hay contrato")
 	}
 
+	
 	//ADEMAS DE VER TODAS LAS VALIDACIONES DE TIPO VER CON GRUPO DE SERVICIOS LO DE VERIFICADOR DE PATENTES
 
 	//SUBIR A LA BASE DE DATOS
@@ -299,9 +300,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						document_id+=1;
 					}
 
-				}).catch((err)=>{
-					console.log(err)
-				});
+				})
 
 			}).then(() => {
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
@@ -498,7 +497,7 @@ export default {
 			var nombreacreedor;
 			if(this.tipoPersona == "Natural"){
 				runacreedor = this.run
-				nombreacreedor = this.nombres
+				nombreacreedor = this.nombres + " " + this.Apaterno + " " + this.Amaterno
 			}else if(this.tipoPersona == "Juridica"){
 				runacreedor = this.rut
 				nombreacreedor = this.razonsocial
@@ -507,37 +506,52 @@ export default {
 				nombreacreedor = this.nombres
 			}
 			console.log(this.Bienes)
-            enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
-				this.FSuscripcion.toString(),
-                this.FOtorgamiento.toString(),
-                this.FProtocolizacion.toString(),
-                this.FAutorizacion.toString(), 
-                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),
-                this.ProhibGravEnajenar,
-                this.notaria, 
-                this.nombreRequirente, 
-                this.nDocRequirente, 
-				this.correoRequirente,
-				this.fechaRequirente,
-                this.Bienes[0],
-                this.Bienes[1], 
-                this.Bienes[2], 
-                this.Bienes[3], 
-                100, 
-				flags, 
-				this.tipoPersona, 
-                runacreedor.toString(), //id , rut y run
-                nombreacreedor, 
-                this.pais, 
-				this.constituyentes, 
-                this.deudores, 
-                this.vehiculos, 
-                this.contrato, 
-                this.anexos, 
-                localStorage.esoficina,
-				"mi oficina",
-				localStorage.mail
-                )
+			var oReq = new XMLHttpRequest();
+			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + runacreedor  
+			oReq.open("GET", url);
+			oReq.send();
+			oReq.onload = ()=>{
+				if(oReq.status == 200){
+					var reqResult = JSON.parse(oReq.response);
+					if (reqResult.valid){
+						enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
+						this.FSuscripcion.toString(),
+						this.FOtorgamiento.toString(),
+						this.FProtocolizacion.toString(),
+						this.FAutorizacion.toString(), 
+						(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
+						this.ProhibGravEnajenar,
+						this.notaria, 
+						this.nombreRequirente, 
+						this.nDocRequirente, 
+						this.correoRequirente,
+						this.fechaRequirente,
+						this.Bienes[0],
+						this.Bienes[1], 
+						this.Bienes[2], 
+						this.Bienes[3], 
+						100, 
+						flags, 
+						this.tipoPersona, 
+						runacreedor.toString(), //id , rut y run
+						nombreacreedor, 
+						this.pais, 
+						this.constituyentes, 
+						this.deudores, 
+						this.vehiculos, 
+						this.contrato, 
+						this.anexos, 
+						localStorage.esoficina,
+						"mi oficina",
+						localStorage.mail
+						)
+					}
+					else{
+						alert(reqResult.msg)
+					}
+				}
+			}
+            
 			
 		}
   },

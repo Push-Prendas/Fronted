@@ -757,7 +757,7 @@ export default {
 			var nombreacreedor;
 			if(this.tipoPersona == "Natural"){
 				runacreedor = this.run
-				nombreacreedor = this.nombres
+				nombreacreedor = this.nombres + " " + this.Apaterno + " " + this.Amaterno
 			}else if(this.tipoPersona == "Juridica"){
 				runacreedor = this.rut
 				nombreacreedor = this.razonsocial
