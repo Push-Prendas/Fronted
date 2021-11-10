@@ -21,7 +21,7 @@
                 <td>{{item.rvm}}</td>
                 <td>{{item.GoE}}</td>
                 <td>{{item.estado}}</td>
-                <td>$10000</td>
+                <td>{{item.precio}}</td>
                 <td v-if="tipoSolicitud == 'Moficacion'"> 
                     <div class="form-check ">
                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck" >
@@ -215,25 +215,27 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 
 export default {
 
+  mounted() {
+		this.items = []
+		total_items = []
+		console.log("Llegara aca?")
+		//setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
+		//add("1","1","1","12")
+		buscador_especifico_solicitud(36,"I")
+		setTimeout(() => {
+			console.log("AUTOS")
+			console.log(patentes_relacionadas)
+		}, 1500);
+		//add("1","1","1","12")
 
+  },
   name: 'AcreedorFormularios',
   data() {
         return {
   
         }
     },
-    mounted() {
-    this.items = []
-	total_items = []
-	console.log()
-	setTimeout(() => {buscador_especifico_solicitud(localStorage.idSol, "I") }, 1000)
-	//add("1","1","1","12")
-
-	console.log("AUTOS")
-	console.log(patentes_relacionadas)
-	//add("1","1","1","12")
-
-    },
+    
     props: {
         opcion:Array,
         tipoSolicitud:{

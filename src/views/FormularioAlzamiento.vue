@@ -256,9 +256,23 @@ function see_prices(){
 	})
 }
 
+var autoGlobal = []
+function load_vehicles(id_inscripcion){
+    getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
+		var my_cars = car_Data.docs
+		my_cars.forEach((p) => {
+			var p_data = p.data();
+            if(p_data.idInscripcion == id_inscripcion)
+                autoGlobal.push(p_data)
+		})
+		console.log(autoGlobal)
+	})
+}
+
 export default {
   mounted(){
       see_prices()
+      load_vehicles(36)
       setTimeout(() => {
         const monto = document.getElementById('monto')
 		monto.innerHTML = "$" + preciosGlobal[1]["precio"]
@@ -407,12 +421,15 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
-        alzar(flags){
+        async alzar(flags){
             console.log("MIS BIENES")
             console.log(this.Bienes[0])
             console.log(this.Bienes[1])
             console.log(this.Bienes[2])
             console.log(this.Bienes[3])
+            await this.vehiculos.forEach((veh) =>{
+
+            })
             alzamiento(
                 this.nDocRequirente,//
                 this.tipoDoc.toString(),//
