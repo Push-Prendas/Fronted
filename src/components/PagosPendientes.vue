@@ -292,6 +292,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 }
 */
 
+var my_rpsd;
 function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
 	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
 
@@ -314,6 +315,8 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 			counter = counter.toString()
 		}
 		var year = counter_data.year;
+		my_rpsd = counter + "-" + year.toString()
+		console.log("RPSD: " + my_rpsd)
 		if(estado_secundario == 1){
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
@@ -540,7 +543,25 @@ export default {
             //id
             //1
             //emailUser?
-            modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
+			console.log("SENDING DATA")		
+            console.log("LOL")
+			modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
+			setTimeout(() => {
+				console.log(localStorage.user +','+my_rpsd+','+this.monto)
+			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
+            var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
+				fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: params
+                }).then((response)=>{
+                    response.json().then((reqResult) => {
+                        alert(reqResult.msg)
+                    })
+                })
+			}, 1500);               
             this.items.splice(indexCheck[w],1)
             w++
         }
