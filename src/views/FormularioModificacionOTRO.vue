@@ -419,6 +419,7 @@ export default {
                    est_p = 3
                }
             }
+            
             const razon = document.getElementById('textoOTRO').value
             inscripcion_modificacion(
                 this.tipoDoc.toString(),//

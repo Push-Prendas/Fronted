@@ -597,34 +597,44 @@ export default {
                    est_p = 3
                }
             }
-            inscripcion_modificacion(
-                this.tipoDoc.toString(),//
-                this.FSuscripcion.toString(),//
-                this.FOtorgamiento.toString(),//
-                this.FProtocolizacion.toString(),//
-                this.FAutorizacion.toString(),//
-                this.notaria,//
-                (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
-                "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
-                this.tipoPersona,//
-                this.nombres  + " " + this.Apaterno + " " + this.Amaterno,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
-                this.run,//
-                this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
-                this.nDocRequirente,//
-                est_p,
-                this.contrato,//
-                this.anexos, 
-                this.Bienes[0],
-                this.Bienes[1], 
-                this.Bienes[2], 
-                this.Bienes[3],//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
-                this.ProhibGravEnajenar,//
-                this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-                this.fechaRequirente//
-            )
-  }
-  
-}
+            var oReq = new XMLHttpRequest();
+			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + run  
+			oReq.open("GET", url);
+			oReq.send();
+			oReq.onload = ()=>{
+				if(oReq.status == 200){
+					var reqResult = JSON.parse(oReq.response);
+					if (reqResult.valid){
+                        inscripcion_modificacion(
+                            this.tipoDoc.toString(),//
+                            this.FSuscripcion.toString(),//
+                            this.FOtorgamiento.toString(),//
+                            this.FProtocolizacion.toString(),//
+                            this.FAutorizacion.toString(),//
+                            this.notaria,//
+                            (this.RepNotaria+"-"+this.anioRepNotaria).toString(),////
+                            "parrafo_modificacion_generica",//EL PARRAFO ES PURO TEXTO Y FALTA AGREARLO A LAS VISTAS
+                            this.tipoPersona,//
+                            this.nombres  + " " + this.Apaterno + " " + this.Amaterno,//EL NOMBRE DEL ACREEDOR LE CORRESPONDE EL GRUPO DE SERVICIOS
+                            this.run,//
+                            this.nombreRequirente,//EL NOMBRE DEL REQUIRENTE  LE CORRESPONDE EL GRUPO DE SERVICIOS
+                            this.nDocRequirente,//
+                            est_p,
+                            this.contrato,//
+                            this.anexos, 
+                            this.Bienes[0],
+                            this.Bienes[1], 
+                            this.Bienes[2], 
+                            this.Bienes[3],//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
+                            this.ProhibGravEnajenar,//
+                            this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
+                            this.fechaRequirente//
+                        )
+                    }
+                }
+            }
+        }  
+    }
 }
 </script>
 
