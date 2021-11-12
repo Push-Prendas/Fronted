@@ -73,10 +73,10 @@ export default {
          let item = {
 									"tipo": u["rol"],
 									"username": u["nombre"],
-                  "rut": "21150234-6",
+                  "rut": u["rut"],
                   "mail": u["mail"],
                   "nombre": u["nombre"],
-                  "apellido": "Rodriguez"}
+                  "apellido": u["apellido"]}
          this.items.push(item)
        })
      }, 1500);
