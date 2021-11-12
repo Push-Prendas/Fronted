@@ -616,9 +616,8 @@ export default {
                 this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                 this.fechaRequirente//
             )
-  }
-  
-}
+        } 
+    }
 }
 </script>
 

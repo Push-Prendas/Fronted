@@ -14,13 +14,13 @@
               <th scope="col"></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index">
             <tr>
-              <th scope="row">1</th>
-              <th scope="row">Not567</th>
-              <th scope="row">Maule</th>
-              <th scope="row">Talca</th>
-              <th scope="row">Juan Perez</th>
+              <th scope="row">{{index + 1}}</th>
+              <th scope="row">{{item.nombre}}</th>
+              <th scope="row">{{item.region}}</th>
+              <th scope="row">{{item.comuna}}</th>
+              <th scope="row">{{item.notario}}</th>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
                   <button type="button" class="btn btn-secondary" style="background-color:green">Editar</button>
@@ -30,6 +30,7 @@
             </tr>
           </tbody>
         </table>
+        <button type="button" class="btn btn-secondary" style="background-color:blue">Agregar Notaria</button>
         </div>
        
     </div>
@@ -39,18 +40,79 @@
   
 import Menu from '../../components/Menu.vue'
 import Navbar from '../../components/Navbar.vue'
+import {db} from "@/main";
+import { collection, getDocs} from "firebase/firestore";
+
+var notariaList = []
+function see_notarias(){
+	getDocs(collection(db,"Notarias")).then((notariaData) => { 
+		var my_notarias = notariaData.docs
+		my_notarias.forEach((p) => {
+			var p_data = p.data();
+			notariaList.push(p_data)
+		})
+	})
+}
+
+var comunasGlobal = []
+var regionesGlobal = []
+function see_comunas_y_regiones(){
+  getDocs(collection(db,"Comunas")).then((comData) => { 
+		var mis_comunas = comData.docs
+		mis_comunas.forEach((p) => {
+			var p_data = p.data();
+			comunasGlobal.push([p.id, p_data])
+		})
+	})
+  getDocs(collection(db,"Regiones")).then((regData) => { 
+		var mis_regiones = regData.docs
+		mis_regiones.forEach((p) => {
+			var p_data = p.data();
+      console.log(p.id);
+			regionesGlobal.push([p.id,p_data])
+		})
+	})
+}
 
 export default {
+  mounted(){
+    this.items = []
+    notariaList = []
+    see_notarias()
+    see_comunas_y_regiones()
+    setTimeout(() => {
+      console.log(notariaList)
+      notariaList.forEach((n) => {
+        var comuna, region
+        var id_comuna = n["id_comuna"]
+        comunasGlobal.forEach((c)=>{
+          if(c[0] == id_comuna){
+            comuna = c[1]["nombre"]
+            var id_region = c[1]["id_region"].split(' ').join('')
+            regionesGlobal.forEach((r) => {
+              console.log(r[0])
+              if (r[0]==id_region){
+                region = r[1]["nombre"]
+              }
+            })
+          }
+        })
+        let item = {
+									"nombre": n["nombre_organizacion"],
+									"region": region,
+                  "comuna": comuna,
+                  "notario": n["nombre_notario"]
+        }
+        this.items.push(item)
+      })
+      
+    }, 2000);
+  },
   name: 'Dashboard',
-  props: {
-        opcion:Array,
-        username:{
-            type: String,
-            default: 'Hola!'
-        },
-        rol :  {
-            type: String,
-            default: "ADMIN"
+  data() {
+        return {
+            opcion: localStorage.my_opts.split(','),
+            items: []
         }
   },
   components: {
