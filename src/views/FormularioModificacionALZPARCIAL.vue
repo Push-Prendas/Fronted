@@ -591,6 +591,7 @@ export default {
                    est_p = 3
                }
             }
+
             inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
