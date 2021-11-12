@@ -47,6 +47,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 	//DEVUELVE EL ID DE LA SOLICITUD QUE CUMPLA CON LOS REQUISITOS ANTES MENCIONADOS
 
 	//DEVOLVER ULTIMA VERSION DE LA PRENDA
+    
 	getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 		var data = sol_data.docs;
 		data.forEach((d) => {
@@ -61,6 +62,8 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 					var ver = false
 					my_person_data.forEach((p) => {
 						var persona = p.data();
+                        
+                        console.log(persona.runPersona)
 						if (persona.tipoContratante == 1){
 							if (identificador_algun_constituyente == persona.runPersona && !ver){
 								console.log("SE ENCONTRO UNA SOLICITUD")
@@ -68,7 +71,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
 								///FRONTEND PUEDE GUARDAR EL ID DE LA SOLICITUD Y USARLO PARA LLAMAR
 								//buscador_especifico_solicitud(persona.idInscripcion,"I")
 								var modificaciones_hechas = []
-								getDocs(query(collection(db, "Solicitud_Modificacion_Prenda"), where("numero_repertorio_RPsD", "==", repertorio_prenda))).then((mod_data) => {
+								getDocs(query(collection(db, "Solicitud_Alzamiento_Prenda"), where("numeroRepertorioContratoPrenda", "==", repertorio_prenda))).then((mod_data) => {
 									var my_mod_data = mod_data.docs;
 									my_mod_data.forEach((m) => {
 										var my_doc = m.id;
@@ -84,6 +87,7 @@ function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_const
                                     id_sol = persona.idInscripcion
                                 }
                                 localStorage.idSol = id_sol
+
 								//MODIFICACIONES HECHAS
 								///////////////////////////////////////////////
 							}
@@ -119,9 +123,15 @@ export default {
             console.log(id_sol)
             localStorage.mod_want = id_sol
             localStorage.idSol = id_sol
-            if(id_sol==-1){
+            if(id_sol==-1 || id_sol == undefined){
                 alert("No se encontraron Coincidencias")
             }else{
+
+                console.log("IDDDDD")
+
+                console.log(id_sol)
+
+
                 this.$router.push({path:`/Dashboard/${localStorage.rol}/${localStorage.user}/solicitudAlzamiento`, params: {username: localStorage.user, rol: localStorage.rol}})
             }
             },1000)

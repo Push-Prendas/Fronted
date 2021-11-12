@@ -101,6 +101,7 @@ async function buscar_solcitud_por_requisito(tipo_solicitud = "", year = "", fol
                     var folio_prenda = my_id.split("-")[0]
                     var year_prenda = my_id.split("-")[1]
                     if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
+                        console.log("entro")
                         if((my_sol.estadoPrimario == estado_solicitud || estado_solicitud == "")
                         &&(my_sol.usuarioCreador == user_id || user_id == "")
                         &&(my_sol.nombre_notaria == notaria || notaria == "")

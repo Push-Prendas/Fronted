@@ -10,7 +10,7 @@
             @getFSuscripcion="getFSuscripcion" @getFAutorizacion="getFAutorizacion" @getFProtocolizacion="getFProtocolizacion" 
             @getRepNotaria="getRepNotaria" @getanioRepNotaria="getanioRepNotaria" @getProhibGravEnajenar="getProhibGravEnajenar"
             @getBienes="getBienes" @getNotaria="getNotaria" @change="getPatentes()"/>
-            <VehiculosFormulario :tipoSolicitud="Alzamiento" :items="patentes" />
+            <VehiculosFormulario :tipoSolicitud="Alzamiento" :items="items" />
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
@@ -45,6 +45,27 @@ function validate_number(inputNumber){
     if(year>curYear || isNaN(year) || year.length < 4) return false;
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PERMITE GUARDAR LOS ARCHIVOS EN NUESTRA BASE DE DATOS, LO IDEAL ES USARLO PARA OFICINA EN LA VISTA PARA SUBIR SUS ARCHIVOS
 	var repertorio = null
 
@@ -252,12 +273,14 @@ function see_prices(){
 			var p_data = p.data();
 			preciosGlobal.push(p_data)
 		})
+        console.log("PRECIOS")
 		console.log(preciosGlobal)
 	})
 }
 
 var autoGlobal = []
 function load_vehicles(id_inscripcion){
+    autoGlobal = []
     getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
 		var my_cars = car_Data.docs
 		my_cars.forEach((p) => {
@@ -265,17 +288,78 @@ function load_vehicles(id_inscripcion){
             if(p_data.idInscripcion == id_inscripcion)
                 autoGlobal.push(p_data)
 		})
+        console.log("AUTOS: ")
 		console.log(autoGlobal)
 	})
 }
 
+
+
+
 export default {
   mounted(){
+
+
+
+
+
+
+
+    //buscador_especifico_solicitud(36,"I")
       see_prices()
-      load_vehicles(36)
+      load_vehicles(localStorage.idSol)
       setTimeout(() => {
+
+        this.items = []
+        console.log(autoGlobal)
         const monto = document.getElementById('monto')
 		monto.innerHTML = "$" + preciosGlobal[1]["precio"]
+
+        console.log("Enviando REQUEST")
+
+        autoGlobal.forEach((data) => {
+
+        if(data.inscripcionPrendaRVM == true){
+
+        var oReq = new XMLHttpRequest();
+        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
+        oReq.open("GET", url);
+        oReq.send();
+        oReq.onload = ()=>{
+            if(oReq.status == 200){
+
+                var reqResult = JSON.parse(oReq.response);
+
+
+                console.log("MENSAJE RECIVIDO")
+                console.log(reqResult)
+
+
+            }
+            
+        }
+
+
+        }
+
+
+        let item = {
+            "patente": data.patente,
+            "rvm": data.inscripcionPrendaRVM,
+            "GoE": data.inscripcionProhibicionGravarEnajenar,
+            "costo": "-"}
+        this.items.push(item);
+
+
+
+
+        })
+
+
+
+
+
+
       }, 1500);
   },
   name: 'Dashboard',
@@ -318,6 +402,27 @@ export default {
             type: String,
             default: localStorage.rol
         },
+        items:{
+            type: Array,
+            default: new Array,
+        },
+		patente:{
+            type: String,
+            default: ''
+        },
+		GoE:{
+            type: Boolean,
+            default: false,
+        },
+		rvm:{
+            type: Boolean,
+            default: false
+        },
+		estado:{
+            type: String,
+            default: ''
+        },
+        
 
   },
   components: {

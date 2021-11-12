@@ -340,6 +340,8 @@ function see_prices(){
 
 export default {
   mounted(){
+
+
 	see_prices()
 	setTimeout(() => {
 		console.log("DINERO")

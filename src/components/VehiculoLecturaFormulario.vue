@@ -21,7 +21,13 @@
                 <td>{{item.rvm}}</td>
                 <td>{{item.GoE}}</td>
                 <td>{{item.estado}}</td>
-                <td v-if="tipoSolicitud != 'RevisionDoc'">$10000</td>
+                <td v-if="tipoSolicitud != 'RevisionDoc' && item.costo != null">
+
+		
+					{{item.costo}}
+	
+
+				</td>
                 <td v-if="tipoSolicitud == 'Moficacion'"> 
                     <div class="form-check ">
                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck" >
