@@ -14,13 +14,13 @@
               <th scope="col"></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index">
             <tr>
-              <th scope="row">1</th>
-              <th scope="row">OfRC234</th>
-              <th scope="row">Metropolitana</th>
-              <th scope="row">Las Condes</th>
-              <th scope="row">Ana Rojas</th>
+              <th scope="row">{{index + 1}}</th>
+              <th scope="row">{{item.nombre}}</th>
+              <th scope="row">{{item.region}}</th>
+              <th scope="row">{{item.comuna}}</th>
+              <th scope="row">{{item.encargado}}</th>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
                   <button type="button" class="btn btn-secondary" style="background-color:green">Editar</button>
@@ -30,28 +30,90 @@
             </tr>
           </tbody>
         </table>
+        <button type="button" class="btn btn-secondary" style="background-color:blue">Agregar Oficina</button>
         </div>
        
     </div>
 </template>
 
 <script>
+
+import {db} from "@/main";
+import { collection, getDocs} from "firebase/firestore";
+
+var oficinaList = []
+function see_oficinas(){
+	getDocs(collection(db,"Oficina")).then((notariaData) => { 
+		var my_notarias = notariaData.docs
+		my_notarias.forEach((p) => {
+			var p_data = p.data();
+			oficinaList.push(p_data)
+		})
+	})
+}
+
+var comunasGlobal = []
+var regionesGlobal = []
+function see_comunas_y_regiones(){
+  getDocs(collection(db,"Comunas")).then((comData) => { 
+		var mis_comunas = comData.docs
+		mis_comunas.forEach((p) => {
+			var p_data = p.data();
+			comunasGlobal.push([p.id, p_data])
+		})
+	})
+  getDocs(collection(db,"Regiones")).then((regData) => { 
+		var mis_regiones = regData.docs
+		mis_regiones.forEach((p) => {
+			var p_data = p.data();
+      console.log(p.id);
+			regionesGlobal.push([p.id,p_data])
+		})
+	})
+}
   
 import Menu from '../../components/Menu.vue'
 import Navbar from '../../components/Navbar.vue'
 
 export default {
-  name: 'Dashboard',
-  props: {
-        opcion:Array,
-        username:{
-            type: String,
-            default: 'Hola!'
-        },
-        rol :  {
-            type: String,
-            default: "ADMIN"
+  mounted(){
+    this.items = []
+    oficinaList = []
+    see_oficinas()
+    see_comunas_y_regiones()
+    setTimeout(() => {
+      oficinaList.forEach((n) => {
+        var comuna, region
+        var id_comuna = n["id_comuna"]
+        comunasGlobal.forEach((c)=>{
+          if(c[0] == id_comuna){
+            comuna = c[1]["nombre"]
+            var id_region = c[1]["id_region"].split(' ').join('')
+            regionesGlobal.forEach((r) => {
+              console.log(r[0])
+              if (r[0]==id_region){
+                region = r[1]["nombre"]
+              }
+            })
+          }
+        })
+        let item = {
+									"nombre": n["nombre_organizacion"],
+									"region": region,
+                  "comuna": comuna,
+                  "encargado": "Juan Perez"
         }
+        this.items.push(item)
+      })
+      
+    }, 2000);
+  },
+  name: 'Dashboard',
+  data() {
+      return {
+          opcion: localStorage.my_opts.split(','),
+          items: []
+      }
   },
   components: {
     Menu,

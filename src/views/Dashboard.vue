@@ -28,6 +28,7 @@ import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import TablaRecepcionDocumento from '../components/RecepcionDocumentosTabla.vue'
 import MisSolicitudesNotario from '../components/MisSolicitudesNotario.vue'
 import PagosPendientes from '../components/PagosPendientes.vue'
+
 var opciones;
 export default {
   name: 'Dashboard',
