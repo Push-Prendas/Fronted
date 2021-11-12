@@ -391,8 +391,12 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 export default {
   mounted() {
 
+
+
 	this.clean()
     console.log("MOUNT")
+
+
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
 
     buscador_especifico_solicitud(parseInt(localStorage.id_judge), localStorage.tipo_judge)
@@ -523,8 +527,30 @@ export default {
   methods:{
     aceptar(){
 
+	var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
+
+
+
+
+	//var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
+
+
+
     if(localStorage.tipo_judge.toString() == "I"){
 
+
+	this.total_itemsVehiculos.forEach((data) => {
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":' + "aceptada"+  '}'
+
+			fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: params
+				})
+
+	})
             updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
             estadoPrimario: 5,
         }).then(() => {
@@ -540,10 +566,63 @@ export default {
 
     }
     else if(localStorage.tipo_judge.toString() == "M"){
+
+
+
+
+		// 1 -> Alzamiento Parcial 2 -> Cambio de Acreedor 3-> Prohibicion de Acta 4 -> otro
+
+	var tipoMod = ""
+
+
+	getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((resp)=>{
+		
+		resp.docs.forEach((element) => {
+			if(localStorage.id_judge.toString() == element.id){
+				console.log("Es igual")
+				console.log(element.data().tipoModificacion)
+
+				if(element.data().tipoModificacion == 1){
+					tipoMod = "AlzPN"
+				}
+				else if(element.data().tipoModificacion == 2){
+					tipoMod = "CA"
+				}
+				else if(element.data().tipoModificacion == 3){
+					tipoMod = "AlzPH"
+				}
+				else if(element.data().tipoModificacion == 4){
+					tipoMod = ""//no existe en RVM
+				}
+
+
+
+			}
+
+		})	
+	}).then(()=>{
+
+
+		this.total_itemsVehiculos.forEach((data) => {
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":' + "aceptada"+  '}'
+
+		fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: params
+			})
+
+		})
+
 		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 5,
 		}).then(() => {
 			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+
+
+
 				updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
 					aprovRevisor: true
 				,}).then(()=>this.$router.push({path: VOLVER}) )
@@ -551,9 +630,32 @@ export default {
 			
 		})
 
+
+
+	})
+
+
+
+
+
     }
 
     else if(localStorage.tipo_judge.toString() == "A"){
+
+		this.total_itemsVehiculos.forEach((data) => {
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN" + '", "aceptarORechazar":' + "aceptada"+  '}'
+
+		fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: params
+			})
+
+		})
+
+
 		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 5,
 		}).then(() => {
@@ -589,6 +691,13 @@ export default {
 
     }
     else if(localStorage.tipo_judge.toString() == "M"){
+
+
+
+
+
+
+		
 		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 6,
 		}).then(() => {
