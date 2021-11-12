@@ -296,6 +296,13 @@ function load_vehicles(id_inscripcion){
 
 
 
+
+var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
+
+function pendiente(){
+    solicitudPendiente = false 
+}
+
 export default {
   mounted(){
 
@@ -304,7 +311,7 @@ export default {
 
 
 
-
+      pendiente()
     //buscador_especifico_solicitud(36,"I")
       see_prices()
       load_vehicles(localStorage.idSol)
@@ -313,11 +320,15 @@ export default {
         this.items = []
         console.log(autoGlobal)
         const monto = document.getElementById('monto')
-		monto.innerHTML = "$" + preciosGlobal[1]["precio"]
+
 
         console.log("Enviando REQUEST")
 
+        var costoTotalAutos = 0
+
         autoGlobal.forEach((data) => {
+
+        costoTotalAutos += preciosGlobal[9]["precio"] 
 
         if(data.inscripcionPrendaRVM == true){
 
@@ -333,6 +344,15 @@ export default {
 
                 console.log("MENSAJE RECIVIDO")
                 console.log(reqResult)
+                console.log("LARGO")
+                console.log(reqResult.solicitudes.length)
+
+                if(reqResult.solicitudes.length > 0){
+
+                    solicitudPendiente = true
+
+
+                }
 
 
             }
@@ -354,6 +374,9 @@ export default {
 
 
         })
+
+
+        monto.innerHTML = "$" + (preciosGlobal[1]["precio"] + costoTotalAutos )
 
 
 
@@ -527,6 +550,10 @@ export default {
         console.log("Anexos:"+this.anexos)
         },
         async alzar(flags){
+
+            if(!solicitudPendiente){
+
+
             console.log("MIS BIENES")
             console.log(this.Bienes[0])
             console.log(this.Bienes[1])
@@ -558,6 +585,17 @@ export default {
                 localStorage.esoficina,
                 "Mi oficina"
             )
+
+
+
+
+
+            }
+            else{
+                alert("Existen patentes con solicitudes pendientes")
+                console.log("NO ESTA PERMITIDO")
+            }
+
         }
   }
   
