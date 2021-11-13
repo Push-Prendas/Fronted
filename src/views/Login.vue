@@ -28,7 +28,7 @@
             <form v-on:submit.prevent="Login">
                 <input type="text" id="username" class="fadeIn second" name="login" placeholder="Usuario" v-model="username">
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
-                <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones(), getComunas()">
+                <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones(), getComunas(), getOficinas()">
             </form>              
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
@@ -51,6 +51,7 @@ var rolGlobal;
 var notarias = [];
 var regiones = [];
 var comunas = [];
+var oficina = [];
 var notariaGlobal;
 export default {
   name: 'App',
@@ -112,6 +113,10 @@ export default {
                                 localStorage.notaria = notariaGlobal
                                 localStorage.mis_regiones = JSON.stringify(regiones);
                                 localStorage.mis_comunas = JSON.stringify(comunas);
+                                localStorage.mis_notarias = JSON.stringify(notarias);
+                                localStorage.mis_oficinas = JSON.stringify(oficina);
+                                console.log("MIS OFICINAS")
+                                console.log(oficina)
                                 //TEST LOAD
                                 //const rol_load = localStorage.getItem('user_rol')
                                 //console.log(rol_load)
@@ -168,6 +173,22 @@ export default {
                 })
             })
             
+        },
+        getOficinas(){
+            getDocs(collection(db, "Oficina")).then((users_data) => {
+            var data = users_data.docs
+            data.forEach((doc) => {
+                    var not = doc.data();
+                    let item = {
+                        "direccion": not["direccion"],
+                        "id_comuna": not["id_comuna"],
+                        "encargado": not["nombre_encargado"],
+                        "rut": not["rut_encargado"],
+                        "organizacion": not["nombre_organizacion"]
+                    }
+                    oficina.push(item)
+                })
+            }) 
         },
         getRegiones(){
             getDocs(collection(db, "Regiones")).then((users_data) => {
