@@ -23,8 +23,8 @@
               <th scope="row">{{item.notario}}</th>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-secondary" style="background-color:green">Editar</button>
-                  <button type="button" class="btn btn-secondary" style="background-color:red">Eliminar</button>
+                  <button type="button" class="btn btn-secondary" style="background-color:green" v-b-modal.modal-3 @click="setIdtoUpdate(item.ID, item.nombre, item.rut, item.comuna, item.notario, item.dir)">Editar</button>
+                  <button type="button" class="btn btn-secondary" style="background-color:red" @click="erase(item.ID)">Eliminar</button>
                 </div>
               </td>
             </tr>
@@ -45,7 +45,7 @@
                             <input id="nombreNot" type="text">
                         </div>
                         <div class="titles d-flex justify-content-start">
-                            Comunas
+                            Comuna
                         </div>
                         <div class="tamanoTipoDocumento">
                           <select id="comunaNot" class="form-select" v-model="comuna">      
@@ -79,9 +79,60 @@
             </div>
             
             <button id="ADDNOTARIA" @click="add()">Agregar Notaria</button>
+        </b-modal>
+
+        <b-modal id="modal-3"  hide-footer>
+            <!--AQUI TODO LO QUE TIENE QUE VER CON AGREGAR VEHICULO-->
+            <div class="d-flex justify-content-center titleModal">Editar Notaria </div>
+            <div class="row">            
+                <div class="row">
+                    <div class="col row">
+                        <div class="titles d-flex justify-content-start" >
+                            Nombre Notaria
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="nombreNot2" type="text">
+                        </div>
+                        <div class="titles d-flex justify-content-start">
+                            Comunas
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                          <select id="comunaNot2" class="form-select" v-model="comuna">      
+                            <option :value="region.nombre" v-for="(region,index) in comunasP" :key="index">{{region.nombre}}</option>            
+                          </select>
+                        </div> 
+                        <div class="titles d-flex justify-content-start" >
+                            Nombre Notario
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="notarioNot2" type="text">
+                        </div> 
+                        <div class="titles d-flex justify-content-start" >
+                            Rut Notario
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="rutNot2" type="text">
+                        </div> 
+                        <div class="titles d-flex justify-content-start" >
+                            Direccion
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="dirNot2" type="text">
+                        </div>                                                  
+                    </div>
+                    <div class="d-flex justify-content-center SpaceItems">
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <button id="ADDNOTARIA"  @click="update()">Editar Notaria</button>
           </b-modal>   
 
-        </div>
+
+
+      </div>
        
     </div>
 </template>
@@ -91,15 +142,16 @@
 import Menu from '../../components/Menu.vue'
 import Navbar from '../../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, deleteDoc} from "firebase/firestore";
 
 var notariaList = []
+var id_to_modify = 0
 function see_notarias(){
 	getDocs(collection(db,"Notarias")).then((notariaData) => { 
 		var my_notarias = notariaData.docs
 		my_notarias.forEach((p) => {
 			var p_data = p.data();
-			notariaList.push(p_data)
+			notariaList.push([p.id,p_data])
 		})
 	})
 }
@@ -134,7 +186,7 @@ function add_notaria(){
         id_comuna: comunaID.toString(),
         nombre_notario: notario,
         nombre_organizacion: notaria,
-        rut_notario: rutNotario
+        run_notario: rutNotario
       })
     })
   }
@@ -199,7 +251,7 @@ export default {
         console.log(notariaList)
         notariaList.forEach((n) => {
           var comuna, region
-          var id_comuna = n["id_comuna"]
+          var id_comuna = n[1]["id_comuna"]
           comunasGlobal.forEach((c)=>{
             if(c[0] == id_comuna){
               comuna = c[1]["nombre"]
@@ -212,23 +264,67 @@ export default {
             }
           })
           let item = {
-                    "nombre": n["nombre_organizacion"],
+                    "nombre": n[1]["nombre_organizacion"],
                     "region": region,
                     "comuna": comuna,
-                    "notario": n["nombre_notario"]
+                    "notario": n[1]["nombre_notario"],
+                    "ID": n[0],
+                    "rut": n[1]["run_notario"],
+                    "dir": n[1]["direccion"]
           }
-          this.misNotarias.push(n)
+          this.misNotarias.push(n[1])
           this.items.push(item)
         })
         
       }, 2000);
     },
-     add(){
+
+    add(){
       add_notaria()
       setTimeout(() => {
         this.rellenarTabla()
       }, 1000);
     },
+
+    setIdtoUpdate(id, nombre, rut, comuna, notario, dir){
+      id_to_modify = id
+      console.log(id_to_modify)
+      setTimeout(() => {
+        document.getElementById('nombreNot2').value = nombre
+        document.getElementById('rutNot2').value = rut
+        document.getElementById('comunaNot2').value = comuna
+        document.getElementById('notarioNot2').value = notario
+        document.getElementById('dirNot2').value = dir       
+      }, 300);
+    },
+
+    update(){ 
+      var comunaID;
+      const comuna = document.getElementById('comunaNot2').value.toUpperCase()
+      comunasGlobal.forEach((c)=>{
+        if (c[1]["nombre"] == comuna){
+          comunaID = c[0]
+        }
+      })
+      setDoc(doc(collection(db, "Notarias"),id_to_modify.toString()),{
+          direccion: document.getElementById('dirNot2').value,
+          id_comuna: comunaID.toString(),
+          nombre_notario: document.getElementById('notarioNot2').value,
+          nombre_organizacion: document.getElementById('nombreNot2').value,
+          run_notario: document.getElementById('rutNot2').value
+        })
+      setTimeout(() => {       
+        this.rellenarTabla()
+      }, 1000);
+    },
+
+    erase(id){
+      deleteDoc(doc(db, "Notarias", id));
+      setTimeout(() => {
+        this.rellenarTabla()
+      }, 1000);
+    },
+
   },
   mounted(){
     this.rellenarTabla()
