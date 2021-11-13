@@ -423,7 +423,7 @@ export default {
                }
             }
             var oReq = new XMLHttpRequest();
-			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + run  
+			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.run  
 			oReq.open("GET", url);
 			oReq.send();
 			oReq.onload = ()=>{

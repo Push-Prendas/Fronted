@@ -28,7 +28,7 @@
             <form v-on:submit.prevent="Login">
                 <input type="text" id="username" class="fadeIn second" name="login" placeholder="Usuario" v-model="username">
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
-                <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones()">
+                <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones(), getComunas()">
             </form>              
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
@@ -50,6 +50,7 @@ var emailGlobal;
 var rolGlobal;
 var notarias = [];
 var regiones = [];
+var comunas = [];
 var notariaGlobal;
 export default {
   name: 'App',
@@ -110,8 +111,7 @@ export default {
                                 localStorage.rol = rolGlobal
                                 localStorage.notaria = notariaGlobal
                                 localStorage.mis_regiones = JSON.stringify(regiones);
-                                console.log("REGIONES LOCALHOST")
-                                console.log(localStorage.mis_regiones)
+                                localStorage.mis_comunas = JSON.stringify(comunas);
                                 //TEST LOAD
                                 //const rol_load = localStorage.getItem('user_rol')
                                 //console.log(rol_load)
@@ -187,11 +187,21 @@ export default {
 
         },
         getComunas(){
+            getDocs(collection(db, "Comunas")).then((users_data) => {
+                var data = users_data.docs
+                data.forEach((doc) => {
+                        var not = doc.data();
+                        let item = {
+                            "nombre": not["nombre"],
+                        }
+                        comunas.push(item)
+                })
+            })
             
         },
     }
 }
-export{notarias, regiones}
+export{notarias, regiones, comunas}
 
 </script>
 

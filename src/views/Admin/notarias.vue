@@ -45,24 +45,30 @@
                             <input id="nombreNot" type="text">
                         </div>
                         <div class="titles d-flex justify-content-start">
-                            Region
+                            Comunas
                         </div>
                         <div class="tamanoTipoDocumento">
-                          <select id="regionNot" class="form-select" v-model="region">      
-                            <option :value="region.nombre" v-for="(region,index) in regionesP" :key="index">{{region.nombre}}</option>            
+                          <select id="comunaNot" class="form-select" v-model="comuna">      
+                            <option :value="region.nombre" v-for="(region,index) in comunasP" :key="index">{{region.nombre}}</option>            
                           </select>
                         </div> 
                         <div class="titles d-flex justify-content-start" >
-                            Comuna
-                        </div>
-                        <div class="tamanoTipoDocumento">
-                            <input id="comunaNot" type="text">
-                        </div>
-                        <div class="titles d-flex justify-content-start" >
-                            Notario
+                            Nombre Notario
                         </div>
                         <div class="tamanoTipoDocumento">
                             <input id="notarioNot" type="text">
+                        </div> 
+                        <div class="titles d-flex justify-content-start" >
+                            Rut Notario
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="rutNot" type="text">
+                        </div> 
+                        <div class="titles d-flex justify-content-start" >
+                            Direccion
+                        </div>
+                        <div class="tamanoTipoDocumento">
+                            <input id="dirNot" type="text">
                         </div>                                                  
                     </div>
                     <div class="d-flex justify-content-center SpaceItems">
@@ -72,7 +78,7 @@
                 </div>
             </div>
             
-            <button id="ADDNOTARIA" @click="add(), setData()">Agregar Notaria</button>
+            <button id="ADDNOTARIA" @click="add()">Agregar Notaria</button>
           </b-modal>   
 
         </div>
@@ -85,7 +91,7 @@
 import Menu from '../../components/Menu.vue'
 import Navbar from '../../components/Navbar.vue'
 import {db} from "@/main";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 
 var notariaList = []
 function see_notarias(){
@@ -96,6 +102,46 @@ function see_notarias(){
 			notariaList.push(p_data)
 		})
 	})
+}
+
+function add_notaria(){
+  const notaria = document.getElementById('nombreNot').value
+  const rutNotario = document.getElementById('rutNot').value
+  const comuna = document.getElementById('comunaNot').value.toUpperCase()
+  const notario = document.getElementById('notarioNot').value
+  const direccion = document.getElementById('dirNot').value
+  var validate = false
+  var comunaID;
+  comunasGlobal.forEach((c)=>{
+    if (c[1]["nombre"] == comuna){
+      comunaID = c[0]
+      validate = true
+    }
+  })
+  if(validate){
+      getDocs(collection(db,"Notarias")).then((notariaData) => { 
+      var my_notarias = notariaData.docs
+      var my_notarias_id = 2521
+      my_notarias.forEach((m)=>{
+        var id_check = parseInt(m.id)
+        if(id_check > my_notarias_id){
+          my_notarias_id = id_check
+        }
+      })
+      my_notarias_id += 1
+      setDoc(doc(collection(db, "Notarias"),my_notarias_id.toString()),{
+        direccion: direccion,
+        id_comuna: comunaID.toString(),
+        nombre_notario: notario,
+        nombre_organizacion: notaria,
+        rut_notario: rutNotario
+      })
+    })
+  }
+  else{
+    alert("Esta comuna no existe")
+  }
+  
 }
 
 var comunasGlobal = []
@@ -126,41 +172,6 @@ export default {
             misNotarias: []
         }
   },
-  mounted(){
-    this.items = []
-    notariaList = []
-    console.log("MIS REGIONES")
-    console.log(localStorage.mis_regiones)
-    see_notarias()
-    see_comunas_y_regiones()
-    setTimeout(() => {
-      console.log(notariaList)
-      notariaList.forEach((n) => {
-        var comuna, region
-        var id_comuna = n["id_comuna"]
-        comunasGlobal.forEach((c)=>{
-          if(c[0] == id_comuna){
-            comuna = c[1]["nombre"]
-            var id_region = c[1]["id_region"].split(' ').join('')
-            regionesGlobal.forEach((r) => {
-              if (r[0]==id_region){
-                region = r[1]["nombre"]
-              }
-            })
-          }
-        })
-        let item = {
-									"nombre": n["nombre_organizacion"],
-									"region": region,
-                  "comuna": comuna,
-                  "notario": n["nombre_notario"]
-        }
-        this.misNotarias.push(n)
-        this.items.push(item)
-      })
-      
-    }, 2000);
-  },
   name: 'Dashboard',
   components: {
     Menu,
@@ -170,8 +181,58 @@ export default {
     regionesP:{
       type: Array,
       default: JSON.parse(localStorage.mis_regiones)
+    },
+    comunasP:{
+      type: Array,
+      default: JSON.parse(localStorage.mis_comunas)
     }
-  }
+  },
+  methods:{
+    rellenarTabla(){
+      this.items = []
+      notariaList = []
+      console.log("MIS REGIONES")
+      console.log(localStorage.mis_regiones)
+      see_notarias()
+      see_comunas_y_regiones()
+      setTimeout(() => {
+        console.log(notariaList)
+        notariaList.forEach((n) => {
+          var comuna, region
+          var id_comuna = n["id_comuna"]
+          comunasGlobal.forEach((c)=>{
+            if(c[0] == id_comuna){
+              comuna = c[1]["nombre"]
+              var id_region = c[1]["id_region"].split(' ').join('')
+              regionesGlobal.forEach((r) => {
+                if (r[0]==id_region){
+                  region = r[1]["nombre"]
+                }
+              })
+            }
+          })
+          let item = {
+                    "nombre": n["nombre_organizacion"],
+                    "region": region,
+                    "comuna": comuna,
+                    "notario": n["nombre_notario"]
+          }
+          this.misNotarias.push(n)
+          this.items.push(item)
+        })
+        
+      }, 2000);
+    },
+     add(){
+      add_notaria()
+      setTimeout(() => {
+        this.rellenarTabla()
+      }, 1000);
+    },
+  },
+  mounted(){
+    this.rellenarTabla()
+  },
 }
 </script>
 
