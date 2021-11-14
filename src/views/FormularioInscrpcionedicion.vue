@@ -29,7 +29,7 @@
 </template>
 <script scoped>
 import {db,storage} from "@/main";
-import { collection, getDocs, setDoc, doc, query, where} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, query, where, updateDoc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import AntecedentesFormulario from '../components/AntecedentesFormulario.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
@@ -58,6 +58,7 @@ import Navbar from '../components/Navbar.vue'
 
 
 //const storage2 = getStorage();
+var my_rpsd;
 
 function validate_number(inputNumber){
         if(!inputNumber.includes("-")) return false;
@@ -78,6 +79,112 @@ var contratos_relacionados = []
 var archivos_relacionados = []	
 var patentes_relacionadas = []
 
+function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
+	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
+
+	////////OJO: REVISAR NUMERO REPERTORIO DE PRENDA/////////////////
+	///GUARDAR EN UNA TABLA APARTE O EN ALGO EL NUMERO DE REPEROTRIO DE PRENDA ACTUAL Y ASIGNAR
+	var change_message = ["El pago no se realizo", "Hubo intencion de pagar", "Pagado"]
+	getDocs(collection(db, "Counter_N_RPsD")).then((n) => {
+		var counter_data = n.docs[0].data();
+		var counter = counter_data.counter;
+		if(counter < 10){
+			counter = "000" + counter.toString()
+		}
+		else if (counter < 100){
+			counter = "00" + counter.toString()
+		}
+		else if (counter < 1000){
+			counter = "0" + counter.toString()
+		}
+		else{
+			counter = counter.toString()
+		}
+		var year = counter_data.year;
+		my_rpsd = counter + "-" + year.toString()
+		console.log("RPSD: " + my_rpsd)
+		if(estado_secundario == 1){
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+		}
+		else{
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 4,
+					estadoSecundario: estado_secundario,
+				});
+			}
+		}
+		updateDoc(doc(db, "Counter_N_RPsD","0"),{
+			counter: counter_data.counter + 1
+		});
+
+	})
+	var today = new Date();
+	getDocs(collection(db, "Bitacora")).then((bit_data) => {
+		var id_bit = bit_data.docs.length;
+		var id_insc = ""
+		var id_mod = ""
+		var id_alz = ""
+		if(tipo_de_solicitud == "I"){
+			id_insc = id_solicitud
+		}
+		else if(tipo_de_solicitud == "M"){
+			id_mod = id_solicitud
+		}
+		else if(tipo_de_solicitud == "A"){
+			id_alz = id_solicitud
+		}
+		setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+			idInscripcion: id_insc,
+			idModificacion: id_mod,
+			idAlzamiento: id_alz,
+			idUser: user_id,
+			comment: change_message[estado_secundario],
+			fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+		})
+	})
+	
+}
 
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
@@ -470,7 +577,29 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				
 				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
 				
-
+				console.log("PAGANDO EN CAJA")
+				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
+				if (rol_oficina){
+					modifySecondaryStatus("I",id.toString(),1,userid)
+					setTimeout(() => {
+						var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
+						var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + monto_total +'}'
+						fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: params
+						}).then((response)=>{
+							response.json().then((reqResult) => {
+								alert(reqResult.msg)
+								console.log("PAGADO")
+								modifySecondaryStatus("I",id.toString(),2,userid)
+								this.redirect()					
+							})
+						})
+					}, 1500);
+				}		
 
 				//
 			})
