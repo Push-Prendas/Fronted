@@ -548,20 +548,21 @@ export default {
 			modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
 			setTimeout(() => {
 				console.log(localStorage.user +','+my_rpsd+','+this.monto)
-			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
-            var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
-				fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: params
-                }).then((response)=>{
-                    response.json().then((reqResult) => {
-                        alert(reqResult.msg)
-                    })
-                })
-			}, 1500);               
+				var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
+				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
+					fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: params
+					}).then((response)=>{
+						response.json().then((reqResult) => {
+							alert(reqResult.msg)
+							
+						})
+					})
+				}, 1500);               
             this.items.splice(indexCheck[w],1)
             w++
         }

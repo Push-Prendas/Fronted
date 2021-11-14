@@ -322,6 +322,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 		})
 		});
+
+		////LLAMADA A SERVICIOS////
+
 	}
 
 }
