@@ -158,7 +158,7 @@
                         </div>
                         <div class="tamanoTipoDocumento">
                           <select id="oficinaUsu2" class="form-select" v-model="comuna">      
-                            <option :value="oficina.organizacion" v-for="(oficina,index) in oficinasP" :key="index">{{oficina.organizacion}}</option>            
+                            <option :value="oficina.nombre_organizacion" v-for="(oficina,index) in oficinasP" :key="index">{{oficina.organizacion}}</option>            
                           </select>
                         </div> 
                         <div class="titles d-flex justify-content-start">
@@ -166,7 +166,7 @@
                         </div>
                         <div class="tamanoTipoDocumento">
                           <select id="notariaUsu2" class="form-select" v-model="comuna">      
-                            <option :value="oficina.organizacion" v-for="(oficina,index) in notariasP" :key="index">{{oficina.organizacion}}</option>            
+                            <option :value="oficina.nombre_organizacion" v-for="(oficina,index) in notariasP" :key="index">{{oficina.organizacion}}</option>            
                           </select>
                         </div> 
                         <div class="titles d-flex justify-content-start" >
