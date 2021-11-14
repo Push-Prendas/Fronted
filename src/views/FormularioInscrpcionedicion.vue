@@ -801,7 +801,7 @@ export default {
 							this.vehiculos, 
 							this.contrato, 
 							this.anexos, 
-							localStorage.esoficina,
+							localStorage.rol == 'FUNCIONARIOOFICINA',
 							"mi oficina",
 							localStorage.mail
 							)
