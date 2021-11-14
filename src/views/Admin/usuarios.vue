@@ -13,7 +13,7 @@
               <th scope="col">Mail</th>
               <th scope="col">Nombre</th>
               <th scope="col">Apellido</th>
-              <th scope="col">Rol</th>
+              <th scope="col">Activo</th>
               <th scope="col"></th>
             </tr>
           </thead>
@@ -26,10 +26,11 @@
               <th scope="row">{{item.mail}}</th>
               <th scope="row">{{item.nombre}}</th>
               <th scope="row">{{item.apellido}}</th>
+              <th scope="row">{{item.abogado_activo}}</th>
               <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
                   <button type="button" class="btn btn-secondary" style="background-color:green" v-b-modal.modal-3 @click="setIdtoUpdate(item.ID, item.nombre, item.apellido, item.rut, item.tipo, item.mail, item.oficina, item.notaria)">Editar</button>
-                  <button type="button" class="btn btn-secondary" style="background-color:red">Eliminar</button>
+                  <button type="button" class="btn btn-secondary" style="background-color:red">Deshabilitar</button>
                 </div>
               </td>
             </tr>
@@ -264,6 +265,7 @@ export default {
    data() {
         return {
             opcion: localStorage.my_opts.split(','),
+            username: localStorage.user,
             items: []
         }
     },
@@ -301,7 +303,13 @@ export default {
           this.items.push(item)
         })
       }, 1500);
-    },
+    },/*
+    desabilitarUser(){
+      updateDocs(collection(db, "Usuario")).then((docs)=>
+                    docs.forEach((doc) => {
+                            const user = doc.data();
+                            if(user.mail == username && user.abogado_activo)
+    }}},*/
 
     add(){
       console.log("DATA")

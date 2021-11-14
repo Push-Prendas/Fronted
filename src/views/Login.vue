@@ -29,7 +29,8 @@
                 <input type="text" id="username" class="fadeIn second" name="login" placeholder="Usuario" v-model="username">
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
                 <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones(), getComunas(), getOficinas()">
-            </form>              
+            </form>
+            <p type="button" @click="RecuperarPass()">Olvidaste tu Contraseña?</p>            
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
             <div class="alert alert-danger" role="alert" v-if="error">
@@ -44,6 +45,8 @@
 import {auth, db} from "@/main";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
+import { sendPasswordResetEmail } from "firebase/auth";
+
 
 var usernameGlobal;
 var emailGlobal;
@@ -81,7 +84,7 @@ export default {
                     getDocs(collection(db, "Usuario")).then((docs)=>
                     docs.forEach((doc) => {
                             const user = doc.data();
-                            if(user.mail == username){
+                            if(user.mail == username && user.abogado_activo){
                                 //Usuario:{abogado_activo,mail,nombre,rol}
                                 //TEST SAVE
                                 this.username = user.username
@@ -157,6 +160,17 @@ export default {
 
             //console.log(this.rol)
             //return this.rol
+        },
+        RecuperarPass(){
+            sendPasswordResetEmail(auth, this.username)
+            .then(() => {
+                alert("Se ha enviado un correo con el link para que recupere su Contraseña ")
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                alert(errorCode+" "+errorMessage)
+            });
         },
         getNotarias(){
             getDocs(collection(db, "Notarias")).then((users_data) => {

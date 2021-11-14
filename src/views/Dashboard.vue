@@ -12,6 +12,11 @@
           <PagosPendientes v-if = "rol == 'PAGADOR'"/>
           <MisSolicitudesFuncionarioNotaria v-if = "rol == 'FUNCIONARIONOTARIA'"/>
           <MisSolicitudesFuncionarioNotaria v-if = "rol == 'FUNCIONARIOOFICINA'"/>
+        <div v-if = "rol == 'ADMIN'" id="textoadmin">
+          <p><b>Bienvenido Administrador, aqui podra editar, agregar o desabilitar USUARIOS, NOTARIAS Y OFICINAS.
+            Tambien podra editar algunos parametros Basicos del funcionamiento del sistema.</b>
+          </p>
+        </div>
         </div>
 
     </div>
@@ -28,6 +33,7 @@ import TablaJefeServicio2 from '../components/TablaJefeServicio2.vue'
 import TablaRecepcionDocumento from '../components/RecepcionDocumentosTabla.vue'
 import MisSolicitudesNotario from '../components/MisSolicitudesNotario.vue'
 import PagosPendientes from '../components/PagosPendientes.vue'
+
 
 var opciones;
 export default {
@@ -50,7 +56,7 @@ export default {
     TablaRecepcionDocumento,
     MisSolicitudesNotario,
     PagosPendientes,
-    MisSolicitudesFuncionarioNotaria
+    MisSolicitudesFuncionarioNotaria,
   },
   mounted() {
       //console.log("Entro")
@@ -106,7 +112,13 @@ export {opciones}
 
 
 <style scoped>
-
+#textoadmin{
+  margin-top: 5%;
+  margin-left: 20%;
+  float: right;
+  width: 70%;
+  height: auto;
+}
 .right {
     margin-right: 10px;
     float: right;
