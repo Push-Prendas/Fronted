@@ -232,6 +232,7 @@ export default {
   data() {
       return {
           opcion: localStorage.my_opts.split(','),
+          username: localStorage.user,
           items: []
       }
   },

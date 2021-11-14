@@ -12,8 +12,6 @@
                 <button class="col-2 titleButton">Imprimir</button>
             </div>
         </div>
-        
-        
     </div>
 </template>
 <script scoped>

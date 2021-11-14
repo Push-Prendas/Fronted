@@ -679,6 +679,9 @@ export default {
             console.log(this.Bienes[1])
             console.log(this.Bienes[2])
             console.log(this.Bienes[3])
+            await this.vehiculos.forEach((veh) =>{
+                console.log(veh)
+            })
             alzamiento(
                 this.nDocRequirente,//
                 this.tipoDoc.toString(),//
@@ -702,10 +705,6 @@ export default {
                 localStorage.rol == 'FUNCIONARIOOFICINA',
                 "Mi oficina"
             )
-
-
-
-
 
             }
             else{
