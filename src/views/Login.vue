@@ -113,6 +113,7 @@ export default {
                                 localStorage.mail = emailGlobal
                                 localStorage.user = usernameGlobal
                                 localStorage.rol = rolGlobal
+                                console.log("|" + localStorage.rol + "|")
                                 localStorage.rutLog = user.rut
                                 localStorage.notaria = notariaGlobal
                                 localStorage.mis_regiones = JSON.stringify(regiones);

@@ -557,9 +557,9 @@ export default {
 						},
 						body: params
 					}).then((response)=>{
-						response.json().then((reqResult) => {
-							alert(reqResult.msg)
-							
+						response.json().then(() => {
+							//alert(reqResult.msg)
+							modifySecondaryStatus(item.Tipo, item.id, 2, this.emailUser)
 						})
 					})
 				}, 1500);               

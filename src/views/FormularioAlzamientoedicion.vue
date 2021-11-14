@@ -607,7 +607,7 @@ export default {
                 this.Bienes[3],
                 -1,-1,
                 flags,
-                localStorage.esoficina,
+                localStorage.rol == 'FUNCIONARIOOFICINA',
                 "Mi oficina"
             )
         }
