@@ -49,7 +49,7 @@
                         </div>
                         <div class="tamanoTipoDocumento">
                           <select id="comunaNot" class="form-select" v-model="comuna">      
-                            <option :value="region.nombre" v-for="(region,index) in comunasP" :key="index">{{region.nombre}}</option>            
+                            <option :value="comuna.nombre" v-for="(comuna,index) in comunasP" :key="index">{{comuna.nombre}}</option>            
                           </select>
                         </div> 
                         <div class="titles d-flex justify-content-start" >
@@ -221,7 +221,7 @@ export default {
         return {
             opcion: localStorage.my_opts.split(','),
             items: [],
-            misNotarias: []
+            misNotarias: [],
         }
   },
   name: 'Dashboard',
@@ -232,21 +232,22 @@ export default {
   props:{
     regionesP:{
       type: Array,
-      default: JSON.parse(localStorage.mis_regiones)
     },
     comunasP:{
       type: Array,
-      default: JSON.parse(localStorage.mis_comunas)
     }
   },
   methods:{
     rellenarTabla(){
       this.items = []
       notariaList = []
-      console.log("MIS REGIONES")
+      
       console.log(localStorage.mis_regiones)
       see_notarias()
-      see_comunas_y_regiones()
+
+      console.log("CHECK DATA")
+      console.log(this.regionesP)
+      console.log(this.comunasP)
       setTimeout(() => {
         console.log(notariaList)
         notariaList.forEach((n) => {
@@ -328,6 +329,15 @@ export default {
   },
   mounted(){
     this.rellenarTabla()
+    see_comunas_y_regiones()
+    setTimeout(() => {
+      var my_list = []
+      comunasGlobal.forEach((c)=>{
+        console.log(c[1])
+        my_list.push(c[1])
+      })
+      this.comunasP = my_list
+    }, 1000);
   },
 }
 </script>

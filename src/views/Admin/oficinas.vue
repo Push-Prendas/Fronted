@@ -218,6 +218,15 @@ import Navbar from '../../components/Navbar.vue'
 export default {
   mounted(){
     this.rellenarTabla()
+    see_comunas_y_regiones()
+    setTimeout(() => {
+      var my_list = []
+      comunasGlobal.forEach((c)=>{
+        console.log(c[1])
+        my_list.push(c[1])
+      })
+      this.comunasP = my_list
+    }, 1000);
   },
   name: 'Dashboard',
   data() {
@@ -233,11 +242,9 @@ export default {
   props:{
     regionesP:{
       type: Array,
-      default: JSON.parse(localStorage.mis_regiones)
     },
     comunasP:{
       type: Array,
-      default: JSON.parse(localStorage.mis_comunas)
     }
   },
   methods:{

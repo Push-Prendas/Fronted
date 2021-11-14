@@ -80,7 +80,7 @@
                         </div>
                         <div class="tamanoTipoDocumento">
                           <select id="oficinaUsu" class="form-select" v-model="comuna">      
-                            <option :value="oficina.organizacion" v-for="(oficina,index) in oficinasP" :key="index">{{oficina.organizacion}}</option>            
+                            <option :value="oficina.nombre_organizacion" v-for="(oficina,index) in oficinasP" :key="index">{{oficina.nombre_organizacion}}</option>            
                           </select>
                         </div> 
                         <div class="titles d-flex justify-content-start">
@@ -88,7 +88,7 @@
                         </div>
                         <div class="tamanoTipoDocumento">
                           <select id="notariaUsu" class="form-select" v-model="comuna">      
-                            <option :value="oficina.organizacion" v-for="(oficina,index) in notariasP" :key="index">{{oficina.organizacion}}</option>            
+                            <option :value="oficina.nombre_organizacion" v-for="(oficina,index) in notariasP" :key="index">{{oficina.nombre_organizacion}}</option>            
                           </select>
                         </div> 
                         <div class="titles d-flex justify-content-start" >
@@ -243,6 +243,23 @@ export default {
      this.rellenarTabla()
      see_notarias()
      see_oficinas()
+     setTimeout(() => {
+        var my_list = []
+        console.log("MIS NOTARIAS")
+        notariaList.forEach((c)=>{
+          console.log(c[1])
+          my_list.push(c[1])
+        })
+        this.notariasP = my_list
+        var my_list2 = []
+        console.log("MIS OFICINAS")
+        oficinaList.forEach((c)=>{
+          console.log(c[1])
+          my_list2.push(c[1])
+        })
+        this.oficinasP = my_list2
+    }, 1500);
+
    },
    data() {
         return {
@@ -258,11 +275,9 @@ export default {
   props:{
     notariasP:{
       type: Array,
-      default: JSON.parse(localStorage.mis_notarias)
     },
     oficinasP:{
       type: Array,
-      default: JSON.parse(localStorage.mis_oficinas)
     }
   },
   methods:{
