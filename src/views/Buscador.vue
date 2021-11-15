@@ -6,6 +6,8 @@
           <BuscadorJefeDeServicios v-if="rol == 'JEFEDESERVICIO'"/>
           <BuscadorReceptor v-if="rol == 'RECEPTOR'"/>
           <BuscadorRevisor v-if="rol == 'REVISOR'"/>
+          <BuscadorFuncionarioNotaria v-if="rol == 'FUNCIONARIONOTARIA'"/>
+          <BuscadorNotario v-if="rol == 'NOTARIO'"/>
         </div>
 
     </div>
@@ -17,6 +19,9 @@ import Navbar from '../components/Navbar.vue'
 import BuscadorReceptor from '../components/BuscadorReceptor.vue'
 import BuscadorJefeDeServicios from '../components/BuscadorJefeDeServicios.vue'
 import BuscadorRevisor from '../components/BuscadorRevisor.vue'
+import BuscadorFuncionarioNotaria from '../components/BuscadorFuncionarioNotaria.vue'
+import BuscadorNotario from '../components/BuscadorNotario.vue'
+
 
 
 export default {
@@ -37,7 +42,9 @@ export default {
     //TablaJefeServicio2,
     BuscadorReceptor,
     BuscadorJefeDeServicios,
-    BuscadorRevisor
+    BuscadorRevisor,
+    BuscadorFuncionarioNotaria,
+    BuscadorNotario
   }
 }
 </script>
