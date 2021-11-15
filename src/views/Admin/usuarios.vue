@@ -423,7 +423,7 @@ export default {
           mail: mail,
           rut: rut,
           rol: tipo,
-          abogado_activo: (tipo == "OFICINA")
+          abogado_activo: true
         })
 
       setTimeout(() => {

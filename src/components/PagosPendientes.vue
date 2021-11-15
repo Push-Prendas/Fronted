@@ -344,6 +344,30 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 				});
 			}
 		}
+		else if(estado_secundario == 0){
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    estadoPrimario: 1,
+					estadoSecundario: estado_secundario,
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    estadoPrimario: 1,
+					estadoSecundario: estado_secundario,
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    estadoPrimario: 1,
+					estadoSecundario: estado_secundario,
+				});
+			}
+		}
 		else{
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
@@ -557,18 +581,21 @@ export default {
 						},
 						body: params
 					}).then((response)=>{
-						response.json().then(() => {
+						response.json().then((reqResult) => {
 							//alert(reqResult.msg)
-							modifySecondaryStatus(item.Tipo, item.id, 2, this.emailUser)
+							if(reqResult.msg == "Pago Ingresado")
+								modifySecondaryStatus(item.Tipo, item.id, 2, this.emailUser)
+							else
+								modifySecondaryStatus(item.Tipo, item.id, 0, this.emailUser)
 						})
 					})
 				}, 1500);               
             this.items.splice(indexCheck[w],1)
             w++
         }
-        
-        
+
     }
+	
   }
 
 }
