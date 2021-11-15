@@ -30,6 +30,8 @@ import FormularioModificacion2Edit from "./views/FormularioModificacionCAMBIOACR
 import FormularioModificacion3Edit from "./views/FormularioModificacionPROHIBACTOedicion.vue"
 import FormularioModificacion4Edit from "./views/FormularioModificacionOTROedicion.vue"
 
+import Parametros from "./views/Admin/parametros.vue"
+
 
 const routes = [
     {
@@ -221,6 +223,12 @@ const routes = [
     path: "/Dashboard/:rol/:username/solicitudModificacion4Edit",
     name: "solicitudModificacion4",
     component: FormularioModificacion4Edit,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/Parametros",
+    name: "Dashboard",
+    component: Parametros,
     props: true
   },
   {
