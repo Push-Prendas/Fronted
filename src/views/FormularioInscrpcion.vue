@@ -311,34 +311,35 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				if (send_flag==false){
 					alert("Solicitud Guardada Exitosamente")
 				}else{
+					console.log("PAGANDO EN CAJA")
+					//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
+					if (rol_oficina){
+						modifySecondaryStatus("I",id.toString(),1,userid)
+						setTimeout(() => {
+							var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
+							var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + monto_total +'}'
+							fetch(url, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: params
+							}).then((response)=>{
+								response.json().then((reqResult) => {
+									alert(reqResult.msg)
+									console.log("PAGADO")
+									modifySecondaryStatus("I",id.toString(),2,userid)
+									this.redirect()					
+								})
+							})
+						}, 1500);
+					}	
 					alert("Solicitud Enviada Exitosamente")
 					if(!rol_oficina)
 						this.redirect()
 				}
 				
-				console.log("PAGANDO EN CAJA")
-				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
-				if (rol_oficina){
-					modifySecondaryStatus("I",id.toString(),1,userid)
-					setTimeout(() => {
-						var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
-						var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + monto_total +'}'
-						fetch(url, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: params
-						}).then((response)=>{
-							response.json().then((reqResult) => {
-								alert(reqResult.msg)
-								console.log("PAGADO")
-								modifySecondaryStatus("I",id.toString(),2,userid)
-								this.redirect()					
-							})
-						})
-					}, 1500);
-				}		
+	
 
 
 				//
@@ -668,7 +669,7 @@ export default {
 						this.Bienes[1], 
 						this.Bienes[2], 
 						this.Bienes[3], 
-						100, 
+						preciosGlobal[0]["precio"], 
 						flags, 
 						this.tipoPersona, 
 						runacreedor.toString(), //id , rut y run

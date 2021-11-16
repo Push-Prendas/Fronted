@@ -63,14 +63,17 @@ import Navbar from '../components/Navbar.vue'
 function buscar_y_validar_solicitud(repertorio_prenda, identificador_algun_constituyente){
 	//DEVUELVE EL ID DE LA SOLICITUD QUE CUMPLA CON LOS REQUISITOS ANTES MENCIONADOS
 
+    
+
 	//DEVOLVER ULTIMA VERSION DE LA PRENDA
 	getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 		var data = sol_data.docs;
 		data.forEach((d) => {
 			var my_data = d.data();
 			//console.log(my_data_id)
-			//console.log(my_data.numeroRepertorioContratoPrenda + "|" + repertorio_prenda + "-" + year)
+			// console.log(my_data.numeroRepertorioContratoPrenda + "|" + repertorio_prenda + "-" + year)
 			if(my_data.numeroRepertorioContratoPrenda == repertorio_prenda){
+                console.log("Se encontro numero de repertorio igual")
 				var my_data_id = d.id;
                 console.log(my_data_id)
 				getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(my_data_id)))).then((per_data) => {

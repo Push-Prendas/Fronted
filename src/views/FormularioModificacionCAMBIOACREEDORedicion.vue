@@ -12,7 +12,7 @@
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <VehiculoLecturaFormulario :tipoSolicitud="Modificacion" @getVehiculos="getVehiculos" />
+            <VehiculoLecturaFormulario :tipoSolicitud="Modificacion" :items="items" />
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
             <Monto/>
@@ -50,6 +50,117 @@ function validate_number(inputNumber){
     if(year>curYear || isNaN(year) || year.length < 4) return false;
     return true;
 }
+
+var my_rpsd;
+
+
+function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
+	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
+
+	////////OJO: REVISAR NUMERO REPERTORIO DE PRENDA/////////////////
+	///GUARDAR EN UNA TABLA APARTE O EN ALGO EL NUMERO DE REPEROTRIO DE PRENDA ACTUAL Y ASIGNAR
+	var change_message = ["El pago no se realizo", "Hubo intencion de pagar", "Pagado"]
+	getDocs(collection(db, "Counter_N_RPsD")).then((n) => {
+		var counter_data = n.docs[0].data();
+		var counter = counter_data.counter;
+		if(counter < 10){
+			counter = "000" + counter.toString()
+		}
+		else if (counter < 100){
+			counter = "00" + counter.toString()
+		}
+		else if (counter < 1000){
+			counter = "0" + counter.toString()
+		}
+		else{
+			counter = counter.toString()
+		}
+		var year = counter_data.year;
+		my_rpsd = counter + "-" + year.toString()
+		console.log("RPSD: " + my_rpsd)
+		if(estado_secundario == 1){
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    
+					estadoSecundario: estado_secundario,
+					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
+				});
+			}
+		}
+		else{
+			if (tipo_de_solicitud == "I"){
+				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
+                    
+					estadoSecundario: estado_secundario,
+
+				}).then(() => {
+					console.log("ACTUALIZADO")
+				})
+
+			}
+			else if (tipo_de_solicitud == "M"){
+				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
+                    
+					estadoSecundario: estado_secundario,
+				});
+			}
+			else if (tipo_de_solicitud == "A"){
+				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
+                    
+					estadoSecundario: estado_secundario,
+				});
+			}
+		}
+		updateDoc(doc(db, "Counter_N_RPsD","0"),{
+			counter: counter_data.counter + 1
+		});
+
+	})
+	var today = new Date();
+	getDocs(collection(db, "Bitacora")).then((bit_data) => {
+		var id_bit = bit_data.docs.length;
+		var id_insc = ""
+		var id_mod = ""
+		var id_alz = ""
+		if(tipo_de_solicitud == "I"){
+			id_insc = id_solicitud
+		}
+		else if(tipo_de_solicitud == "M"){
+			id_mod = id_solicitud
+		}
+		else if(tipo_de_solicitud == "A"){
+			id_alz = id_solicitud
+		}
+		setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+			idInscripcion: id_insc,
+			idModificacion: id_mod,
+			idAlzamiento: id_alz,
+			idUser: user_id,
+			comment: change_message[estado_secundario],
+			fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+		})
+	})
+	
+}
+
 
 var solicitud_relacionada;
 var acreedores_relacionados = []
@@ -313,6 +424,7 @@ function  inscripcion_modificacion(
     GrabarEnagenar,//
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
     fecha_requirente="",//
+    send_flag
     ){
 
 
@@ -396,7 +508,39 @@ function  inscripcion_modificacion(
                 firma:false,
                 tipoModificacion:2,
                 usuarioCreador: localStorage.mail
-            })//18
+            }).then(() => {
+            console.log("PAGANDO EN CAJA")
+            //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
+            if(send_flag){
+
+            if (localStorage.rol == "FUNCIONARIOOFICINA"){
+                modifySecondaryStatus("M",ids.toString(),1,localStorage.mail)
+                setTimeout(() => {
+                    var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
+                    var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[2]["precio"]) +parseInt(costoTotalAutos)) +'}' //CORREGIR ESTA CUESTION
+                    fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: params
+                    }).then((response)=>{
+                        response.json().then((reqResult) => {
+                            alert(reqResult.msg)
+                            console.log("PAGADO")
+                            modifySecondaryStatus("M",ids.toString(),2,localStorage.mail)
+                            this.redirect()					
+                        })
+                    })
+                }, 1500);
+            }
+            
+            alert("Solicitud Enviada Exitosamente")	
+
+            }else{
+                alert("Solicitud Guardada Exitosamente")
+            }		
+            })
             
             console.log("entros")
             if(estadoPrimario == 1){// 1 significa que esta en revision en la notaria
@@ -424,6 +568,21 @@ function see_prices(){
 	})
 }
 
+function load_vehicles(id_inscripcion){
+    autoGlobal = []
+    getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
+		var my_cars = car_Data.docs
+		my_cars.forEach((p) => {
+			var p_data = p.data();
+            if(p_data.idInscripcion == id_inscripcion)
+                autoGlobal.push(p_data)
+		})
+        console.log("AUTOS: ")
+		console.log(autoGlobal)
+	})
+}
+var costoTotalAutos = 0
+
 export default {
     mounted(){
         console.log("STARTER DATA")
@@ -431,17 +590,68 @@ export default {
         console.log(localStorage.tipo_revisar)
         buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
         see_prices()
-        setTimeout(() => {
-            console.log(solicitud_relacionada)
-            console.log(acreedores_relacionados)
-            console.log(constituyentes_relacionados)
-            console.log(deudores_relacionados)
-            console.log(contratos_relacionados)
-            console.log(archivos_relacionados)
-            console.log(patentes_relacionadas)
-            const monto = document.getElementById('monto')
-            monto.innerHTML = "$" + preciosGlobal[2]["precio"]
-        }, 1500)
+        load_vehicles(localStorage.idSol)
+      setTimeout(() => {
+
+
+
+        this.items = []
+        console.log(autoGlobal)
+        const monto = document.getElementById('monto')
+
+
+        console.log("Enviando REQUEST")
+        costoTotalAutos = 0
+
+        autoGlobal.forEach((data) => {
+
+        costoTotalAutos +=  parseInt(preciosGlobal[8]["precio"])
+
+        if(data.inscripcionPrendaRVM == true){
+
+        var oReq = new XMLHttpRequest();
+        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
+        oReq.open("GET", url);
+        oReq.send();
+        oReq.onload = ()=>{
+            if(oReq.status == 200){
+
+                var reqResult = JSON.parse(oReq.response);
+
+
+                console.log("MENSAJE RECIVIDO")
+                console.log(reqResult)
+                console.log("LARGO")
+                console.log(reqResult.solicitudes.length)
+
+                if(reqResult.solicitudes.length > 0){
+                    solicitudPendiente = true
+                }
+
+
+            }
+            
+        }
+
+
+        }
+
+
+        let item = {
+            "patente": data.patente,
+            "rvm": data.inscripcionPrendaRVM,
+            "GoE": data.inscripcionProhibicionGravarEnajenar,
+            "costo": "-"}
+        this.items.push(item);
+
+
+
+
+        })
+
+        monto.innerHTML = "$" + (parseInt(preciosGlobal[2]["precio"]) + parseInt(costoTotalAutos) )
+
+      },1000)
     },
   name: 'formularioModificacion',
   data() {
@@ -479,10 +689,14 @@ export default {
     },
 
   props:{
-      rol: {
+    rol: {
           type: String,
           default: localStorage.rol
-      }
+      },
+    items:{
+        type: Array,
+        default: new Array,
+    },
 
     },
   components: {

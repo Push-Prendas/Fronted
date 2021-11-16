@@ -357,11 +357,16 @@ function alzamiento(
     }).then(() => {
         console.log("PAGANDO EN CAJA")
 		//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
+        if (send_flag==false){
+            alert("Solicitud Guardada Exitosamente")
+				}else{
+       
+
         if (rol_oficina){
             modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
             setTimeout(() => {
                 var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
-                var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + 39220 +'}' //CORREGIR ESTA CUESTION
+                var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + preciosGlobal[1]["precio"] +'}' //CORREGIR ESTA CUESTION
                 fetch(url, {
                 method: 'POST',
                 headers: {
@@ -377,7 +382,11 @@ function alzamiento(
                     })
                 })
             }, 1500);
-        }		
+        }
+        alert("Solicitud Enviada Exitosamente")	
+                    
+    }
+	
     })
     if(estado_inicial == 1){// 1 significa que esta en revision en la notaria
 
@@ -416,7 +425,7 @@ function load_vehicles(id_inscripcion){
 	})
 }
 
-
+var costoTotalAutos = 0
 
 
 
@@ -447,11 +456,11 @@ export default {
 
         console.log("Enviando REQUEST")
 
-        var costoTotalAutos = 0
+        costoTotalAutos = 0
 
         autoGlobal.forEach((data) => {
 
-        costoTotalAutos += preciosGlobal[9]["precio"] 
+        costoTotalAutos += parseInt(preciosGlobal[9]["precio"]) + parseInt(preciosGlobal[8]["precio"])
 
         if(data.inscripcionPrendaRVM == true){
 
@@ -496,7 +505,7 @@ export default {
         })
 
 
-        monto.innerHTML = "$" + (preciosGlobal[1]["precio"] + costoTotalAutos )
+        monto.innerHTML = "$" + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos) )
 
 
 
