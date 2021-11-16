@@ -106,7 +106,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		if(estado_secundario == 1){
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 
@@ -117,14 +117,14 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 			}
 			else if (tipo_de_solicitud == "M"){
 				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 				});
 			}
 			else if (tipo_de_solicitud == "A"){
 				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 				});
@@ -133,7 +133,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		else{
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 
 				}).then(() => {
@@ -143,13 +143,13 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 			}
 			else if (tipo_de_solicitud == "M"){
 				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 				});
 			}
 			else if (tipo_de_solicitud == "A"){
 				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 				});
 			}
