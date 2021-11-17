@@ -541,7 +541,7 @@ export default {
 
 
 	this.total_itemsVehiculos.forEach((data) => {
-			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":' + "aceptada"+  '}'
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":' + "aceptada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
 
 			fetch(url, {
 			method: 'POST',
@@ -605,7 +605,7 @@ export default {
 
 
 		this.total_itemsVehiculos.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":' + "aceptada"+  '}'
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":' + "aceptada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
 
 		fetch(url, {
 		method: 'POST',
@@ -644,7 +644,7 @@ export default {
     else if(localStorage.tipo_judge.toString() == "A"){
 
 		this.total_itemsVehiculos.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN" + '", "aceptarORechazar":' + "aceptada"+  '}'
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN" + '", "aceptarORechazar":' + "aceptada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
 
 		fetch(url, {
 		method: 'POST',
