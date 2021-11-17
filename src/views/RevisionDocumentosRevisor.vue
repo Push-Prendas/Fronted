@@ -679,6 +679,19 @@ export default {
 
     if(localStorage.tipo_judge.toString() == "I"){
 
+
+	this.total_itemsVehiculos.forEach((data) => {
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":' + "rechazada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
+
+			fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: params
+				})
+	})
+
             updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
             estadoPrimario: 6,
         }).then(() => {
@@ -693,12 +706,50 @@ export default {
     }
     else if(localStorage.tipo_judge.toString() == "M"){
 
+	
+	var tipoMod = ""
 
 
-
-
-
+	getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((resp)=>{
 		
+		resp.docs.forEach((element) => {
+			if(localStorage.id_judge.toString() == element.id){
+				console.log("Es igual")
+				console.log(element.data().tipoModificacion)
+
+				if(element.data().tipoModificacion == 1){
+					tipoMod = "AlzPN"
+				}
+				else if(element.data().tipoModificacion == 2){
+					tipoMod = "CA"
+				}
+				else if(element.data().tipoModificacion == 3){
+					tipoMod = "AlzPH"
+				}
+				else if(element.data().tipoModificacion == 4){
+					tipoMod = ""//no existe en RVM
+				}
+
+
+
+			}
+
+		})	
+	}).then(()=>{
+
+		this.total_itemsVehiculos.forEach((data) => {
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":' + "rechazada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
+
+		fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: params
+			})
+
+		})
+
 		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 6,
 		}).then(() => {
@@ -710,9 +761,30 @@ export default {
 			
 		})
 
+
+
+
+	})
+
     }
 
     else if(localStorage.tipo_judge.toString() == "A"){
+
+		this.total_itemsVehiculos.forEach((data) => {
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN" + '", "aceptarORechazar":' + "rechazada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
+
+		fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: params
+			})
+
+		})
+
+
+
 		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
 			estadoPrimario: 6,
 		}).then(() => {
