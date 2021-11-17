@@ -313,34 +313,35 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				if (send_flag==false){
 					alert("Solicitud Guardada Exitosamente")
 				}else{
+					console.log("PAGANDO EN CAJA")
+					//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
+					if (rol_oficina){
+						modifySecondaryStatus("I",id.toString(),1,userid)
+						setTimeout(() => {
+							var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
+							var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + monto_total +'}'
+							fetch(url, {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: params
+							}).then((response)=>{
+								response.json().then((reqResult) => {
+									alert(reqResult.msg)
+									console.log("PAGADO")
+									modifySecondaryStatus("I",id.toString(),2,userid)
+									this.redirect()					
+								})
+							})
+						}, 1500);
+					}	
 					alert("Solicitud Enviada Exitosamente")
 					if(!rol_oficina)
 						this.redirect()
 				}
 				
-				console.log("PAGANDO EN CAJA")
-				//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
-				if (rol_oficina){
-					modifySecondaryStatus("I",id.toString(),1,userid)
-					setTimeout(() => {
-						var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
-						var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + monto_total +'}'
-						fetch(url, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: params
-						}).then((response)=>{
-							response.json().then((reqResult) => {
-								alert(reqResult.msg)
-								console.log("PAGADO")
-								modifySecondaryStatus("I",id.toString(),2,userid)
-								this.redirect()					
-							})
-						})
-					}, 1500);
-				}		
+	
 
 
 				//
@@ -384,7 +385,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		if(estado_secundario == 1){
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 
@@ -395,14 +396,14 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 			}
 			else if (tipo_de_solicitud == "M"){
 				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 				});
 			}
 			else if (tipo_de_solicitud == "A"){
 				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 				});
@@ -411,7 +412,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		else{
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 
 				}).then(() => {
@@ -421,13 +422,13 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 			}
 			else if (tipo_de_solicitud == "M"){
 				updateDoc(doc(db, "Solicitud_Modificacion_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 				});
 			}
 			else if (tipo_de_solicitud == "A"){
 				updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",id_solicitud),{
-                    estadoPrimario: 4,
+                    
 					estadoSecundario: estado_secundario,
 				});
 			}
@@ -681,7 +682,7 @@ export default {
 						this.Bienes[1], 
 						this.Bienes[2], 
 						this.Bienes[3], 
-						100, 
+						preciosGlobal[0]["precio"], 
 						flags, 
 						this.tipoPersona, 
 						runacreedor.toString(), //id , rut y run
