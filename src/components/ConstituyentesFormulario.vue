@@ -114,7 +114,7 @@
                 <th scope="col">IDENTIFICADOR</th>
                 <th scope="col">NOMBRE/RAZON</th>
                 <th scope="col">PAIS</th>
-
+                <th scope="col"></th>
                 </tr>
             </thead>
             <tbody class="bodyTabla" v-if="items.length == 0">
@@ -124,8 +124,8 @@
                 <td >{{item.Tipo}}</td>
                 <td >{{item.Id}}</td>
                 <td >{{item.Name}}</td>
-                 <td >{{item.Pais}}</td>
-
+                <td >{{item.Pais}}</td>
+                <td><p type="button" @click="borrar(index), setData()">X</p></td>
             </tbody>
  
         </table> 
@@ -200,6 +200,10 @@ export default {
             var selectBox = document.getElementById("tipoDePersonaConstituyente");
             this.option = selectBox.options[selectBox.selectedIndex].value; 
             //console.log(this.option);
+        },
+        borrar(index){
+            this.items.splice(index,1);
+            
         },
         add() {
             var oReq = new XMLHttpRequest();

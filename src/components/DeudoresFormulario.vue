@@ -112,6 +112,7 @@
                 <th scope="col">IDENTIFICADOR</th>
                 <th scope="col">NOMBRE/RAZON</th>
                 <th scope="col">PAIS</th>
+                <th scope="col"></th>
                 </tr>
             </thead>
             <tbody class="bodyTabla" v-if="items.length == 0">
@@ -122,6 +123,7 @@
                 <td>{{item.Id}}</td>
                 <td>{{item.Name}}</td>
                 <td>{{item.Pais}}</td>
+                <td><p type="button" @click="borrar(index), setData()">X</p></td>
             </tbody>
  
         </table> 
@@ -162,6 +164,10 @@ export default {
         modo: String
     },
     methods:{
+        borrar(index){
+            this.items.splice(index,1);
+            
+        },
         changeOption(){
             var selectBox = document.getElementById("tipoDePersonaDeudor");
             this.option = selectBox.options[selectBox.selectedIndex].value; 

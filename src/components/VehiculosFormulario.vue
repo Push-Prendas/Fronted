@@ -46,6 +46,7 @@
                 <th scope="col">PATENTE</th>
                 <th scope="col">RVM</th>
                 <th scope="col">GRAVAR/ENAJENAR</th>
+                <th scope="col"></th>
                 </tr>
             </thead>
             <tbody class="bodyTabla" v-if="items.length == 0">
@@ -61,7 +62,7 @@
                     <div v-if="item.GoE == true">GRAVAR</div>
                     <div v-if="item.GoE == false">NO</div>
                 </td>
-                
+                <td><p type="button" @click="borrar(index), setData()">X</p></td>
             </tbody>
  
         </table> 
@@ -280,6 +281,10 @@ export default {
             buscador_especifico_solicitud(12,'I')
             //this.items=patentes_relacionadas
         
+        },
+        borrar(index){
+            this.items.splice(index,1);
+            
         },
         changeOption(){
             var selectBox = document.getElementById("tipoDePersona");
