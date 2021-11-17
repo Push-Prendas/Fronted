@@ -465,13 +465,14 @@ export default {
 			const nombre =  document.getElementById("nombresacreedor");
 			const apPaterno =  document.getElementById("apellidopaterno");
 			const apMaterno =  document.getElementById("apellidomaterno");
-			
+			const nombreCompleto = acreedores_relacionados[0].nombrePersona.split(" ");
+
 			//VALUES
 			tipoPersona.value = acreedores_relacionados[0].tipoAcreedor;
 			run.value = acreedores_relacionados[0].runPersona;
-			nombre.value = acreedores_relacionados[0].nombrePersona;
-			apPaterno.value = "No hay por los momentos";
-			apMaterno.value = "No hay por los momentos";
+			nombre.value = nombreCompleto[0];
+			apPaterno.value = nombreCompleto[1];
+			apMaterno.value = nombreCompleto[2];
 
 			//DISABLED
 			tipoPersona.disabled = true;

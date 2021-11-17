@@ -477,6 +477,7 @@ function see_prices(){
 	})
 }
 
+
 export default {
   mounted(){
 
@@ -645,6 +646,8 @@ export default {
             });
         },
         crearInscripcion(flags){
+			console.log("hahau")
+            this.downloadWithCSS()
 			var runacreedor;
 			var nombreacreedor;
 			if(this.tipoPersona == "Natural"){
@@ -703,8 +706,8 @@ export default {
 					}
 				}
 			}
-			console.log("hahau")
-            this.downloadWithCSS()
+			
+			
 			
 		},
 		

@@ -30,7 +30,6 @@
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
                 <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones(), getComunas(), getOficinas()">
             </form>
-            <button @click="downloadWithCSS()">Download</button>
             <p type="button" @click="RecuperarPass()">Olvidaste tu Contraseña?</p>            
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
