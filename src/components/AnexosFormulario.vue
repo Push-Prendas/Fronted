@@ -3,10 +3,8 @@
         <div class="row">
             <div class="titleFormulario col" @change ="setData()">Anexos</div> 
             <div class="input-group mb-3 " @change ="setData()">
-                <label  for="anexos"></label><input type="file" multiple class="form-control" id="anexos" @change ="setData()">
-                
+                <label  for="anexos"></label><input type="file" multiple class="form-control" id="anexos" @change ="setData()" accept="application/pdf">
             </div>
-            
         </div>
 
     </div>

@@ -3,8 +3,7 @@
         <div class="row">
             <div class="titleFormulario col" @change ="setData()">Contrato</div> 
             <div class="input-group mb-3 " @change ="setData()">
-                <label for="contrato"></label><input type="file" class="form-control" id="contrato" @change ="setData()">
-                
+                <label for="contrato"></label><input type="file" class="form-control" id="contrato" @change ="setData()" accept="application/pdf">
             </div>
             
         </div>
@@ -18,12 +17,10 @@ export default {
   data() {
         return {
             headers: ['Tipo', 'Id', 'Name'],
-            contrato: null,
-            
+            contrato: null, 
         }
     },
     props: {
-
     },
 
     methods:{

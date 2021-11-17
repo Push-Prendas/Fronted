@@ -48,7 +48,7 @@
                             RAZON SOCIAL
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input type="text" v-model="razonsocial" id="razonsocial"  >
+                            <input type="text" v-model="razonsocial" id="razonsocial" @input="razonsocial=razonsocial.toUpperCase()" >
                         </div>
                     </div>
                     
@@ -59,7 +59,7 @@
                                 APELLIDO PATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="apellidopaterno" type="text" v-model="apellidopaterno"  >
+                                <input id="apellidopaterno" type="text" v-model="apellidopaterno"  @input="apellidopaterno=apellidopaterno.toUpperCase()">
                             </div>
                     </div>
                     <div class="col row">
@@ -67,7 +67,7 @@
                                APELLIDO MATERNO
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="apellidomaterno" type="text" v-model="apellidomaterno"  >
+                                <input id="apellidomaterno" type="text" v-model="apellidomaterno"  @input="apellidomaterno=apellidomaterno.toUpperCase()">
                             </div>
                     </div>
                     <div class="row">
@@ -75,7 +75,7 @@
                             NOMBRES
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nombres" type="text" v-model="nombres"  >
+                            <input id="nombres" type="text" v-model="nombres"  @input="nombres=nombres.toUpperCase()">
                         </div>
                     </div>
                     
@@ -87,7 +87,7 @@
                             NOMBRE COMPLETO
                         </div>
                         <div class="tamanoTipoDocumento">
-                            <input id="nonmbrecompleto" type="text" v-model="nombrecompleto"  >
+                            <input id="nonmbrecompleto" type="text" v-model="nombrecompleto"  @input="nombrecompleto=nombrecompleto.toUpperCase()">
                         </div>
                     </div>
                     <div class="col row" v-if="option == 'Extranjero'">
@@ -136,6 +136,9 @@
 
 import * as Countries from '../data/countries.js';
 export default {
+    mounted(){
+        this.items.length=0;
+    },
   name: 'ConstituyenteFormulario',
   data() {
       const countries= Countries.default.countries;
@@ -209,7 +212,8 @@ export default {
             }
             else if(this.option == "Extranjero"){
                 url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.id
-            }           
+            }     
+            console.log("jhajs");      
             oReq.open("GET", url);
             oReq.send();
             oReq.onload = ()=>{

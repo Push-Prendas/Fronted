@@ -56,7 +56,7 @@
                    RAZÓN SOCIAL
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="razonsocial" id="nombresacreedor" @change ="setData()">
+                    <input type="text" v-model="razonsocial" id="nombresacreedor" @change ="setData()" @input="razonsocial=razonsocial.toUpperCase()">
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
                     APELLIDO PATERNO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="Apaterno" id="apellidopaterno" @change ="setData()">
+                    <input type="text" v-model="Apaterno" id="apellidopaterno" @change ="setData()" @input="Apaterno=Apaterno.toUpperCase()">
                 </div>
             </div>
             <div class="col row">
@@ -75,7 +75,7 @@
                     APELLIDO MATERNO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="Amaterno" id="apellidomaterno" @change ="setData()">
+                    <input type="text" v-model="Amaterno" id="apellidomaterno" @change ="setData()" @input="Amaterno=Amaterno.toUpperCase()">
                 </div>
             </div>
             <div class="col row">
@@ -83,7 +83,7 @@
                     NOMBRES
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombres" id="nombresacreedor" @change ="setData()">
+                    <input type="text" v-model="nombres" id="nombresacreedor" @change ="setData()" @input="nombres=nombres.toUpperCase()">
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
                     NOMBRE COMPLETO
                 </div>
                 <div class="tamanoTipoDocumento">
-                    <input type="text" v-model="nombrecompleto" id="nombrecompleto" @change ="setData()">
+                    <input type="text" v-model="nombrecompleto" id="nombrecompleto" @change ="setData()" @input="nombrecompleto=nombrecompleto.toUpperCase()">
                 </div>
             </div>
         </div>

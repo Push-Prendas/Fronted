@@ -1,8 +1,8 @@
 <template>
-    <div id="dashboard">
+    <div id="dashboard" >
         <Menu :opciones= opcion />
         <Navbar :username= username />
-        <div class="right">
+        <div class="right" ref="content">
             <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
 			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
 			@getFechaRequirente="getFechaRequirente"/>
@@ -42,6 +42,8 @@ import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import jsPDF  from 'jspdf';
+import html2canvas from 'html2canvas';
 //import { getStorage } from "firebase/storage";
 //import { getApp,initializeApp  } from "firebase/app";
 
@@ -630,6 +632,17 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
+		downloadWithCSS() {
+            const doc = new jsPDF();
+            /** WITH CSS */
+            var canvasElement = document.createElement('canvas');
+                html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
+                }).then(function (canvas) {
+                const img = canvas.toDataURL("image/jpeg",0.8);
+                doc.addImage(img,'JPEG',20,20,120,120);
+                doc.save("sample.pdf");
+            });
+        },
         crearInscripcion(flags){
 			var runacreedor;
 			var nombreacreedor;
@@ -689,9 +702,11 @@ export default {
 					}
 				}
 			}
-            
+			console.log("hahau")
+            this.downloadWithCSS()
 			
-		}
+		},
+		
   },
   components: {
     AntecedentesFormulario,

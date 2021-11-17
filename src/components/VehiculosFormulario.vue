@@ -14,7 +14,7 @@
                                 PATENTE
                             </div>
                             <div class="tamanoTipoDocumento">
-                                <input id="textPatente" type="text" v-model="patente">
+                                <input id="textPatente" type="text" v-model="patente" @input="patente=patente.toUpperCase()">
                             </div>
                         </div>
                         <div class="d-flex justify-content-center SpaceItems">
@@ -53,8 +53,10 @@
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" id="tablapatentesinscripcion" :key="index">
                 <td>{{item.patente}}</td>
-                <td>{{item.rvm}} </td>
-                
+                <td >
+                    <div v-if="item.rvm == true">SI</div>
+                    <div v-if="item.rvm == false">NO</div>
+                </td>
                 <td >
                     <div v-if="item.GoE == true">GRAVAR</div>
                     <div v-if="item.GoE == false">NO</div>
@@ -240,6 +242,7 @@ function see_prices(){
 export default {
   mounted(){
       see_prices()
+      this.items.length=0;
   },
   name: 'AcreedorFormularios',
   data() {

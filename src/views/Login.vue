@@ -1,6 +1,6 @@
 <template>
-    <div class="contenedor">
-        <div class="row navbar">
+    <div class="contenedor" >
+        <div class="row navbar" >
             <div class="col-3">
                 <img src="../assets/LogoDelRegistroCivil.png" alt="dog" width="100px" height="100px">
             </div>
@@ -30,6 +30,7 @@
                 <input type="password" id="password" class="fadeIn third" name="login" placeholder="Contraseña" v-model="password">
                 <input type="submit" class="fadeIn fourth" value="Entrar" @click="getNotarias(), getRegiones(), getComunas(), getOficinas()">
             </form>
+            <button @click="downloadWithCSS()">Download</button>
             <p type="button" @click="RecuperarPass()">Olvidaste tu Contraseña?</p>            
             <p>Para ayuda, favor contáctese con nuestro</p>
             <p>Call Center </p>
@@ -46,7 +47,8 @@ import {auth, db} from "@/main";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { sendPasswordResetEmail } from "firebase/auth";
-
+import jsPDF  from 'jspdf';
+import html2canvas from 'html2canvas';
 
 var usernameGlobal;
 var emailGlobal;
@@ -235,6 +237,33 @@ export default {
                 })
             })
             
+        },
+        download(){
+            console.log("aquiiijhajsjdhjas");
+            //window.jsPDF = require('jspdf');
+            const doc = new jsPDF();
+            const contentHtml = this.$refs.content.innerHTML;
+            //console.log(contentHtml);
+            /*doc.html(contentHtml,15,15,{width:170});
+            doc.save("sample.pdf");*/
+            
+            doc.html(contentHtml, {
+                callback: function (doc) {
+                    doc.save("sample.pdf");
+                }
+            });
+            console.log("aquiii");
+        },
+        downloadWithCSS() {
+            const doc = new jsPDF();
+            /** WITH CSS */
+            var canvasElement = document.createElement('canvas');
+                html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
+                }).then(function (canvas) {
+                const img = canvas.toDataURL("image/jpeg",0.8);
+                doc.addImage(img,'JPEG',20,20,120,120);
+                doc.save("sample.pdf");
+            });
         },
     }
 }

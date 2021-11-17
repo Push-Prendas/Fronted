@@ -1,8 +1,8 @@
 <template>
-    <div id="dashboard">
+    <div id="dashboard" >
         <Menu :opciones= opcion />
         <Navbar :username= username />
-        <div class="right">
+        <div class="right" ref="content">
             <RequirenteFormulario  v-if="rol == 'FUNCIONARIOOFICINA'" @getnombreRequirente="getnombreRequirente" 
 			@getrutRequirente="getrutRequirente" @getCorreoRequirente="getCorreoRequirente"
 			@getFechaRequirente="getFechaRequirente"/>
@@ -13,11 +13,12 @@
             <AcreedorFormulario @gettipoPersona="gettipoPersona"  @getrun="getrun"
             @getid="getid" @getpais="getpais" @getrut="getrut" 
             @getrazonsocial="getrazonsocial" @getApaterno="getApaterno" @getAmaterno="getAmaterno" @getnombres="getnombres"/>
-            <ConstituyentesFormulario :items="constituyentes" @getConstituyentes="getConstituyentes" />
-            <DeudoresFormulario :items="deudores" @getDeudores="getDeudores"/>
-			<VehiculosFormulario :items="vehiculos" @getVehiculos="getVehiculos"/>
+            <ConstituyentesFormulario :items="items_Constituyentes" @getConstituyentes="getConstituyentes" :modo="'Escribir'"/>
+            <DeudoresFormulario :items="items_Deudores" @getDeudores="getDeudores" :modo="'Escribir'"/>
+			<VehiculosFormulario @getVehiculos="getVehiculos" :items="total_itemsVehiculos"/>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
+			<ArchivosLectura :items="items_Contrato" :itemsAnexos="items_Anexos" />
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton" @click="crearInscripcion(false)">Guardar</button>
@@ -40,8 +41,11 @@ import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
 import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
+import ArchivosLectura from '../components/ArchivosLectura.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import jsPDF  from 'jspdf';
+import html2canvas from 'html2canvas';
 //import { getStorage } from "firebase/storage";
 //import { getApp,initializeApp  } from "firebase/app";
 
@@ -71,6 +75,54 @@ function validate_number(inputNumber){
 }
 
 var solicitud_relacionada;
+var total_items = []
+var total_itemsConstitutente = []
+var total_itemsDeudores = []
+var total_itemContraro = []
+var total_itemsAnexos = []
+function addVehiculo(patente,rvm,GoE,estado) {
+        let item = {
+            "patente": patente,
+            "rvm": rvm,
+            "GoE": GoE,
+            "estado": estado}
+        total_items.push(item);
+}
+function addConstituyente(tipo,run,nombre,pais){
+	console.log("PASEEEE")
+	var item = {
+		"Tipo" : tipo,
+		"Id" : run,
+		"Name": nombre,
+		"Pais" : pais
+	}
+	total_itemsConstitutente.push(item)
+}
+function addDeudores(tipo,run,nombre,pais){
+	console.log("PASEEEE")
+	var item = {
+		"Tipo" : tipo,
+		"Id" : run,
+		"Name": nombre,
+		"Pais" : pais
+	}
+	total_itemsDeudores.push(item)
+}
+
+function addContrato(href){
+	var item = {
+		"href": href
+	}
+	total_itemContraro.push(item)
+}
+
+function addAnexos(href){
+	var item = {
+		"href": href
+	}
+	total_itemsAnexos.push(item)
+}
+
 var acreedores_relacionados = []
 var constituyentes_relacionados = []
 var deudores_relacionados = []
@@ -78,21 +130,21 @@ var contratos_relacionados = []
 var archivos_relacionados = []	
 var patentes_relacionadas = []
 
-
 function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
 	///CON TODAS SUS DEPENDEDNCIAS
-    console.log("ENTREEEEEEEE")
 	if(tipo_de_solicitud == "I"){
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var all_insc = sol_data.docs
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
-					solicitud_relacionada = doc.data();					
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((file_data) => {
+					solicitud_relacionada = doc.data();	
+			
+					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
 							var my_doc = d.data();
+							
 							if (my_doc.contrato){
 								contratos_relacionados.push(my_doc)
 							}
@@ -100,20 +152,28 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 								archivos_relacionados.push(my_doc)
 							}
 						})
+						
 					}).then(() => {
 						console.log("ARCHIVOS")
+						
 						console.log(contratos_relacionados)
+						contratos_relacionados.forEach((data) => {
+							addContrato(data.url)
+				
+						})
 						console.log(archivos_relacionados)
+						archivos_relacionados.forEach((data) => {
+							addAnexos(data.url)
+				
+						})
 					})
-					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((persona_data) => {
+					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
 						var all_personas = persona_data.docs;
-						console.log("PERSONA ---->")
-						console.log(id_inscripcion)
+						console.log("per")
+						console.log(persona_data.docs)
 						all_personas.forEach((d) => {
 							var my_doc = d.data();
-							console.log(my_doc)
 							if (my_doc.tipoContratante == 0){
-								
 								acreedores_relacionados.push(my_doc)
 							}
 							else if (my_doc.tipoContratante == 1){
@@ -123,12 +183,19 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 								deudores_relacionados.push(my_doc)
 							}
 						})
-						console.log(acreedores_relacionados)
 					}).then(() => {
-						console.log("PERSONAS")
+						console.log("PERSONASs")
 						console.log(acreedores_relacionados)
 						console.log(constituyentes_relacionados)
+						constituyentes_relacionados.forEach((data) => {
+							addConstituyente(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
 						console.log(deudores_relacionados)
+						deudores_relacionados.forEach((data) => {
+							addDeudores(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
 					})
 					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
@@ -146,8 +213,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
                                 console.log(data.inscripcionPrendaRVM)
                                 console.log(data.inscripcionProhibicionGravarEnajenar)
                                 console.log(data.alzamiento)
-                                //add(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
-                                //this.option
+                                addVehiculo(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
                             })
 					})
 				}
@@ -181,10 +247,65 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					}).then(() => {
 						console.log("ARCHIVOS")
 						console.log(contratos_relacionados)
+                        contratos_relacionados.forEach((data) => {
+							addContrato(data.url)
+				
+						})
 						console.log(archivos_relacionados)
+						archivos_relacionados.forEach((data) => {
+							addAnexos(data.url)
+				
+						})
 					})
+                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						console.log("per")
+						console.log(persona_data.docs)
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONASs")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						constituyentes_relacionados.forEach((data) => {
+							addConstituyente(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+						console.log(deudores_relacionados)
+						deudores_relacionados.forEach((data) => {
+							addDeudores(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
 
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
 
+                        patentes_relacionadas.forEach((data) =>{
+                                console.log(data.patente)
+                                console.log(data.inscripcionPrendaRVM)
+                                console.log(data.inscripcionProhibicionGravarEnajenar)
+                                console.log(data.alzamiento)
+                                addVehiculo(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                            })
+					})
 				}
 			})
 		}).then(() => {
@@ -221,7 +342,64 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					}).then(() => {
 						console.log("ARCHIVOS")
 						console.log(contratos_relacionados)
+                        contratos_relacionados.forEach((data) => {
+							addContrato(data.url)
+				
+						})
 						console.log(archivos_relacionados)
+						archivos_relacionados.forEach((data) => {
+							addAnexos(data.url)
+				
+						})
+					})
+                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+						var all_personas = persona_data.docs;
+						console.log("per")
+						console.log(persona_data.docs)
+						all_personas.forEach((d) => {
+							var my_doc = d.data();
+							if (my_doc.tipoContratante == 0){
+								acreedores_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 1){
+								constituyentes_relacionados.push(my_doc)
+							}
+							else if (my_doc.tipoContratante == 2){
+								deudores_relacionados.push(my_doc)
+							}
+						})
+					}).then(() => {
+						console.log("PERSONASs")
+						console.log(acreedores_relacionados)
+						console.log(constituyentes_relacionados)
+						constituyentes_relacionados.forEach((data) => {
+							addConstituyente(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+						console.log(deudores_relacionados)
+						deudores_relacionados.forEach((data) => {
+							addDeudores(data.tipoAcreedor, data.runPersona, data.nombrePersona, data.paisPersona)
+				
+						})
+					})
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+						var all_patentes = patente_data.docs;
+						all_patentes.forEach((p) => {
+							var my_doc = p.data();
+							patentes_relacionadas.push(my_doc)
+						})
+
+					}).then(() => {
+						console.log("PATENTES")
+						console.log(patentes_relacionadas)
+
+                        patentes_relacionadas.forEach((data) =>{
+                                console.log(data.patente)
+                                console.log(data.inscripcionPrendaRVM)
+                                console.log(data.inscripcionProhibicionGravarEnajenar)
+                                console.log(data.alzamiento)
+                                addVehiculo(data.patente,data.inscripcionPrendaRVM,data.inscripcionProhibicionGravarEnajenar,data.alzamiento)
+                            })
 					})
 				}
 			})
@@ -459,6 +637,15 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				});
 
 			}).then(() => {
+				const doc = new jsPDF();
+				/** WITH CSS */
+				var canvasElement = document.createElement('canvas');
+					html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
+					}).then(function (canvas) {
+					const img = canvas.toDataURL("image/jpeg",0.8);
+					doc.addImage(img,'JPEG',20,20,120,120);
+					doc.save("sample.pdf");
+				});
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
 				if (send_flag==false){
 					alert("Solicitud Guardada Exitosamente")
@@ -494,7 +681,7 @@ function see_prices(){
 }
 
 export default {
-  mounted(){
+  /*mounted(){
 		console.log("STARTER DATA")
 		console.log(localStorage.id_revisar)
 		console.log(localStorage.tipo_revisar)
@@ -622,6 +809,127 @@ export default {
 		document.getElementById('monto').value = solicitud_relacionada.montoTotal
 
 		}, 2500)
+  },*/
+  mounted() {
+	this.clean()
+    console.log("MOUNT")
+	see_prices()
+	setTimeout(() => {
+		console.log("DINERO")
+		const monto = document.getElementById('monto')
+		monto.innerHTML = "$" + preciosGlobal[0]["precio"]
+	}, 1500);
+
+
+    console.log(localStorage.id_revisar+" "+localStorage.tipo_revisar)
+
+    buscador_especifico_solicitud(parseInt(localStorage.id_revisar), localStorage.tipo_revisar)
+    setTimeout(() => { 
+
+            console.log("SOLICITUD2")
+            console.log(solicitud_relacionada)	
+			//Antecedentes
+            var tipo = document.getElementById("tipoDeDocumento");
+            tipo.value = solicitud_relacionada.privacidadDocumento
+            var event = new Event('change');
+            tipo.dispatchEvent(event);
+			tipo.disabled = true
+            setTimeout(() => {
+
+			
+            if(solicitud_relacionada.privacidadDocumento == "Publico"){
+                var FechaOtorgamiento =  document.getElementById("FechaOtorgamiento");
+                var FechaSubscripcion = document.getElementById("FechaSubscripcion");
+                FechaOtorgamiento.value = solicitud_relacionada.fechaOtorgamientoEscritura
+                FechaSubscripcion.value = solicitud_relacionada.fechaSuscripcion
+				FechaOtorgamiento.disabled = true
+				FechaSubscripcion.disabled = true
+            }
+            else if(solicitud_relacionada.privacidadDocumento == "Privado"){
+                var FechaAutorizacion = document.getElementById("FechaAutorizacion");
+                var FechaProtocolizacion = document.getElementById("FechaProtocolizacion");
+                FechaAutorizacion.value = solicitud_relacionada.fechaAutorizacionContratoPrivado
+                FechaProtocolizacion.value = solicitud_relacionada.fechaProtocolizacionContratoPrivado
+				FechaAutorizacion.disabled = true
+				FechaProtocolizacion.disabled = true
+            }
+            },500)
+
+            
+    
+            setTimeout(() => {
+			var numero_repertorio        = solicitud_relacionada.numeroRepertorioNotario.split('-')
+            var left                     = document.getElementById("foliorepnontaria");
+            var right                    = document.getElementById("anorepnotaria");
+			const gravaroenajenar        = document.getElementById("gravaroenajenar")
+			const act_fijo               = document.getElementById('checkinscactfijo')
+            const bien_agro              = document.getElementById('checkinscbagropec')
+            const derechos_intangibles   = document.getElementById('checkinscderecheint')
+            const vehiculos              = document.getElementById('checkinscvehic')
+
+
+			gravaroenajenar.checked      = solicitud_relacionada.prohibicionGravarEnajenar
+            act_fijo.checked             = solicitud_relacionada.activoFijo
+            bien_agro.checked            = solicitud_relacionada.bienesAgropecuarios
+            derechos_intangibles.checked = solicitud_relacionada.derechosIntangibles
+            vehiculos.checked            = solicitud_relacionada.prendaVehiculo
+			left.value                   = numero_repertorio[0]
+            right.value                  = numero_repertorio[1]
+
+			gravaroenajenar.disabled = true
+            act_fijo.disabled = true
+            bien_agro.disabled = true
+            derechos_intangibles.disabled = true
+            vehiculos.disabled = true
+			left.disabled = true
+			right.disabled = true
+            
+            },500)
+			//FIN ANTECENDENTES
+
+			//ACREEDOR
+			const tipoPersona = document.getElementById("tipodepersona");
+			const run =  document.getElementById("runacreedor");
+			const nombre =  document.getElementById("nombresacreedor");
+			const apPaterno =  document.getElementById("apellidopaterno");
+			const apMaterno =  document.getElementById("apellidomaterno");
+			const nombreCompleto = acreedores_relacionados[0].nombrePersona.split(" ");
+			
+			//VALUES
+			tipoPersona.value = acreedores_relacionados[0].tipoAcreedor;
+			run.value = acreedores_relacionados[0].runPersona;
+			nombre.value = nombreCompleto[0];
+			apPaterno.value = nombreCompleto[1];
+			apMaterno.value = nombreCompleto[2];
+
+			//DISABLED
+			tipoPersona.disabled = true;
+			run.disabled = true;
+			nombre.disabled = true;
+			apMaterno.disabled = true;
+			apPaterno.disabled = true;
+
+			//FIN ACREEDOR
+
+			//CONSTITUTENTES
+			this.items_Constituyentes = total_itemsConstitutente
+
+			// DEUDORES
+			this.items_Deudores = total_itemsDeudores
+			console.log("deudores")
+			console.log(this.items_Deudores)
+			//VEHICULOS
+			this.total_itemsVehiculos = total_items
+
+			//CONTRATO
+			this.items_Contrato = total_itemContraro
+			console.log("estoy aqui en contratos, lo que esta abajo")
+			console.log(this.items_Contrato)
+
+			//ANEXOS
+			this.items_Anexos = total_itemsAnexos
+
+           }, 2000)
   },
   name: 'Dashboard',
   data() {
@@ -656,7 +964,12 @@ export default {
 			contrato: null,
 			anexos: null,
 			notaria:'',
-			rol:localStorage.rol
+			rol:localStorage.rol,
+			total_itemsVehiculos : new Array,
+			items_Constituyentes : new Array,
+			items_Deudores: new Array,
+			items_Contrato: new Array,
+			items_Anexos: new Array
         }
     },
   props: {
@@ -810,8 +1123,34 @@ export default {
 						alert(reqResult.msg)
 					}
 				}
+				this.downloadWithCSS()
 			}
-		}
+
+		},
+		downloadWithCSS() {
+            const doc = new jsPDF();
+            /** WITH CSS */
+            var canvasElement = document.createElement('canvas');
+                html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
+                }).then(function (canvas) {
+                const img = canvas.toDataURL("image/jpeg",0.8);
+                doc.addImage(img,'JPEG',20,20,120,120);
+                doc.save("sample.pdf");
+            });
+        },
+		clean(){
+		patentes_relacionadas.length = 0
+		acreedores_relacionados.length = 0
+		constituyentes_relacionados.length = 0
+		deudores_relacionados.length = 0
+		contratos_relacionados.length = 0
+		archivos_relacionados.length = 0	
+		total_items.length = 0
+		total_itemsDeudores.length = 0
+		total_itemsConstitutente.length = 0
+		total_itemsAnexos.length = 0
+		total_itemContraro.length = 0
+	}
   },
   components: {
     AntecedentesFormulario,
@@ -824,7 +1163,8 @@ export default {
     Menu,
     Navbar,
     RequirenteFormulario,
-    Monto
+    Monto,
+	ArchivosLectura
   },
   
 }
