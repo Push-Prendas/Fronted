@@ -24,7 +24,7 @@
 </template>
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc, query, where} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc,updateDoc, query, where} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import VehiculoLecturaFormularioALZAMIENTOPARCIAL from '../components/VehiculoLecturaFormulario.vue'
@@ -585,6 +585,14 @@ function load_vehicles(id_inscripcion){
 }
 var costoTotalAutos = 0
 
+
+var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
+
+function pendiente(){
+    solicitudPendiente = false 
+}
+
+
 export default {
   name: 'formularioModificacion',
   mounted(){
@@ -593,6 +601,7 @@ export default {
         console.log(localStorage.tipo_revisar)
         buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
         see_prices()
+        pendiente()
 
 
         load_vehicles(localStorage.idSol)
@@ -815,6 +824,7 @@ export default {
                    est_p = 3
                }
             }
+            if(!solicitudPendiente){
             inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
@@ -841,6 +851,10 @@ export default {
                 this.fechaRequirente,
                 flag
             )
+            }else{
+                alert("Existen patentes con solicitudes pendientes")
+                console.log("NO ESTA PERMITIDO")
+            }
   }
   
 }

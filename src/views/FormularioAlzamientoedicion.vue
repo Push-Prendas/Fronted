@@ -25,7 +25,7 @@
 
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc,  query, where, updateDoc} from "firebase/firestore";
+import { collection, getDocs, setDoc,updateDoc, doc,  query, where} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import VehiculosFormulario from '../components/VehiculoLecturaFormulario.vue'
@@ -513,7 +513,7 @@ function alzamiento(
             modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
             setTimeout(() => {
                 var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
-                var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + 39220 +'}' //CORREGIR ESTA CUESTION
+                var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[1]["precio"]) +  parseInt(costoTotalAutos)) +'}' //CORREGIR ESTA CUESTION
                 fetch(url, {
                 method: 'POST',
                 headers: {
@@ -540,6 +540,23 @@ function alzamiento(
     }
 }
 
+var autoGlobal = []
+function load_vehicles(id_inscripcion){
+    autoGlobal = []
+    getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
+		var my_cars = car_Data.docs
+		my_cars.forEach((p) => {
+			var p_data = p.data();
+            if(p_data.idInscripcion == id_inscripcion)
+                autoGlobal.push(p_data)
+		})
+        console.log("AUTOS: ")
+		console.log(autoGlobal)
+	})
+}
+
+var costoTotalAutos = 0
+
 var preciosGlobal = []
 function see_prices(){
 	getDocs(collection(db,"Precios")).then((price_Data) => { 
@@ -552,24 +569,87 @@ function see_prices(){
 	})
 }
 
+var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
+
+function pendiente(){
+    solicitudPendiente = false 
+}
+
 export default {
  mounted(){
         console.log("STARTER DATA")
         console.log(localStorage.id_revisar)
         console.log(localStorage.tipo_revisar)
+        pendiente()
         buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
         see_prices()
-        setTimeout(() => {
+        load_vehicles(localStorage.idSol)
+      setTimeout(() => {
+
+        this.items = []
+        console.log(autoGlobal)
         const monto = document.getElementById('monto')
-		monto.innerHTML = "$" + preciosGlobal[1]["precio"]
-        console.log(solicitud_relacionada)
-        console.log(acreedores_relacionados)
-        console.log(constituyentes_relacionados)
-        console.log(deudores_relacionados)
-        console.log(contratos_relacionados)
-        console.log(archivos_relacionados)
-        console.log(patentes_relacionadas)
-        }, 1500)
+
+
+        console.log("Enviando REQUEST")
+
+        costoTotalAutos = 0
+
+        autoGlobal.forEach((data) => {
+
+        costoTotalAutos += parseInt(preciosGlobal[9]["precio"]) + parseInt(preciosGlobal[8]["precio"])
+
+        if(data.inscripcionPrendaRVM == true){
+
+        var oReq = new XMLHttpRequest();
+        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
+        oReq.open("GET", url);
+        oReq.send();
+        oReq.onload = ()=>{
+            if(oReq.status == 200){
+
+                var reqResult = JSON.parse(oReq.response);
+
+
+                console.log("MENSAJE RECIVIDO")
+                console.log(reqResult)
+                console.log("LARGO")
+                console.log(reqResult.solicitudes.length)
+
+                if(reqResult.solicitudes.length > 0){
+                    solicitudPendiente = true
+                }
+
+
+            }
+            
+        }
+
+
+        }
+
+
+        let item = {
+            "patente": data.patente,
+            "rvm": data.inscripcionPrendaRVM,
+            "GoE": data.inscripcionProhibicionGravarEnajenar,
+            "costo": "-"}
+        this.items.push(item);
+
+
+
+
+        })
+
+
+        monto.innerHTML = "$" + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos) )
+
+
+
+
+
+
+      }, 1500);
   },
   name: 'Dashboard',
   data() {
@@ -720,6 +800,8 @@ export default {
             console.log(this.Bienes[1])
             console.log(this.Bienes[2])
             console.log(this.Bienes[3])
+
+            if(!solicitudPendiente){
             alzamiento(
                 this.nDocRequirente,//
                 this.tipoDoc.toString(),//
@@ -743,6 +825,10 @@ export default {
                 localStorage.rol == 'FUNCIONARIOOFICINA',
                 "Mi oficina"
             )
+        }else{
+            alert("Existen patentes con solicitudes pendientes")
+            console.log("NO ESTA PERMITIDO")
+        }
         }
   }
   

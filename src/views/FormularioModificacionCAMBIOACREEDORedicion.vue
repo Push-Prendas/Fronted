@@ -27,7 +27,7 @@
 </template>
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc,  query, where} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc,updateDoc,  query, where} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
@@ -567,7 +567,7 @@ function see_prices(){
 		console.log(preciosGlobal)
 	})
 }
-
+var autoGlobal = []
 function load_vehicles(id_inscripcion){
     autoGlobal = []
     getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
@@ -583,6 +583,12 @@ function load_vehicles(id_inscripcion){
 }
 var costoTotalAutos = 0
 
+var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
+
+function pendiente(){
+    solicitudPendiente = false 
+}
+
 export default {
     mounted(){
         console.log("STARTER DATA")
@@ -590,6 +596,7 @@ export default {
         console.log(localStorage.tipo_revisar)
         buscador_especifico_solicitud(localStorage.id_revisar,localStorage.tipo_revisar)
         see_prices()
+        pendiente()
         load_vehicles(localStorage.idSol)
       setTimeout(() => {
 
@@ -819,6 +826,7 @@ export default {
 				if(oReq.status == 200){
 					var reqResult = JSON.parse(oReq.response);
 					if (reqResult.valid){
+                        if(!solicitudPendiente){
                         inscripcion_modificacion(
                             this.tipoDoc.toString(),//
                             this.FSuscripcion.toString(),//
@@ -844,6 +852,9 @@ export default {
                             this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                             this.fechaRequirente//
                         )
+                        }else{
+                            alert("Existen patentes con solicitudes pendientes")
+                        }
                     }
                 }
             }

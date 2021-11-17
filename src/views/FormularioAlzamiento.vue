@@ -366,7 +366,7 @@ function alzamiento(
             modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
             setTimeout(() => {
                 var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
-                var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + preciosGlobal[1]["precio"] +'}' //CORREGIR ESTA CUESTION
+                var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos)) +'}' //CORREGIR ESTA CUESTION
                 fetch(url, {
                 method: 'POST',
                 headers: {
@@ -437,11 +437,6 @@ function pendiente(){
 
 export default {
   mounted(){
-
-
-
-
-
 
       pendiente()
     //buscador_especifico_solicitud(36,"I")

@@ -27,7 +27,7 @@
 </template>
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import { collection, getDocs, setDoc,updateDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import AcreedorFormulario from '../components/AcreedorFormulario.vue'
@@ -428,9 +428,18 @@ function load_vehicles(id_inscripcion){
 }
 var costoTotalAutos = 0
 
+
+var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
+
+function pendiente(){
+    solicitudPendiente = false 
+}
+
 export default {
   mounted(){
       see_prices()
+
+      pendiente()
       load_vehicles(localStorage.idSol)
       setTimeout(() => {
 
@@ -652,6 +661,7 @@ export default {
                    est_p = 3
                }
             }
+            
             var oReq = new XMLHttpRequest();
 			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.run  
 			oReq.open("GET", url);
@@ -660,6 +670,7 @@ export default {
 				if(oReq.status == 200){
 					var reqResult = JSON.parse(oReq.response);
 					if (reqResult.valid){
+                        if(!solicitudPendiente){
                         inscripcion_modificacion(
                             this.tipoDoc.toString(),//
                             this.FSuscripcion.toString(),//
@@ -686,6 +697,11 @@ export default {
                             this.fechaRequirente,
                             flag
                         )
+                        }
+                        else{
+                            alert("Existen patentes con solicitudes pendientes")
+          
+                        }
                     }
                     else{
                         alert(reqResult.msg)
