@@ -1,4 +1,5 @@
 <template>
+
     <div id="contenedor" class="row" v-on:="" >     
         <table class="table" >
             <thead class="encabezadoTabla" >
