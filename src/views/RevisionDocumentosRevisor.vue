@@ -571,7 +571,7 @@ export default {
 
 
 	autoGlobal.forEach((data) => {
-			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":"' + "aceptado"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
 			
 			console.log("SOLICITUD RELACIONADA")
 			console.log(params)
@@ -646,7 +646,7 @@ export default {
 
 
 		this.total_itemsVehiculos.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":"' + "aceptado"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
 
 		fetch(url, {
 		method: 'POST',
@@ -685,7 +685,7 @@ export default {
     else if(localStorage.tipo_judge.toString() == "A"){
 
 		this.total_itemsVehiculos.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN"  + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN"  + '", "aceptarORechazar":"' + "aceptado"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
 		fetch(url, {
 		method: 'POST',
 		headers: {
