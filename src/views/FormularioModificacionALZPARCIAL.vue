@@ -593,6 +593,21 @@ function load_vehicles(id_inscripcion){
 	})
 }
 
+
+var repertorio_contrato_global;
+function load_rpsd(id_inscripcion){
+    getDocs(collection(db,"Solicitud_Inscripcion_Prenda")).then((info_Data) => { 
+        var myid = info_Data.docs
+        myid.forEach((p) => {
+            var p_data = p.data();
+            console.log(p.id)
+            if(p.id == id_inscripcion){
+                repertorio_contrato_global = p_data.numeroRepertorioContratoPrenda
+            }
+        })
+    })
+}
+
 var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
 
 function pendiente(){
@@ -609,6 +624,7 @@ export default {
       buscador_especifico_solicitud(localStorage.mod_want,"I")
       see_prices()
       load_vehicles(localStorage.idSol)
+      load_rpsd(localStorage.idSol)
 
 
 
@@ -638,22 +654,29 @@ export default {
         oReq.open("GET", url);
         oReq.send();
         oReq.onload = ()=>{
-            if(oReq.status == 200){
+                if(oReq.status == 200){
 
-                var reqResult = JSON.parse(oReq.response);
+                    var reqResult = JSON.parse(oReq.response);
+                    console.log("MENSAJE RECIVIDO")
+                    console.log(reqResult)
+                    solicitudPendiente = false
+                    reqResult.solicitudes.forEach((mensaje)=>{
+
+                        console.log(mensaje.numero_repertorio)
+                        console.log((repertorio_contrato_global.split("-")[1] + "-" + repertorio_contrato_global.split("-")[0]))
+
+                        if(mensaje.numero_repertorio == (repertorio_contrato_global.split("-")[1] + "-" + repertorio_contrato_global.split("-")[0])){
+                                console.log("ENTRO EN PENDIENTE")
+                                solicitudPendiente = true
+                         }
+
+                    })
+                    console.log("LARGO")
+                    console.log(reqResult.solicitudes.length)
+                    console.log(solicitudPendiente)
 
 
-                console.log("MENSAJE RECIVIDO")
-                console.log(reqResult)
-                console.log("LARGO")
-                console.log(reqResult.solicitudes.length)
-
-                if(reqResult.solicitudes.length > 0){
-                    solicitudPendiente = true
-                }
-
-
-            }
+                } 
             
         }
 
