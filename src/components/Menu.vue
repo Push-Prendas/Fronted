@@ -39,7 +39,7 @@ props: {
       opcionesClass(index){
           let answerClass = ''
           var op = this.opciones[index].replaceAll(' ','')
-          console.log("esto es lo que quiero---:"+op)
+          //console.log("esto es lo que quiero---:"+op)
 
             if (!this.answered && this.selectedIndex === index)
             {

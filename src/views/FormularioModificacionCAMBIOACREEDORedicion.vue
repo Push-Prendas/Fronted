@@ -503,7 +503,7 @@ function  inscripcion_modificacion(
                 nombre_notaria: notaria,
                 prohibicionGravarEnajenar: GrabarEnagenar,
                 correoRequiriente: correo_requirente,
-                fechaRequiriente: fecha_requirente,
+                fechaRequirente: fecha_requirente,
                 revisorAsignado :-1,
                 firma:false,
                 tipoModificacion:2,
@@ -685,7 +685,7 @@ export default {
 			nombreRequirente: '',
             nDocRequirente: '',
             correoRequirente: '',
-            fechaRequirente: '',
+            fechaRequirente: this.currentDateTime(),
             Bienes: [],
             constituyentes: [{}],
             deudores: [{}],
@@ -779,6 +779,11 @@ export default {
         getCorreoRequirente(data) {
         this.correoRequirente = data
         },
+		currentDateTime() {
+		const current = new Date();
+		const date = current.getDate()+'-'+(current.getMonth()+1)+'-'+current.getFullYear();
+		return date;
+		},
         getFechaRequirente(data) {
         this.fechaRequirente = data
         },

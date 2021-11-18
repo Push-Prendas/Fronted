@@ -245,7 +245,7 @@ export default {
 									"id": insc[0],
 									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 									"Funcionario": insc[1]["usuarioCreador"],
-									"Fecha": insc[1]["fechaSuscripcion"],
+									"Fecha": insc[1]["fechaRequirente"],
 									"Estado": estad,
 									"Tipo": "I",
 									"nombre_oficina": insc[1]["oficina"]}
@@ -266,7 +266,7 @@ export default {
 									"id": insc[0],
 									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 									"Funcionario": insc[1]["usuarioCreador"],
-									"Fecha": insc[1]["fechaSuscripcion"],
+									"Fecha": insc[1]["fechaRequirente"],
 									"Estado": estad,
 									"Tipo": "M",
 									"nombre_oficina": insc[1]["oficina"]}
@@ -286,7 +286,7 @@ export default {
 									"id": insc[0],
 									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 									"Funcionario": insc[1]["usuarioCreador"],
-									"Fecha": insc[1]["fechaSuscripcion"],
+									"Fecha": insc[1]["fechaRequirente"],
 									"Estado": estad,
 									"Tipo": "A",
 									"nombre_oficina": insc[1]["oficina"]}

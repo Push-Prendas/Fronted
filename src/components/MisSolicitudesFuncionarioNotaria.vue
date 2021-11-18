@@ -182,31 +182,39 @@ export default {
     methods:{
 
         obtain_id_go(id, tipo, mod){
-            console.log("NOIZ ID")
-            console.log(id)
-            localStorage.id_revisar = id
-            localStorage.tipo_revisar = tipo
-            //location.href = URL_REVISION
-            switch(mod){
-                case 1:
-                    this.$router.push({path:URL_REVISION_INSCRIPCION})
-                    break
-                case 2:
-                    this.$router.push({path:URL_REVISION_ALZAMIENTO})
-                    break
-                case 3:
-                    this.$router.push({path:URL_REVISION_MODIFICACION_ALZA})
-                    break
-                case 4:
-                    this.$router.push({path:URL_REVISION_MODIFICACION_ACREEDOR})
-                    break
-                case 5:
-                    this.$router.push({path:URL_REVISION_MODIFICACION_PROHIBICION})
-                    break
-                case 6:
-                    this.$router.push({path:URL_REVISION_MODIFICACION_OTRO})
-                    break               
-            }
+            setTimeout(() => { 
+                console.log("NOIZ ID")
+                console.log(id)
+                localStorage.id_revisar = id
+                console.log("TIPO")
+                console.log(tipo)
+                localStorage.tipo_revisar = tipo
+                console.log("TIPO")
+                console.log(tipo)
+                //location.href = URL_REVISION
+                switch(mod){
+                    case 1:
+                        this.$router.push({path:URL_REVISION_INSCRIPCION})
+                        break
+                    case 2:
+                        this.$router.push({path:URL_REVISION_ALZAMIENTO})
+                        break
+                    case 3:
+                        this.$router.push({path:URL_REVISION_MODIFICACION_ALZA})
+                        break
+                    case 4:
+                        this.$router.push({path:URL_REVISION_MODIFICACION_ACREEDOR})
+                        break
+                    case 5:
+                        this.$router.push({path:URL_REVISION_MODIFICACION_PROHIBICION})
+                        break
+                    case 6:
+                        this.$router.push({path:URL_REVISION_MODIFICACION_OTRO})
+                        break               
+                }
+            }, 
+            2000);
+            
             
         },
 
@@ -250,7 +258,7 @@ export default {
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
-                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Fecha": insc[1]["fechaRequirente"],
                                 "Estado": estad,
                                 "ID": insc[0],
                                 "Tipo": "I",
@@ -271,7 +279,7 @@ export default {
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
-                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Fecha": insc[1]["fechaRequirente"],
                                 "Estado": estad,
                                 "ID": insc[0],
                                 "Tipo": "M",
@@ -291,7 +299,7 @@ export default {
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
-                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Fecha": insc[1]["fechaRequirente"],
                                 "Estado": estad,
                                 "ID": insc[0],
                                 "Tipo": "A",
@@ -305,7 +313,7 @@ export default {
                 console.log("MY ITEMS")
                 console.log(this.items)}, 
             1000);
-
+            
             
         },
         firmardoc(){

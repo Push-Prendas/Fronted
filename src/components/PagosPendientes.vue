@@ -493,7 +493,7 @@ export default {
                             "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaRequiriente"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Monto": insc[1]["montoTotal"],
                             "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
@@ -519,7 +519,7 @@ export default {
                             "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"], //numero repertorio notaria
                             "Funcionario": insc[1]["usuarioCreador"], 
-                            "Fecha": insc[1]["fechaRequiriente"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Monto": insc[1]["montoTotal"], 
                             "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
@@ -549,7 +549,7 @@ export default {
                             "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaRequiriente"], //NO EXISTE TODAVIA
+                            "Fecha": insc[1]["fechaRequirente"], //NO EXISTE TODAVIA
                             "Monto": insc[1]["montoTotal"],
                             "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,

@@ -433,7 +433,7 @@ export default {
 						let item = {
 								"id": insc[0],
 								"Rep": insc[1]["numeroRepertorioNotario"],
-								"Fecha": insc[1]["fechaRequiriente"],
+								"Fecha": insc[1]["fechaRequirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "I"}
 						console.log(item)
@@ -454,7 +454,7 @@ export default {
 						let item = {
 								"id": insc[0],
 								"Rep": insc[1]["numeroRepertorioNotario"],
-								"Fecha": insc[1]["fechaRequiriente"],
+								"Fecha": insc[1]["fechaRequirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "M"}
 
@@ -471,7 +471,7 @@ export default {
 						let item = {
 								"id": insc[0],
 								"Rep": insc[1]["numeroRepertorioNotario"],
-								"Fecha": insc[1]["fechaRequiriente"],
+								"Fecha": insc[1]["fechaRequirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "A"}
 

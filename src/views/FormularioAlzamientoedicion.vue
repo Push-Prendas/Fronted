@@ -491,7 +491,7 @@ function alzamiento(
             runRequiriente: numero_requiriente,
             nombreRequiriente: nombre_requirente,
             correoRequiriente: correo,
-            fechaRequiriente: fecha,
+            fechaRequirente: fecha,
             estadoPrimario: estado_inicial,
             estadoSecundario: 0,
             activoFijo: activo_fijo,
@@ -676,7 +676,7 @@ export default {
 			nombreRequirente: '',
             nDocRequirente: '',
             correoRequirente: '',
-            fechaRequirente: '',
+            fechaRequirente: this.currentDateTime(),
             Bienes: [],
             constituyentes: [],
             deudores: [],
@@ -765,6 +765,11 @@ export default {
         getCorreoRequirente(data) {
         this.correoRequirente = data
         },
+		currentDateTime() {
+		const current = new Date();
+		const date = current.getDate()+'-'+(current.getMonth()+1)+'-'+current.getFullYear();
+		return date;
+		},
         getFechaRequirente(data) {
         this.fechaRequirente = data
         },
