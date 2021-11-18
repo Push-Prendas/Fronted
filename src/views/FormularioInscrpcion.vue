@@ -652,7 +652,7 @@ export default {
             });
         },
         crearInscripcion(flags){
-            this.downloadWithCSS()
+			console.log("LOADING INSCRIPCION")
 			var runacreedor;
 			var nombreacreedor;
 			if(this.tipoPersona == "Natural"){
@@ -667,53 +667,61 @@ export default {
 			}
 			var oReq = new XMLHttpRequest();
 			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + runacreedor  
+			console.log(url)
 			oReq.open("GET", url);
-			oReq.send();
-			setTimeout(() => {
-				oReq.onload = ()=>{
-					if(oReq.status == 200){
-						var reqResult = JSON.parse(oReq.response);
-						if (reqResult.valid){
-							enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
-							this.FSuscripcion.toString(),
-							this.FOtorgamiento.toString(),
-							this.FProtocolizacion.toString(),
-							this.FAutorizacion.toString(), 
-							(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
-							this.ProhibGravEnajenar,
-							this.notaria, 
-							this.nombreRequirente, 
-							this.nDocRequirente, 
-							this.correoRequirente,
-							this.fechaRequirente,
-							this.Bienes[0],
-							this.Bienes[1], 
-							this.Bienes[2], 
-							this.Bienes[3], 
-							preciosGlobal[0]["precio"], 
-							flags, 
-							this.tipoPersona, 
-							runacreedor.toString(), //id , rut y run
-							nombreacreedor, 
-							this.pais, 
-							this.constituyentes, 
-							this.deudores, 
-							this.vehiculos, 
-							this.contrato, 
-							this.anexos, 
-							localStorage.rol == 'FUNCIONARIOOFICINA',
-							"mi oficina",
-							localStorage.mail
-							)
-						}
-						else{
-							alert(reqResult.msg)
-						}
+			console.log("LOADING REQUEST")
+			console.log("MOMENT")
+			oReq.onload = ()=>{
+				console.log("REQUEST")
+				if(oReq.status == 200){
+					console.log("ACEPTED")
+					var reqResult = JSON.parse(oReq.response);
+					if (reqResult.valid){
+						console.log("VALID")
+						enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
+						this.FSuscripcion.toString(),
+						this.FOtorgamiento.toString(),
+						this.FProtocolizacion.toString(),
+						this.FAutorizacion.toString(), 
+						(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
+						this.ProhibGravEnajenar,
+						this.notaria, 
+						this.nombreRequirente, 
+						this.nDocRequirente, 
+						this.correoRequirente,
+						this.fechaRequirente,
+						this.Bienes[0],
+						this.Bienes[1], 
+						this.Bienes[2], 
+						this.Bienes[3], 
+						preciosGlobal[0]["precio"], 
+						flags, 
+						this.tipoPersona, 
+						runacreedor.toString(), //id , rut y run
+						nombreacreedor, 
+						this.pais, 
+						this.constituyentes, 
+						this.deudores, 
+						this.vehiculos, 
+						this.contrato, 
+						this.anexos, 
+						localStorage.rol == 'FUNCIONARIOOFICINA',
+						"mi oficina",
+						localStorage.mail
+						)
+						setTimeout(() => {
+							this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})			
+							this.downloadWithCSS()
+						}, 1000);
+					}
+					else{
+						alert(reqResult.msg)
 					}
 				}
-			}, 2000);
+			}
+			oReq.send();
 			
-			this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
+			
 
 		},
 		
