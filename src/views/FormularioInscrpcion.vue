@@ -519,6 +519,7 @@ export default {
             nombres: '',
 			nombreRequirente: '',
             nDocRequirente: '',
+			correoRequirente: '',
             fechaRequirente: this.currentDateTime(),
             Bienes: [false, false, false, false],
             constituyentes: [],
