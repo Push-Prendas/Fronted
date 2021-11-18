@@ -304,7 +304,7 @@ export default {
                             "id" : insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Tipo":"I"}
                     console.log(item)
@@ -324,7 +324,7 @@ export default {
                             "id" : insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Tipo":"I"}
 
@@ -343,7 +343,7 @@ export default {
                             "id" : insc[0],
                             "Rep": insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Tipo":"I"}
 

@@ -207,6 +207,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();
+					solicitud_relacionada_id = doc.id
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
@@ -302,6 +303,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();
+					solicitud_relacionada_id = doc.id
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
@@ -396,6 +398,8 @@ export default {
   mounted() {
       this.clean()
     console.log("MOUNT hh")
+	console.log(localStorage.tipo_revisar)
+	
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
 
     buscador_especifico_solicitud(parseInt(localStorage.id_judge), localStorage.tipo_judge)
@@ -529,7 +533,7 @@ export default {
 
     if(localStorage.tipo_revisar.toString() == "I"){
 
-            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
+        updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
         }).then(() => {
             this.$router.push({path: VOLVER})
@@ -540,7 +544,7 @@ export default {
     }
     else if(localStorage.tipo_revisar.toString() == "M"){
 
-            updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
+        updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
         }).then(() => {
             this.$router.push({path: VOLVER})
@@ -550,7 +554,7 @@ export default {
 
     else if(localStorage.tipo_revisar.toString() == "A"){
 
-            updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
+        updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
         }).then(() => {
             this.$router.push({path: VOLVER})
@@ -560,40 +564,40 @@ export default {
 
 
     },
-
     rechazar(){
+		
+		if(localStorage.tipo_revisar.toString() == "I"){
+			console.log("RECHAZANDO")
+			console.log(solicitud_relacionada_id)
+			updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
+				estadoPrimario: 2,
+			}).then(() => {
+				console.log("RECHAZADO OK")
+				this.$router.push({path: VOLVER})
+			})
 
+		}
+		else if(localStorage.tipo_revisar.toString() == "M"){
+			console.log("RECHAZANDO")
+			console.log(solicitud_relacionada_id)
+			updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
+				estadoPrimario: 2,
+			}).then(() => {
+				console.log("RECHAZADO OK")
+				this.$router.push({path: VOLVER})
+			})
+		}
+		else if(localStorage.tipo_revisar.toString() == "A"){
+			console.log("RECHAZANDO")
+			console.log(solicitud_relacionada_id)
+			updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
+				estadoPrimario: 2,
+			}).then(() => {
+				console.log("RECHAZADO OK")
+				this.$router.push({path: VOLVER})
+			})
 
-
-    if(localStorage.tipo_revisar.toString() == "I"){
-		alert("INSCRIPCION")
-
-            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
-            estadoPrimario: 2,
-        }).then(() => {
-            this.$router.push({path: VOLVER})
-        })
-
-    }
-    else if(localStorage.tipo_revisar.toString() == "M"){
-
-            updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
-            estadoPrimario: 2,
-        }).then(() => {
-            this.$router.push({path: VOLVER})
-        })
-
-    }
-
-    else if(localStorage.tipo_revisar.toString() == "A"){
-
-            updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
-            estadoPrimario: 2,
-        }).then(() => {
-            this.$router.push({path: VOLVER})
-        })
-
-    }
+		}
 
 
     },

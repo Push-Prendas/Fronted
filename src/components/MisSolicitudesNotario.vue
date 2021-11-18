@@ -71,7 +71,7 @@ function buscar_usuario_de_notaria(id_notaria){
             if(users.data().NotariaID == id_notaria && users.data().rol == "FUNCIONARIONOTARIA"){
                 
                     funcionarios_notaria_encontradosGlobal.push(users.data().mail.toString())
-                    console.log(funcionarios_notaria_encontradosGlobal)
+                    //console.log(funcionarios_notaria_encontradosGlobal)
             }
         })
     })
@@ -218,7 +218,7 @@ export default {
                 //localStorage.notaria
                 
                 buscar_usuario_de_notaria(localStorage.notaria)
-                console.log(localStorage.notaria)
+                //console.log(localStorage.notaria)
             },500)
             setTimeout(() => { 
                 console.log(this.funcionarios_notaria)
@@ -245,7 +245,7 @@ export default {
                         let item = {
                                 "Rep": insc[1]["numeroRepertorioNotario"],
                                 "Funcionario": insc[1]["usuarioCreador"],
-                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Fecha": insc[1]["fechaRequirente"],
                                 "Estado": estad,
                                 "ID": insc[0],
                                 "Tipo": "I"}

@@ -604,7 +604,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				nombreRequiriente: nombre_requirente,
 				runRequiriente: run_requiriente,
 				correoRequiriente: correo_requiriente,
-				fechaRequiriente: fecha_requiriente,
+				fechaRequirente: fecha_requiriente,
 				activoFijo: activo_fijo,
 				bienesAgropecuarios: bienes_agropecuarios,
 				derechosIntangibles: derechos_intangibles,
@@ -958,7 +958,7 @@ export default {
 			nombreRequirente: '',
             nDocRequirente: '',
             correoRequirente: '',
-            fechaRequirente: '',
+            fechaRequirente: this.currentDateTime,
             Bienes: [false, false, false, false],
             constituyentes: [],
             deudores: [],
@@ -1038,6 +1038,11 @@ export default {
         getCorreoRequirente(data) {
         this.correoRequirente = data
         },
+		currentDateTime() {
+		const current = new Date();
+		const date = current.getDate()+'-'+(current.getMonth()+1)+'-'+current.getFullYear();
+		return date;
+		},
         getFechaRequirente(data) {
         this.fechaRequirente = data
         },
