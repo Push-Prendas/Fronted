@@ -851,6 +851,7 @@ export default {
                 this.fechaRequirente,
                 flag
             )
+
             }else{
                 alert("Existen patentes con solicitudes pendientes")
                 console.log("NO ESTA PERMITIDO")

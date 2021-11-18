@@ -697,6 +697,8 @@ export default {
                             this.fechaRequirente,
                             flag
                         )
+                        this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
+
                         }
                         else{
                             alert("Existen patentes con solicitudes pendientes")

@@ -157,14 +157,6 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 	
 }
 
-
-
-
-
-
-
-
-
 function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PERMITE GUARDAR LOS ARCHIVOS EN NUESTRA BASE DE DATOS, LO IDEAL ES USARLO PARA OFICINA EN LA VISTA PARA SUBIR SUS ARCHIVOS
 	var repertorio = null
 
@@ -427,8 +419,6 @@ function load_vehicles(id_inscripcion){
 
 var costoTotalAutos = 0
 
-
-
 var solicitudPendiente = false // se verifica se existen solicitudes pendientes de autos en el RVM
 
 function pendiente(){
@@ -459,34 +449,27 @@ export default {
 
         if(data.inscripcionPrendaRVM == true){
 
-        console.log("PATENTE")
-        console.log(data.patente)
+            console.log("PATENTE")
+            console.log(data.patente)
 
-        var oReq = new XMLHttpRequest();
-        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
-        oReq.open("GET", url);
-        oReq.send();
-        oReq.onload = ()=>{
-            if(oReq.status == 200){
+            var oReq = new XMLHttpRequest();
+            var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
+            oReq.open("GET", url);
+            oReq.send();
+            oReq.onload = ()=>{
+                if(oReq.status == 200){
 
-                var reqResult = JSON.parse(oReq.response);
+                    var reqResult = JSON.parse(oReq.response);
+                    console.log("MENSAJE RECIVIDO")
+                    console.log(reqResult)
+                    console.log("LARGO")
+                    console.log(reqResult.solicitudes.length)
 
-
-                console.log("MENSAJE RECIVIDO")
-                console.log(reqResult)
-                console.log("LARGO")
-                console.log(reqResult.solicitudes.length)
-
-                if(reqResult.solicitudes.length > 0){
-                    solicitudPendiente = true
-                }
-
-
+                    if(reqResult.solicitudes.length > 0){
+                        solicitudPendiente = true
+                    }
+                }   
             }
-            
-        }
-
-
         }
 
 
@@ -496,20 +479,8 @@ export default {
             "GoE": data.inscripcionProhibicionGravarEnajenar,
             "costo": "-"}
         this.items.push(item);
-
-
-
-
         })
-
-
         monto.innerHTML = "$" + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos) )
-
-
-
-
-
-
       }, 1500);
   },
   name: 'Dashboard',
@@ -678,7 +649,7 @@ export default {
         },
         async alzar(flags){
 
-            if(!solicitudPendiente){
+        if(!solicitudPendiente){
 
 
             console.log("MIS BIENES")
@@ -712,14 +683,15 @@ export default {
                 localStorage.rol == 'FUNCIONARIOOFICINA',
                 "Mi oficina"
             )
-
-            }
-            else{
-                alert("Existen patentes con solicitudes pendientes")
-                console.log("NO ESTA PERMITIDO")
-            }
+            this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
 
         }
+        else{
+            alert("Existen patentes con solicitudes pendientes")
+            console.log("NO ESTA PERMITIDO")
+        }
+
+    }
   }
   
 }

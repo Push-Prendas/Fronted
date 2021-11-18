@@ -311,6 +311,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 			}).then(() => {
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
 				if (send_flag==false){
+					//TODO: HACER QUE SE GUARDEN LOS DOCS
 					alert("Solicitud Guardada Exitosamente")
 				}else{
 					console.log("PAGANDO EN CAJA")
@@ -646,7 +647,6 @@ export default {
             });
         },
         crearInscripcion(flags){
-			console.log("hahau")
             this.downloadWithCSS()
 			var runacreedor;
 			var nombreacreedor;
@@ -660,7 +660,6 @@ export default {
 				runacreedor = this.id
 				nombreacreedor = this.nombres
 			}
-			console.log(this.Bienes)
 			var oReq = new XMLHttpRequest();
 			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + runacreedor  
 			oReq.open("GET", url);
@@ -706,9 +705,8 @@ export default {
 					}
 				}
 			}
-			
-			
-			
+			this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
+
 		},
 		
   },

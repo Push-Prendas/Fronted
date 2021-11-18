@@ -65,31 +65,16 @@ function firmarDocumento(tipo_de_solicitud, id_solicitud){
 
 function buscar_usuario_de_notaria(id_notaria){
     getDocs(collection(db, "Usuario")).then((sol_data) => {
-
-
-        console.log(sol_data.docs)
+        //console.log(sol_data.docs)
         sol_data.docs.forEach((users) =>{
 
-            //var insc_data = users.data();
-
             if(users.data().NotariaID == id_notaria && users.data().rol == "FUNCIONARIONOTARIA"){
-
                 
                     funcionarios_notaria_encontradosGlobal.push(users.data().mail.toString())
-
-          
-
-                   
-                    console.log(users.data().mail.toString())
-
-
- 
+                    console.log(funcionarios_notaria_encontradosGlobal)
             }
-
         })
-
     })
-
 }
 
 async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_solicitud="T", user_id=-1, oficina="", notaria=""){
@@ -229,120 +214,107 @@ export default {
             console.log("relleno tabla")
             console.log(localStorage.notaria)
 
-            
-
             setTimeout(() => { 
                 //localStorage.notaria
                 
                 buscar_usuario_de_notaria(localStorage.notaria)
-            },1000)
-
-
+                console.log(localStorage.notaria)
+            },500)
             setTimeout(() => { 
-                //localStorage.notaria
-            this.funcionarios_notaria.forEach(()=>{
-                buscador_solicitud(1,0,"T",-1)
+                console.log(this.funcionarios_notaria)
+
+                this.funcionarios_notaria.forEach((fun)=>{
+                    buscador_solicitud(1,0,"T",fun)
             
             })
-
-
-                
+   
             },2000)
-            
 
+            setTimeout(() => { 
+                if(this.inscripciones_encontradas.length>0){
+                    console.log(this.inscripciones_encontradas);
+                    var estad;
+                    this.inscripciones_encontradas.forEach((insc)=>{
+                        if(insc[1]["estadoPrimario"]==1){
+                            estad="Por Firmar"
+                        }else if(insc[1]["estadoPrimario"]==0){
+                            estad="Edicion"
+                        }else{
+                            estad="Rechazo Notaria"
+                        }
+                        let item = {
+                                "Rep": insc[1]["numeroRepertorioNotario"],
+                                "Funcionario": insc[1]["usuarioCreador"],
+                                "Fecha": insc[1]["fechaSuscripcion"],
+                                "Estado": estad,
+                                "ID": insc[0],
+                                "Tipo": "I"}
+                        console.log(item)
+                        console.log(this.items)
+                        if(insc[1]["firma"] == false){
+                            this.items.push(item)
+                        }
+                        
+                        });
 
-
-            //
-            
-             setTimeout(() => { 
-
-
-        
-
-            if(this.inscripciones_encontradas.length>0){
-                console.log(this.inscripciones_encontradas);
-                var estad;
-                this.inscripciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
-                    }else if(insc[1]["estadoPrimario"]==0){
-                        estad="Edicion"
-                    }else{
-                        estad="Rechazo Notaria"
                     }
-                    let item = {
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
-                            "Estado": estad,
-                            "ID": insc[0],
-                            "Tipo": "I"}
-                    console.log(item)
-                    console.log(this.items)
-                    if(insc[1]["firma"] == false){
-                        this.items.push(item)
-                    }
-                    
-                    });
-
-                }
-            if(this.modificaciones_encontradas.length>0){
-                this.modificaciones_encontradas.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
-                    }else if(insc[1]["estadoPrimario"]==0){
-                        estad="Edicion"
-                    }else{
-                        estad="Rechazo Notaria"
-                    }
-                    let item = {
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaRequirente"],
-                            "Estado": estad,
-                            "ID": insc[0],
-                            "Tipo": "M"}
-
-                 if(insc[1]["firma"] == false){
-                        this.items.push(item)
-                    }
-                    });
-
-                }
-            if(this.alzamientos_encontrados.length>0){
-                this.alzamientos_encontrados.forEach((insc)=>{
-                    if(insc[1]["estadoPrimario"]==1){
-                        estad="Por Firmar"
-                    }else if(insc[1]["estadoPrimario"]==0){
-                        estad="Edicion"
-                    }else{
-                        estad="Rechazo Notaria"
-                    }
-                    let item = {
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaRequirente"],
-                            "Estado": estad,
-                            "ID": insc[0],
-                            "Tipo": "A"}
+                if(this.modificaciones_encontradas.length>0){
+                    this.modificaciones_encontradas.forEach((insc)=>{
+                        if(insc[1]["estadoPrimario"]==1){
+                            estad="Por Firmar"
+                        }else if(insc[1]["estadoPrimario"]==0){
+                            estad="Edicion"
+                        }else{
+                            estad="Rechazo Notaria"
+                        }
+                        let item = {
+                                "Rep": insc[1]["numeroRepertorioNotario"],
+                                "Funcionario": insc[1]["usuarioCreador"],
+                                "Fecha": insc[1]["fechaRequirente"],
+                                "Estado": estad,
+                                "ID": insc[0],
+                                "Tipo": "M"}
 
                     if(insc[1]["firma"] == false){
-                        this.items.push(item)
-                    }
-                    });
+                            this.items.push(item)
+                        }
+                        });
 
-                }
-            //this.items=i
-            console.log("ESTOS SON TODOS")
-            console.log(this.items)
-             },3000);
+                    }
+                if(this.alzamientos_encontrados.length>0){
+                    this.alzamientos_encontrados.forEach((insc)=>{
+                        if(insc[1]["estadoPrimario"]==1){
+                            estad="Por Firmar"
+                        }else if(insc[1]["estadoPrimario"]==0){
+                            estad="Edicion"
+                        }else{
+                            estad="Rechazo Notaria"
+                        }
+                        let item = {
+                                "Rep": insc[1]["numeroRepertorioNotario"],
+                                "Funcionario": insc[1]["usuarioCreador"],
+                                "Fecha": insc[1]["fechaRequirente"],
+                                "Estado": estad,
+                                "ID": insc[0],
+                                "Tipo": "A"}
+
+                        if(insc[1]["firma"] == false){
+                            this.items.push(item)
+                        }
+                        });
+
+                    }
+                //this.items=i
+                console.log("ESTOS SON TODOS")
+                console.log(this.items)
+            },3000);
             
-            },
+        },
         firmardoc(){
             firmarDocumento()
         }
             
-        },
+    },
     /*created(){
         //this.items=[]
         this.rellenarTabla()

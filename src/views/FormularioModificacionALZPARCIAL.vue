@@ -840,7 +840,7 @@ export default {
 
             if(!solicitudPendiente){
 
-            inscripcion_modificacion(
+                inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
                 this.FOtorgamiento.toString(),//
@@ -866,6 +866,7 @@ export default {
                 this.fechaRequirente,//,
                 flag
             )
+                this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
             }else{
                 alert("Existen patentes con solicitudes pendientes")
                 console.log("NO ESTA PERMITIDO")
