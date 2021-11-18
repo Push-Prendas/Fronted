@@ -600,6 +600,7 @@ export default {
 				console.log("Phase 1 GETTING IP")
 				console.log(response.ip)
 				console.log(localStorage.rutLog)
+				var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
 				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "'+response.ip+'"}'
 					fetch(url, {
 						method: 'POST',
@@ -662,9 +663,13 @@ export default {
 
 								}
 
+								console.log("REPERTORIO")
+								
+
 
 								
-								var params2 =  '{"patente": "' + data.patente + '", "tipo":"' + type + '", "numero_repertorio":"'  + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] +  '"}'
+								var params2 =  '{"patente": "' + data.patente + '", "tipo":"' + type + '", "numero_repertorio":"'  + real_rpsd +  '"}'
+								console.log(params2)
 								fetch(url2, {
 									method: 'POST',
 									headers: {

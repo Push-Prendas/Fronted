@@ -403,6 +403,7 @@ function see_prices(){
 }
 
 var autoGlobal = []
+
 function load_vehicles(id_inscripcion){
     autoGlobal = []
     getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
@@ -411,10 +412,32 @@ function load_vehicles(id_inscripcion){
 			var p_data = p.data();
             if(p_data.idInscripcion == id_inscripcion)
                 autoGlobal.push(p_data)
+                
 		})
         console.log("AUTOS: ")
 		console.log(autoGlobal)
 	})
+
+}
+
+var repertorio_contrato_global;
+function load_rpsd(id_inscripcion){
+    
+    getDocs(collection(db,"Solicitud_Inscripcion_Prenda")).then((info_Data) => { 
+        var myid = info_Data.docs
+
+        myid.forEach((p) => {
+            var p_data = p.data();
+            console.log(p.id)
+            if(p.id == id_inscripcion){
+                repertorio_contrato_global = p_data.numeroRepertorioContratoPrenda
+            }
+
+        })
+
+        
+
+    })
 }
 
 var costoTotalAutos = 0
@@ -432,7 +455,12 @@ export default {
     //buscador_especifico_solicitud(36,"I")
       see_prices()
       load_vehicles(localStorage.idSol)
+      load_rpsd(localStorage.idSol)
+
       setTimeout(() => {
+
+        console.log("REPERTORIO GLOBAL")
+         console.log(repertorio_contrato_global)
 
         this.items = []
         console.log(autoGlobal)
@@ -450,7 +478,9 @@ export default {
         if(data.inscripcionPrendaRVM == true){
 
             console.log("PATENTE")
-            console.log(data.patente)
+            
+
+            
 
             var oReq = new XMLHttpRequest();
             var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
@@ -462,12 +492,23 @@ export default {
                     var reqResult = JSON.parse(oReq.response);
                     console.log("MENSAJE RECIVIDO")
                     console.log(reqResult)
+                    solicitudPendiente = false
+                    reqResult.solicitudes.forEach((mensaje)=>{
+
+                        console.log(mensaje.numero_repertorio)
+                        console.log((repertorio_contrato_global.split("-")[1] + "-" + repertorio_contrato_global.split("-")[0]))
+
+                        if(mensaje.numero_repertorio == (repertorio_contrato_global.split("-")[1] + "-" + repertorio_contrato_global.split("-")[0])){
+                                console.log("ENTRO EN PENDIENTE")
+                                solicitudPendiente = true
+                         }
+
+                    })
                     console.log("LARGO")
                     console.log(reqResult.solicitudes.length)
+                    console.log(solicitudPendiente)
 
-                    if(reqResult.solicitudes.length > 0){
-                        solicitudPendiente = true
-                    }
+
                 }   
             }
         }
