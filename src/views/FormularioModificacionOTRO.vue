@@ -28,7 +28,7 @@
 </template>
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import { collection, getDocs, setDoc,updateDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'

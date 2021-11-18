@@ -24,7 +24,7 @@
 </template>
 <script scoped>
 import {db, storage} from "@/main";
-import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import { collection, getDocs, setDoc,updateDoc, doc} from "firebase/firestore";
 import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODIF-ALZA.vue'
 import ContratoFormulario from '../components/ContratoFormulario.vue'
@@ -355,7 +355,7 @@ function  inscripcion_modificacion(
                 modifySecondaryStatus("M",ids.toString(),1,localStorage.mail)
                 setTimeout(() => {
                     var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
-                    var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[2]["precio"]) +parseInt(costoTotalAutos)) +'}' //CORREGIR ESTA CUESTION
+                    var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[2]["precio"])) +'}' //CORREGIR ESTA CUESTION
                     fetch(url, {
                     method: 'POST',
                     headers: {

@@ -676,7 +676,7 @@ export default {
 	rechazar(){
 
 
-
+    var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
     if(localStorage.tipo_judge.toString() == "I"){
 
 
