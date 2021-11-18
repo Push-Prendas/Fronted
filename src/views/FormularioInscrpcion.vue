@@ -138,16 +138,20 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		var estado_inicial = 0 //GUARDADO
 		console.log("validate")
 		if(send_flag){ ///VERIFICAR SI VIENE O NO DE OFICINA
-			if(parseInt(localStorage.esoficina))
+			if(parseInt(localStorage.esoficina)){
+				console.log("validate asignando estado")
 				estado_inicial = 3 //ENVIADO DESDE OFICINA
-			else
+			}else{
+				console.log("validate asignando estado")
 				estado_inicial = 1 //ENVIADO DESDE NOTARIA
+			}
 		
 		}
 		//Contar elementos en la lista para dar una ID
 		//En este caso funciona porque nosotros NUNCA borramos algo de la base de datos REALMENTE
 		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
 			var id = sol_data.docs.length + 1;
+			console.log("validate creando inscripcion")
 			console.log(id)
 			//INSCRIPCION
 			setDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),id.toString()), {
@@ -251,12 +255,14 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				});
 				//REVISAR DOCUMENTOS
 				var repertorio = null
+				console.log("validate revisando documents")
 				getDocs(collection(db,"Document_RPsD")).then((pat_data) => {
 					var id_inspeccion = pat_data.docs.length
 					var pt = pat_data.docs[id_inspeccion-1]
 					repertorio = pt.data().numero_repertorio_RPsD
 					
 				}).then(() => {
+				console.log("validate revisando documents 2")
 
 				getDocs(collection(db, "Document_RPsD")).then(async(doc_data) => {
 					var document_id = doc_data.docs.length
@@ -309,7 +315,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				})
 
 			}).then(() => {
-				console.log("EVERYTHING ITS SEND SUCCESFULLY")
+				console.log("EVERYTHING ITS SEND SUCCESFULLY---")
 				if (send_flag==false){
 					//TODO: HACER QUE SE GUARDEN LOS DOCS
 					alert("Solicitud Guardada Exitosamente")
@@ -336,6 +342,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 								})
 							})
 						}, 1500);
+						
 					}	
 					alert("Solicitud Enviada Exitosamente")
 					if(!rol_oficina)
@@ -481,8 +488,6 @@ function see_prices(){
 
 export default {
   mounted(){
-
-
 	see_prices()
 	setTimeout(() => {
 		console.log("DINERO")
@@ -663,47 +668,50 @@ export default {
 			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + runacreedor  
 			oReq.open("GET", url);
 			oReq.send();
-			oReq.onload = ()=>{
-				if(oReq.status == 200){
-					var reqResult = JSON.parse(oReq.response);
-					if (reqResult.valid){
-						enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
-						this.FSuscripcion.toString(),
-						this.FOtorgamiento.toString(),
-						this.FProtocolizacion.toString(),
-						this.FAutorizacion.toString(), 
-						(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
-						this.ProhibGravEnajenar,
-						this.notaria, 
-						this.nombreRequirente, 
-						this.nDocRequirente, 
-						this.correoRequirente,
-						this.fechaRequirente,
-						this.Bienes[0],
-						this.Bienes[1], 
-						this.Bienes[2], 
-						this.Bienes[3], 
-						preciosGlobal[0]["precio"], 
-						flags, 
-						this.tipoPersona, 
-						runacreedor.toString(), //id , rut y run
-						nombreacreedor, 
-						this.pais, 
-						this.constituyentes, 
-						this.deudores, 
-						this.vehiculos, 
-						this.contrato, 
-						this.anexos, 
-						localStorage.rol == 'FUNCIONARIOOFICINA',
-						"mi oficina",
-						localStorage.mail
-						)
-					}
-					else{
-						alert(reqResult.msg)
+			setTimeout(() => {
+				oReq.onload = ()=>{
+					if(oReq.status == 200){
+						var reqResult = JSON.parse(oReq.response);
+						if (reqResult.valid){
+							enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
+							this.FSuscripcion.toString(),
+							this.FOtorgamiento.toString(),
+							this.FProtocolizacion.toString(),
+							this.FAutorizacion.toString(), 
+							(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
+							this.ProhibGravEnajenar,
+							this.notaria, 
+							this.nombreRequirente, 
+							this.nDocRequirente, 
+							this.correoRequirente,
+							this.fechaRequirente,
+							this.Bienes[0],
+							this.Bienes[1], 
+							this.Bienes[2], 
+							this.Bienes[3], 
+							preciosGlobal[0]["precio"], 
+							flags, 
+							this.tipoPersona, 
+							runacreedor.toString(), //id , rut y run
+							nombreacreedor, 
+							this.pais, 
+							this.constituyentes, 
+							this.deudores, 
+							this.vehiculos, 
+							this.contrato, 
+							this.anexos, 
+							localStorage.rol == 'FUNCIONARIOOFICINA',
+							"mi oficina",
+							localStorage.mail
+							)
+						}
+						else{
+							alert(reqResult.msg)
+						}
 					}
 				}
-			}
+			}, 2000);
+			
 			this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
 
 		},
