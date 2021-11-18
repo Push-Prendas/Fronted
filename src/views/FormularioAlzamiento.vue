@@ -459,6 +459,9 @@ export default {
 
         if(data.inscripcionPrendaRVM == true){
 
+        console.log("PATENTE")
+        console.log(data.patente)
+
         var oReq = new XMLHttpRequest();
         var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
         oReq.open("GET", url);

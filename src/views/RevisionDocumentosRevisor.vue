@@ -94,6 +94,7 @@ function addAnexos(href){
 	total_itemsAnexos.push(item)
 }
 var solicitud_relacionada;
+var solicitud_relacionada_id;
 var acreedores_relacionados = []
 var constituyentes_relacionados = []
 var deudores_relacionados = []
@@ -110,6 +111,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();	
+					solicitud_relacionada_id = doc.id;
 			
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
@@ -204,6 +206,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();
+					solicitud_relacionada_id = doc.id;
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
@@ -299,6 +302,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			all_insc.forEach((doc) => {
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();
+					solicitud_relacionada_id = doc.id;
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
@@ -385,6 +389,23 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 			//////////////////////
 		})
 	}
+	
+}
+
+
+var autoGlobal = []
+function load_vehicles(id_inscripcion){
+    autoGlobal = []
+    getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
+		var my_cars = car_Data.docs
+		my_cars.forEach((p) => {
+			var p_data = p.data();
+            if(p_data.idInscripcion == id_inscripcion)
+                autoGlobal.push(p_data)
+		})
+        console.log("AUTOS: ")
+		console.log(autoGlobal)
+	})
 }
 
 
@@ -396,11 +417,16 @@ export default {
 	this.clean()
     console.log("MOUNT")
 
+	
+
 
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
 
     buscador_especifico_solicitud(parseInt(localStorage.id_judge), localStorage.tipo_judge)
     setTimeout(() => { 
+			console.log("ID RELACIONADA")
+			console.log(solicitud_relacionada_id)
+			load_vehicles(solicitud_relacionada_id)
 
             console.log("SOLICITUD2")
             console.log(solicitud_relacionada)	
@@ -535,13 +561,20 @@ export default {
 
 	//var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
 
-
+	console.log("VEHICULOS RELACIONADOS")
+	console.log(autoGlobal)
+	console.log(localStorage.tipo_judge.toString())
 
     if(localStorage.tipo_judge.toString() == "I"){
 
 
-	this.total_itemsVehiculos.forEach((data) => {
-			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":' + "aceptada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
+
+
+	autoGlobal.forEach((data) => {
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+			
+			console.log("SOLICITUD RELACIONADA")
+			console.log(params)
 
 			fetch(url, {
 			method: 'POST',
@@ -549,9 +582,17 @@ export default {
 				'Content-Type': 'application/json'
 			},
 			body: params
-				})
+				}).then(response =>{
+				console.log("RESPUESTA")
+				console.log(response.json())
+		
 
-	})
+				}
+
+				)
+
+			})
+			
             updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
             estadoPrimario: 5,
         }).then(() => {
@@ -593,7 +634,7 @@ export default {
 					tipoMod = "AlzPH"
 				}
 				else if(element.data().tipoModificacion == 4){
-					tipoMod = ""//no existe en RVM
+					tipoMod = "AlzPH"//no existe en RVM
 				}
 
 
@@ -605,7 +646,7 @@ export default {
 
 
 		this.total_itemsVehiculos.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":' + "aceptada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
 
 		fetch(url, {
 		method: 'POST',
@@ -644,8 +685,7 @@ export default {
     else if(localStorage.tipo_judge.toString() == "A"){
 
 		this.total_itemsVehiculos.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN" + '", "aceptarORechazar":' + "aceptada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
-
+		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN"  + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
 		fetch(url, {
 		method: 'POST',
 		headers: {

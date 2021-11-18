@@ -425,6 +425,22 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 }
 
 
+var autoGlobal = []
+function load_vehicles(id_inscripcion){
+    autoGlobal = []
+    getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
+		var my_cars = car_Data.docs
+		my_cars.forEach((p) => {
+			var p_data = p.data();
+            if(p_data.idInscripcion == id_inscripcion)
+                autoGlobal.push(p_data)
+		})
+        console.log("AUTOS: ")
+		console.log(autoGlobal)
+	})
+}
+
+
 
 export default {
   name: 'PagosPendientes',
@@ -599,6 +615,79 @@ export default {
 							else
 								modifySecondaryStatus(item.Tipo, item.id, 0, this.emailUser)
 						})
+
+						load_vehicles(item.id)
+
+						var tipoMod = ""
+
+						
+						getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((the_data) => {
+							the_data.docs.forEach((doc) =>{
+								if(doc.data().tipoModificacion  == 1){
+									tipoMod = "AlzPN"
+								}
+								else if(doc.data().tipoModificacion  == 2){
+									tipoMod = "CA"
+								}
+								else if(doc.data().tipoModificacion  == 3){
+									tipoMod = "AlzPH"
+								}else{
+									tipoMod = "AlzPH"
+								}
+
+							})
+
+						})
+
+
+						setTimeout(() => {
+
+							autoGlobal.forEach((data)=>{
+
+								var url2 = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/anotation'
+								var type = ""
+
+								if(item.Tipo == "I"){
+									type = "PN"
+
+								}
+								
+								if(item.Tipo == "M"){
+									type = tipoMod
+
+								}
+								
+								if(item.Tipo == "A"){
+									type = "AlzPN"
+
+								}
+
+
+								
+								var params2 =  '{"patente": "' + data.patente + '", "tipo":"' + type + '", "numero_repertorio":"'  + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] +  '"}'
+								fetch(url2, {
+									method: 'POST',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: params2
+								}).then((response2)=>{
+										response2.json().then((reqResult) => {
+											console.log("INGRESAR")
+											console.log(reqResult)
+											console.log(reqResult.msg)
+									})
+
+								})
+
+							})
+
+							
+						},3000)
+
+
+
+
 					})
 				});
 				}, 1500);               
