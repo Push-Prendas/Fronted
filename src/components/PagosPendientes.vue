@@ -564,10 +564,13 @@ export default {
             },2000);
             },
     pagar(){
+		
         var indexCheck = []
 		for (let index = 0; index < this.items.length; index++) {
 			if (document.getElementById(index).checked == true){
                 indexCheck.push(index)
+				console.log("Check")
+				console.log(index)
             }	
 		}
 		for (let w = 0; w < indexCheck.length; w++) {
@@ -575,8 +578,24 @@ export default {
             console.log(item)
 			console.log("SENDING DATA")		
             console.log("LOL")
-			modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
+			this.updatePago(item)
+            console.log("W")
+			console.log(indexCheck[w])
+        }
+		this.items.length=0
+		this.clean()
+		this.rellenarTabla()
+
+    },
+	clean(){
+		inscripciones_encontradasGlobal.length=0
+		modificaciones_encontradasGlobal.length=0
+		alzamientos_encontradosGlobal.length=0
+	},
+	updatePago(item){
+		modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
 			setTimeout(() => {
+				
 				/*
 					SI OBTENER LA IP NO FUNCIONA
 					APAGAR ADBLOCKER O NO UTILIZAR BRAVE
@@ -697,11 +716,8 @@ export default {
 
 
 					})
-			}, 1500);               
-            this.items.splice(indexCheck[w],1)
-        }
-
-    }
+			}, 1500);
+	}
 	
   }
 
