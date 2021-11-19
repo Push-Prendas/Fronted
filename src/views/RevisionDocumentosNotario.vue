@@ -398,7 +398,7 @@ export default {
   mounted() {
       this.clean()
     console.log("MOUNT hh")
-	console.log(localStorage.tipo_revisar)
+	console.log(this.tipoA_revisar)
 	
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
 
@@ -432,7 +432,7 @@ export default {
 				FechaAutorizacion.disabled = true
 				FechaProtocolizacion.disabled = true
             }
-            },500)
+            },3000)
 
             
     
@@ -462,7 +462,7 @@ export default {
 			left.disabled = true
 			right.disabled = true
             
-            },500)
+            },3000)
 			//FIN ANTECENDENTES
 
 			//ACREEDOR
@@ -503,7 +503,7 @@ export default {
 
 			//ANEXOS
 			this.items_Anexos = total_itemsAnexos
-           }, 2000)
+           }, 3000)
   },
   name: 'RevisionDocNotario',
   data() {
@@ -515,7 +515,8 @@ export default {
 			items_Constituyentes : new Array,
 			items_Deudores: new Array,
 			items_Contrato: new Array,
-			items_Anexos: new Array
+			items_Anexos: new Array,
+			tipoA_revisar: localStorage.tipo_revisar
         }
     },
   components: {
@@ -531,7 +532,7 @@ export default {
   methods:{
     aceptar(){
 
-    if(localStorage.tipo_revisar.toString() == "I"){
+    if(this.tipoA_revisar.toString() == "I"){
 
         updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
@@ -542,7 +543,7 @@ export default {
 
 
     }
-    else if(localStorage.tipo_revisar.toString() == "M"){
+    else if(this.tipoA_revisar.toString() == "M"){
 
         updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
@@ -552,7 +553,7 @@ export default {
 
     }
 
-    else if(localStorage.tipo_revisar.toString() == "A"){
+    else if(this.tipoA_revisar.toString() == "A"){
 
         updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
@@ -566,7 +567,7 @@ export default {
     },
     rechazar(){
 		
-		if(localStorage.tipo_revisar.toString() == "I"){
+		if(this.tipoA_revisar.toString() == "I"){
 			console.log("RECHAZANDO")
 			console.log(solicitud_relacionada_id)
 			updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
@@ -577,7 +578,7 @@ export default {
 			})
 
 		}
-		else if(localStorage.tipo_revisar.toString() == "M"){
+		else if(this.tipoA_revisar.toString() == "M"){
 			console.log("RECHAZANDO")
 			console.log(solicitud_relacionada_id)
 			updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
@@ -587,7 +588,7 @@ export default {
 				this.$router.push({path: VOLVER})
 			})
 		}
-		else if(localStorage.tipo_revisar.toString() == "A"){
+		else if(this.tipoA_revisar.toString() == "A"){
 			console.log("RECHAZANDO")
 			console.log(solicitud_relacionada_id)
 			updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{

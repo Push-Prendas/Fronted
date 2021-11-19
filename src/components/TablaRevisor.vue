@@ -5,7 +5,8 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Contrato Prenda</th>
+              <th scope="col">N° Rep Prenda</th>
+              <th scope="col">N° Rep Notaria</th>
               <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
@@ -14,16 +15,17 @@
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
-              <th >{{item.Rep}}</th>
-              <th >{{item.nombre_oficina}}</th>
-              <th scope="row">{{item.Fecha}}</th>
-              <td> 
-                  <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey" v-if="item.Estado == 'Pagado'">{{item.Estado}}</th>
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:red" v-if="item.Estado == 'Por pagar'">{{item.Estado}}</th>
-                  </div>
-              </td>
-              <td> 
+				<th >{{item.Rep}}</th>
+				<th >{{item.Not}}</th>
+				<th >{{item.nombre_oficina}}</th>
+				<th scope="row">{{item.Fecha}}</th>
+				<td> 
+					<div class="btn-group" role = "group" aria-label="Basic example">
+						<th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey" v-if="item.Estado == 'Pagado'">{{item.Estado}}</th>
+						<th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:red" v-if="item.Estado == 'Por pagar'">{{item.Estado}}</th>
+					</div>
+				</td>
+				<td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
                       <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey">Sin Asignar</th>
                       <th></th>
@@ -229,77 +231,81 @@ export default {
             console.log("relleno tabla")
             //this.items.length = 0;
 			buscador_solicitud("T")
-				setTimeout(() => {
-					console.log("Timeout Enter")
-					//Llama a todas las tablas
-					if(this.inscripciones_encontradas.length>0){
-						console.log(this.inscripciones_encontradas);
-						var estad;
-						this.inscripciones_encontradas.forEach((insc)=>{
-							if(insc[1]["estadoSecundario"]!=2){
-								estad="Por pagar"
-							}else{
-								estad="Pagado"
-							}
-							let item = {
-									"id": insc[0],
-									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-									"Funcionario": insc[1]["usuarioCreador"],
-									"Fecha": insc[1]["fechaRequirente"],
-									"Estado": estad,
-									"Tipo": "I",
-									"nombre_oficina": insc[1]["oficina"]}
-							console.log(item)
-							console.log(this.items)
-							this.items.push(item)
-							});
-
+			setTimeout(() => {
+				console.log("Timeout Enter")
+				//Llama a todas las tablas
+				if(this.inscripciones_encontradas.length>0){
+					console.log(this.inscripciones_encontradas);
+					var estad;
+					this.inscripciones_encontradas.forEach((insc)=>{
+						if(insc[1]["estadoSecundario"]!=2){
+							estad="Por pagar"
+						}else{
+							estad="Pagado"
 						}
-					if(this.modificaciones_encontradas.length>0){
-						this.modificaciones_encontradas.forEach((insc)=>{
-							if(insc[1]["estadoSecundario"]!=2){
-								estad="Por pagar"
-							}else{
-								estad="Pagado"
-							}
-							let item = {
-									"id": insc[0],
-									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-									"Funcionario": insc[1]["usuarioCreador"],
-									"Fecha": insc[1]["fechaRequirente"],
-									"Estado": estad,
-									"Tipo": "M",
-									"nombre_oficina": insc[1]["oficina"]}
+						let item = {
+								"id": insc[0],
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
+								"Funcionario": insc[1]["usuarioCreador"],
+								"Fecha": insc[1]["fechaRequirente"],
+								"Estado": estad,
+								"Tipo": "I",
+								"nombre_oficina": insc[1]["oficina"]}
+						console.log(item)
+						console.log(this.items)
+						this.items.push(item)
+						});
 
-							this.items.push(item)
-							});
-
+					}
+				if(this.modificaciones_encontradas.length>0){
+					this.modificaciones_encontradas.forEach((insc)=>{
+						if(insc[1]["estadoSecundario"]!=2){
+							estad="Por pagar"
+						}else{
+							estad="Pagado"
 						}
-					if(this.alzamientos_encontrados.length>0){
-						this.alzamientos_encontrados.forEach((insc)=>{
-							if(insc[1]["estadoSecundario"]!=2){
-								estad="Por pagar"
-							}else{
-								estad="Pagado"
-							}
-							let item = {
-									"id": insc[0],
-									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-									"Funcionario": insc[1]["usuarioCreador"],
-									"Fecha": insc[1]["fechaRequirente"],
-									"Estado": estad,
-									"Tipo": "A",
-									"nombre_oficina": insc[1]["oficina"]}
+						let item = {
+								"id": insc[0],
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
+								"Funcionario": insc[1]["usuarioCreador"],
+								"Fecha": insc[1]["fechaRequirente"],
+								"Estado": estad,
+								"Tipo": "M",
+								"nombre_oficina": insc[1]["oficina"]}
 
-							this.items.push(item)
-							});
+						this.items.push(item)
+						});
 
+					}
+				if(this.alzamientos_encontrados.length>0){
+					this.alzamientos_encontrados.forEach((insc)=>{
+						if(insc[1]["estadoSecundario"]!=2){
+							estad="Por pagar"
+						}else{
+							estad="Pagado"
 						}
-					//this.items=i
-					console.log(this.items)
-				},3000)
-            }
-        ,clean(){
+						let item = {
+								"id": insc[0],
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
+								"Funcionario": insc[1]["usuarioCreador"],
+								"Fecha": insc[1]["fechaRequirente"],
+								"Estado": estad,
+								"Tipo": "A",
+								"nombre_oficina": insc[1]["oficina"]}
+
+						this.items.push(item)
+						});
+
+					}
+				//this.items=i
+				console.log(this.items)
+			},3000)
+			}
+        ,
+		clean(){
             this.items.length = 0;
             this.inscripciones_encontradas.length = 0;
             this.modificaciones_encontradas.length = 0;

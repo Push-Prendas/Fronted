@@ -158,18 +158,6 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 	
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 function Subir_archivos_en_oficina(contratos,archivos,id,tipo){//ESTA FUNCION PERMITE GUARDAR LOS ARCHIVOS EN NUESTRA BASE DE DATOS, LO IDEAL ES USARLO PARA OFICINA EN LA VISTA PARA SUBIR SUS ARCHIVOS
 	var repertorio = null
 
@@ -516,7 +504,8 @@ function  inscripcion_modificacion(
                 revisorAsignado :-1,
                 firma:false,
                 tipoModificacion:1,
-                usuarioCreador: localStorage.mail
+                usuarioCreador: localStorage.mail,
+                id_transaccion: -1,
             }).then(() => {
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA

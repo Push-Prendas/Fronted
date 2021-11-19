@@ -13,7 +13,7 @@
             <!-- FALTA COLOCALAR LOS ARCHIVOS -->
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton"  @click="rechazar()">Rechazar</button>
-                <button class="col-2 titleButton" @click="aceptar()">Aprobar</button>
+                <button class="col-2 titleButton" id="botonACEPTARRECEPTOR" @click="aceptar()">Aprobar</button>
             </div>
         </div>
         
@@ -416,6 +416,13 @@ export default {
 
 	this.clean()
     console.log("MOUNT")
+	if(localStorage.pagado == "Por pagar"){
+		var aux = document.getElementById("botonACEPTARRECEPTOR");
+		aux.visibility = "hidden";
+	}else{
+		var aux2 = document.getElementById("botonACEPTARRECEPTOR");
+		aux2.visibility = "visible";
+	}
 
 	
 

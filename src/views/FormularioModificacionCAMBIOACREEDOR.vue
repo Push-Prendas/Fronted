@@ -351,7 +351,8 @@ function  inscripcion_modificacion(
                 revisorAsignado :-1,
                 firma:false,
                 tipoModificacion:2,
-                usuarioCreador: localStorage.mail
+                usuarioCreador: localStorage.mail,
+                id_transaccion: -1,
             }).then(() => {
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -443,8 +444,6 @@ export default {
       load_vehicles(localStorage.idSol)
       setTimeout(() => {
 
-
-
         this.items = []
         console.log(autoGlobal)
         const monto = document.getElementById('monto')
@@ -493,9 +492,6 @@ export default {
             "GoE": data.inscripcionProhibicionGravarEnajenar,
             "costo": "-"}
         this.items.push(item);
-
-
-
 
         })
 

@@ -564,44 +564,29 @@ export default {
             },2000);
             },
     pagar(){
-        var i = 0;
         var indexCheck = []
-        while (i<this.items.length)
-        {
-            if (document.getElementById(i).checked == true)
-            {
-                indexCheck.push(i)
-            }
-            i++
-            
-        }
-        var w = 0
-        while (w<indexCheck.length){
+		for (let index = 0; index < this.items.length; index++) {
+			if (document.getElementById(index).checked == true){
+                indexCheck.push(index)
+            }	
+		}
+		for (let w = 0; w < indexCheck.length; w++) {
             var item = this.items[indexCheck[w]]
             console.log(item)
-            //Tipo
-            //id
-            //1
-            //emailUser?
 			console.log("SENDING DATA")		
             console.log("LOL")
 			modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
 			setTimeout(() => {
-				fetch('https://api.ipify.org?format=json')
-				.then(response => response.json())
-				.then(response => {
 				/*
 					SI OBTENER LA IP NO FUNCIONA
 					APAGAR ADBLOCKER O NO UTILIZAR BRAVE
 				*/
-
 				console.log(localStorage.user +','+my_rpsd+','+this.monto)
 				var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
 				console.log("Phase 1 GETTING IP")
-				console.log(response.ip)
 				console.log(localStorage.rutLog)
 				var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
-				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "'+response.ip+'"}'
+				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "190.215.234.251"}'
 					fetch(url, {
 						method: 'POST',
 						headers: {
@@ -610,11 +595,29 @@ export default {
 						body: params
 					}).then((response)=>{
 						response.json().then((reqResult) => {
+							if (item.Tipo=="I"){
+								updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",item.id),{
+								id_transaccion: reqResult.transaction_id,
+								}).then(() => {
+									console.log("id_transaccion asignado")
+								})
+							}else if (item.Tipo=="M"){
+								updateDoc(doc(db, "Solicitud_Modificacion_Prenda",item.id),{
+								id_transaccion: reqResult.transaction_id,
+								}).then(() => {
+									console.log("id_transaccion asignado")
+								})
+							}else if (item.Tipo=="A"){
+								updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",item.id),{
+								id_transaccion: reqResult.transaction_id,
+								}).then(() => {
+									console.log("id_transaccion asignado")
+								})
+								
+							}
+							console.log(reqResult.transaction_id)
 							alert(reqResult.msg)
-							if(reqResult.msg == "Pago Ingresado")
-								modifySecondaryStatus(item.Tipo, item.id, 2, this.emailUser)
-							else
-								modifySecondaryStatus(item.Tipo, item.id, 0, this.emailUser)
+							
 						})
 
 						load_vehicles(item.id)
@@ -694,10 +697,8 @@ export default {
 
 
 					})
-				});
-				}, 1500);               
+			}, 1500);               
             this.items.splice(indexCheck[w],1)
-            w++
         }
 
     }

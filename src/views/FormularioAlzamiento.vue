@@ -313,13 +313,8 @@ function alzamiento(
 
     var ids = null
     getDocs(collection(db,"Solicitud_Alzamiento_Prenda")).then((pat_data) => {
-
-
         ids = pat_data.docs.length;
-
-
     }).then(() => {
-
         setDoc(doc(collection(db,"Solicitud_Alzamiento_Prenda"),ids.toString()),{//se le hace un camino extra, no pude acortar, pero es con el mismo id asi que no deberia haber problemas
             privacidadDocumento: tipo_de_documento,
             fechaOtorgamientoEscritura: fecha_de_otorgamiento,
@@ -342,10 +337,8 @@ function alzamiento(
             numeroRepertorioContratoPrenda: numero_repertorio_RPsD,
             oficina: "mi oficina",
             firma:false,
-            usuarioCreador: localStorage.mail
-
-
-
+            usuarioCreador: localStorage.mail,
+            id_transaccion: -1,
     }).then(() => {
         console.log("PAGANDO EN CAJA")
 		//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA

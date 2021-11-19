@@ -5,28 +5,37 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Contrato Prenda</th>
-              <th scope="col">Oficina/Notaria</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Acciones</th>
-              <th></th>
+				<th scope="col">N° Rep Prenda</th>
+				<th scope="col">N° Rep Notaria</th>
+				<th scope="col">Oficina/Notaria</th>
+				<th scope="col">Fecha</th>
+				<th scope="col">Estado</th>
+				<th scope="col">Acciones</th>
+				<th></th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
-              <th >{{item.Rep}}</th>
-              <th >{{item.nombre_oficina}}</th>
-              <th >{{item.Fecha}}</th>
-              <td> 
-                  <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" @click="obtain_id_judge(item.id, item.Tipo)" >Revisar</th>
-                      <th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey" @click="LiberarSolicitud(index)">Liberar</th>
-                  </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
+				<th >{{item.Rep}}</th>
+				<th >{{item.Not}}</th>
+				<th >{{item.nombre_oficina}}</th>
+				<th >{{item.Fecha}}</th>
+				<td> 
+					<div class="btn-group" role = "group" aria-label="Basic example">
+						<th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:grey" v-if="item.Estado == 'Pagado'">{{item.Estado}}</th>
+						<th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:red" v-if="item.Estado == 'Por pagar'">{{item.Estado}}</th>
+					</div>
+				</td>
+				<td> 
+					<div class="btn-group" role = "group" aria-label="Basic example">
+						<th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" @click="obtain_id_judge(item.id, item.Tipo, item.Estado)" >Revisar</th>
+						<th class="rounded-pill" type="button" style="padding-left: 10px;  padding-right: 10px; background-color:grey" @click="LiberarSolicitud(index)">Liberar</th>
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</div>
        
     </div>
 </template>
@@ -270,13 +279,16 @@ export default {
                 var estad;
                 this.inscripciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]!=2){
+						//localStorage.pagado=false
                         estad="Por pagar"
                     }else{
+						//localStorage.pagado=true
                         estad="Pagado"
                     }
                     let item = {
 						"id": insc[0],
 						"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+						"Not":insc[1]["numeroRepertorioNotario"],
 						"Funcionario": insc[1]["usuarioCreador"],
 						"Fecha": insc[1]["fechaRequirente"],
 						"Estado": estad,
@@ -298,6 +310,7 @@ export default {
                     let item = {
 						"id": insc[0],
 						"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+						"Not":insc[1]["numeroRepertorioNotario"],
 						"Funcionario": 'funcionarionotaria@funcionarionotaria.cl',
 						"Fecha": today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
 						"Estado": estad,
@@ -318,6 +331,7 @@ export default {
                     let item = {
                             "id": insc[0],
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+							"Not":insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
                             "Estado": estad,
@@ -350,11 +364,12 @@ export default {
             this.alzamientos_encontrados.length = 0;
             
         },
-		obtain_id_judge(id, tipo){
+		obtain_id_judge(id, tipo, estad){
             console.log("NOIZ ID")
             console.log(id)
             localStorage.id_judge = id
             localStorage.tipo_judge = tipo
+			localStorage.pagado=estad
 
 
 			this.$router.push({path: '/Dashboard/REVISOR/'+username+'/RevisionDocumentosRevisor'})

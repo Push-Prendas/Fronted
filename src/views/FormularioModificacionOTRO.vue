@@ -348,7 +348,8 @@ function  inscripcion_modificacion(
                 revisorAsignado :-1,
                 firma:false,
                 tipoModificacion:4,
-                usuarioCreador: localStorage.mail
+                usuarioCreador: localStorage.mail,
+                id_transaccion: -1,
             }).then(() => {
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA

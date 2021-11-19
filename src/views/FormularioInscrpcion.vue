@@ -44,24 +44,9 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import jsPDF  from 'jspdf';
 import html2canvas from 'html2canvas';
-//import { getStorage } from "firebase/storage";
-//import { getApp,initializeApp  } from "firebase/app";
 
-
-  
-//initializeApp()
-
-//const storage2 = getStorage(firebaseApp);
-
-
-  
-//const app = initializeApp(firebaseConfig);
 var preciosGlobal = []
 var my_rpsd;
-
-
-
-//const storage2 = getStorage();
 
 function validate_number(inputNumber){
         if(!inputNumber.includes("-")) return false;
@@ -177,7 +162,8 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				estadoSecundario: 0,
 				usuarioCreador: userid,
 				oficina: Oficina,
-				firma: false
+				firma: false,
+				id_transaccion: -1,
 			}).then(() => {
 				//TABLAS RELACIONADAS
 				getDocs(collection(db, "Patente_por_Inscripcion")).then((pat_data) => {
@@ -320,7 +306,6 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					//TODO: HACER QUE SE GUARDEN LOS DOCS
 					alert("Solicitud Guardada Exitosamente")
 				}else{
-					console.log("PAGANDO EN CAJA")
 					//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
 					if (rol_oficina){
 						modifySecondaryStatus("I",id.toString(),1,userid)
@@ -348,23 +333,12 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					if(!rol_oficina)
 						this.redirect()
 				}
-				
-	
-
-
-				//
 			})
 		})
 		});
-
 		////LLAMADA A SERVICIOS////
-		
-
 	}
-
 }
-
-
 
 function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
 	///FUNCION QUE PERMITE ACTUALIZAR UN ESTADO, EL ID VA COMO STRING
@@ -393,7 +367,6 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		if(estado_secundario == 1){
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
-                    
 					estadoSecundario: estado_secundario,
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 
