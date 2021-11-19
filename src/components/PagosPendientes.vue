@@ -582,9 +582,7 @@ export default {
             var item = this.items[indexCheck[w]]
             console.log(item)
 			console.log("SENDING DATA")		
-            console.log("LOL")
 			this.updatePago(item)
-            console.log("W")
 			console.log(indexCheck[w])
         }
 		this.items.length=0

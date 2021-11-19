@@ -308,7 +308,7 @@ export default {
                 }).then((response)=>{
                     response.json().then((reqResult) => {
                         if(reqResult.valid){
-                            alert(reqResult.valid)
+                            //alert(reqResult.valid)
                             patValida=true
                             
                         }
@@ -335,7 +335,7 @@ export default {
                     response.json().then((reqResult) => {
                         console.log(reqResult)
                         if(reqResult.valid){
-                            alert(reqResult.valid)
+                            //alert(reqResult.valid)
                             patPerteneceaContr = true 
                         }
                         else{
@@ -347,18 +347,17 @@ export default {
                 params = '{}'
                 console.log(params)
                 fetch(url, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
-                    },
-                    body: params
+                    }
                     
                 }).then((response)=>{
                     console.log(response)
                     response.json().then((reqResult) => {
                         console.log(reqResult)
                         if(reqResult.success){
-                            alert(reqResult.success)
+                            //alert(reqResult.success)
                             patPerteneceaContr = true 
                         }
                         else{

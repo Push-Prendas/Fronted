@@ -81,11 +81,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	///[["Natural","20000000-K","Juanito Perez","Chile"],["Juridico","50000000-K","Empresa","Chile"]]
 
 	vehiculos.forEach((v) => {
-		if(v[0]){
-			console.log("VALIDANDO PATENTES")
+		if(v){
 			//INVOCAR SERVICIO DEL PATENTE
-
-
+			
 			//RESULTADOS DEL SERVICIO DE PATENTE
 		}
 	})
@@ -638,61 +636,47 @@ export default {
 				runacreedor = this.id
 				nombreacreedor = this.nombres
 			}
-			var oReq = new XMLHttpRequest();
-			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + runacreedor  
-			console.log(url)
-			oReq.open("GET", url);
-			console.log("LOADING REQUEST")
-			console.log("MOMENT")
-			oReq.onload = ()=>{
-				console.log("REQUEST")
-				if(oReq.status == 200){
-					console.log("ACEPTED")
-					var reqResult = JSON.parse(oReq.response);
-					if (reqResult.valid){
-						console.log("VALID")
-						enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
-						this.FSuscripcion.toString(),
-						this.FOtorgamiento.toString(),
-						this.FProtocolizacion.toString(),
-						this.FAutorizacion.toString(), 
-						(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
-						this.ProhibGravEnajenar,
-						this.notaria, 
-						this.nombreRequirente, 
-						this.nDocRequirente, 
-						this.correoRequirente,
-						this.fechaRequirente,
-						this.Bienes[0],
-						this.Bienes[1], 
-						this.Bienes[2], 
-						this.Bienes[3], 
-						preciosGlobal[0]["precio"], 
-						flags, 
-						this.tipoPersona, 
-						runacreedor.toString(), //id , rut y run
-						nombreacreedor, 
-						this.pais, 
-						this.constituyentes, 
-						this.deudores, 
-						this.vehiculos, 
-						this.contrato, 
-						this.anexos, 
-						localStorage.rol == 'FUNCIONARIOOFICINA',
-						"mi oficina",
-						localStorage.mail
-						)
-						setTimeout(() => {
-							this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})			
-							this.downloadWithCSS()
-						}, 1000);
-					}
-					else{
-						alert(reqResult.msg)
-					}
-				}
-			}
-			oReq.send();
+			
+			
+			enviar_solicitud_de_inscripcion_prenda(this.tipoDoc.toString(),
+					this.FSuscripcion.toString(),
+					this.FOtorgamiento.toString(),
+					this.FProtocolizacion.toString(),
+					this.FAutorizacion.toString(), 
+					(this.RepNotaria+"-"+this.anioRepNotaria).toString(),
+					this.ProhibGravEnajenar,
+					this.notaria, 
+					this.nombreRequirente, 
+					this.nDocRequirente, 
+					this.correoRequirente,
+					this.fechaRequirente,
+					this.Bienes[0],
+					this.Bienes[1], 
+					this.Bienes[2], 
+					this.Bienes[3], 
+					preciosGlobal[0]["precio"], 
+					flags, 
+					this.tipoPersona, 
+					runacreedor.toString(), //id , rut y run
+					nombreacreedor, 
+					this.pais, 
+					this.constituyentes, 
+					this.deudores, 
+					this.vehiculos, 
+					this.contrato, 
+					this.anexos, 
+					localStorage.rol == 'FUNCIONARIOOFICINA',
+					"mi oficina",
+					localStorage.mail
+					)
+			setTimeout(() => {
+				this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})			
+				this.downloadWithCSS()
+			}, 1000);
+					
+				
+			
+			
 			
 			
 
