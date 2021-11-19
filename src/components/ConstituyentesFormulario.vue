@@ -206,6 +206,20 @@ export default {
             this.items.splice(index,1);
             
         },
+        clean(){
+            console.log("MYDATA")
+            console.log("limpiar campos aqui")
+
+        },
+        setData(){
+            this.$emit("getConstituyentes",this.items);
+            var constitu = []
+            this.items.forEach(cons => {
+                constitu.push('"'+cons.Id+'"')
+                
+            });
+            localStorage.constituyentes = constitu
+        },
         add() {
             var oReq = new XMLHttpRequest();
             var url = ""
@@ -267,15 +281,13 @@ export default {
                 }
 
             }
+            var constitu = []
+            this.items.forEach(cons => {
+                constitu.push('"'+cons.Id+'"')
+                
+            });
+            localStorage.constituyentes = constitu
             
-        },
-        clean(){
-            console.log("MYDATA")
-            console.log("limpiar campos aqui")
-
-        },
-        setData(){
-            this.$emit("getConstituyentes",this.items);
         }
     }
 

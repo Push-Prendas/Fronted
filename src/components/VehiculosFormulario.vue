@@ -292,10 +292,13 @@ export default {
             //console.log(this.option);
         },
         add() {
-			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates'
-            var params = '{"patente": "' + this.patente + '"}'
-            console.log("LOL")
             if(this.rvm){
+                var patValida = false
+                var patPerteneceaContr = false
+                var partSinProces = false 
+
+                var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates'
+                var params = '{"patente": "' + this.patente + '"}'
                 fetch(url, {
                     method: 'POST',
                     headers: {
@@ -305,27 +308,80 @@ export default {
                 }).then((response)=>{
                     response.json().then((reqResult) => {
                         if(reqResult.valid){
-                            console.log(reqResult.valid)
-                            let item = {
-                                "patente": this.patente,
-                                "rvm": this.rvm,
-                                "GoE": this.GoE}
-
-                            this.items.push(item);
-                            const monto = document.getElementById('monto')
-                            var valor = parseInt(monto.innerHTML.substring(1))
-                            valor += preciosGlobal[7]["precio"]
-                            valor += preciosGlobal[8]["precio"]
-                            monto.innerHTML = "$" + valor
-                            this.patente ="";
-                            this.rvm =false;
-                            this.GoE=false;
+                            alert(reqResult.valid)
+                            patValida=true
+                            
                         }
                         else{
-                            alert("Este vehiculo no esta registrado en el RVM")
+                            alert("PATENTE INVALIDA o este vehiculo no esta registrado en el RVM")
                         }
                     })
                 })
+                url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/check_ownership'
+                var persons = localStorage.constituyentes
+                console.log(typeof(persons.split(',')))
+                console.log(persons.split(','))
+                params = '{"plate": "' + this.patente + '","owners": [' + persons.split(',') + ']}'
+                console.log(params)
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: params
+                    
+                }).then((response)=>{
+                    console.log(response)
+                    response.json().then((reqResult) => {
+                        console.log(reqResult)
+                        if(reqResult.valid){
+                            alert(reqResult.valid)
+                            patPerteneceaContr = true 
+                        }
+                        else{
+                            alert("Patente NO pertenece a constituyentes")
+                        }
+                    })
+                })
+                url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente='+this.patente+''
+                params = '{}'
+                console.log(params)
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: params
+                    
+                }).then((response)=>{
+                    console.log(response)
+                    response.json().then((reqResult) => {
+                        console.log(reqResult)
+                        if(reqResult.success){
+                            alert(reqResult.success)
+                            patPerteneceaContr = true 
+                        }
+                        else{
+                            alert("La Patente tiene Solicitudes pendientes")
+                        }
+                    })
+                })
+                if(patValida && patPerteneceaContr && partSinProces){
+                    let item = {
+                                    "patente": this.patente,
+                                    "rvm": this.rvm,
+                                    "GoE": this.GoE}
+                                this.items.push(item);  
+                    const monto = document.getElementById('monto')
+                    var valor1 = parseInt(monto.innerHTML.substring(1))
+                    valor1 += preciosGlobal[7]["precio"]
+                    valor1 += preciosGlobal[8]["precio"]
+                    monto.innerHTML = "$" + valor1
+                    this.patente ="";
+                    this.rvm =false;
+                    this.GoE=false;
+                }
+                
             }
             else{
                 let item = {

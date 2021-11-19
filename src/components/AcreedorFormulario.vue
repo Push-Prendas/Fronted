@@ -63,7 +63,7 @@
             </div>
         </div>
  
-        <div class="row" v-if="tipoPersona == 'Natural'">
+        <div class="row" v-if="tipoPersona == 'Natural'  && rol!='FUNCIONARIOOFICINA'">
             <div class="col row" >
                 <div class="titles d-flex justify-content-start" >
                     APELLIDO PATERNO
@@ -134,7 +134,26 @@ export default {
         },
         check(){
             if(this.tipoPersona == "Natural"){
-                console.log("TRABJANDO EN ESTO")
+                var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user'
+				var params = '{ "run": "'+this.run+'", "nombres": "'+this.nombres+'", "apellido_paterno": "'+this.Apaterno+'", "apellido_materno": "'+this.Amaterno+'"}'
+					fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: params
+					}).then((response)=>{
+						response.json().then((reqResult) => {
+                            if(reqResult.valid){
+                                var color = document.getElementById("btncheckacreedor").style.background = "#5bd54b"
+                                console.log(color)
+                                //alert(reqResult.valid)
+                            }else{
+                                alert("Datos de ACREEDOR invalidos")
+                            }
+
+                        })
+                    })
             }
         }
     },
