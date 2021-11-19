@@ -154,6 +154,7 @@ export default {
             apellidopaterno:'',
             apellidomaterno:'',
             nombrecompleto:'',
+            rol: localStorage.rol,
         }
     },
     props: {

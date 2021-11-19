@@ -1,6 +1,8 @@
 <template>
     <div id="contenedor" class="row">
         <div class="titleFormulario">Acreedor</div>
+        <button v-b-modal.modal-1 id="btncheckacreedor" @click="check()" class="col buttonAdd" >Checkear datos</button>
+
         <div class="row">
             <div class="col row">
                 <div class="titles d-flex justify-content-start">
@@ -109,8 +111,8 @@ export default {
   data() {
       const countries= Countries.default.countries;
         return {
-            listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
             countries,
+            rol: localStorage.rol,
         }
     },
     methods:{
@@ -129,6 +131,11 @@ export default {
             this.$emit("getApaterno",this.Apaterno.toString());
             this.$emit("getAmaterno",this.Amaterno.toString());
             this.$emit("getnombres",this.nombres.toString());
+        },
+        check(){
+            if(this.tipoPersona == "Natural"){
+                console.log("TRABJANDO EN ESTO")
+            }
         }
     },
     props:{
@@ -219,5 +226,15 @@ export default {
 .nrepertorioleft{
     margin-right: 1em;
     width:6.5em
+}
+.buttonAdd{
+    background: #d54b4b;
+    color: white;
+    border-radius: 15em;
+    width: 1em;
+    padding: 0em;
+    margin-left: 10em;
+    margin-right: 30em;
+    height: 2em;
 }
 </style>

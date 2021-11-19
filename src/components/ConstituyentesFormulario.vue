@@ -147,7 +147,8 @@ export default {
             countries,
             idDocumento:'',
             nombrePersona: '',
-            pais: 'Chile'
+            pais: 'Chile',
+            rol: localStorage.rol,
         }
     },
     props: {

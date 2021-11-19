@@ -125,6 +125,7 @@ export default {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
             option:'Publico',
             
+            
         }
     },
     props:{
