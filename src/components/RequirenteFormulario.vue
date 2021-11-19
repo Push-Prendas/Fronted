@@ -1,7 +1,10 @@
 <template>
     <div id="contenedor" class="row">
         <div class="titleFormulario">Requirente</div>
-        <div class="row">
+        <button id="btncheckacreedor" @click="check()" class="col buttonAdd" >Checkear datos</button>
+
+
+        <div class="row" v-if="checked">
             <div class="col row">
                 <div class="titles d-flex justify-content-start" >
                     NOMBRE COMPLETO
@@ -48,12 +51,18 @@
 <script>
 import * as Countries from '../data/countries.js';
 export default {
+  mounted(){
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      document.getElementById("fecharequirente").value = date
+  },
   name: 'AcreedorFormularios',
   data() {
       const countries= Countries.default.countries;
         return {
             listBienesPrendados:["ACTIVO FIJO",'BIENES AGROPECUARIOS','DERECHOS E INTANGIBLES','VEHICULOS'],
             countries, 
+            checked: false,
         }
     },
     props:{
@@ -127,6 +136,37 @@ export default {
             this.$emit("getrutRequirente",this.NdeDocumento.toString());
             this.$emit("getCorreoRequirente",this.correo.toString());
             this.$emit("getFechaRequirente",this.fecha.toString());
+        },
+        check(){
+            var run = document.getElementById("ndedocumentorequirente").value
+            if(run == ""){
+                alert("No hay ningun run ingresado")
+            }
+            else{
+                var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + run
+                var oReq = new XMLHttpRequest();
+                oReq.open("GET", url);
+                oReq.send();
+                oReq.onload = ()=>{
+                    if(oReq.status == 200){
+                        var reqResult = JSON.parse(oReq.response);
+                        if (reqResult.valid){
+                            this.checked = true
+                            document.getElementById("btncheckacreedor").style.background = "#5bd54b"
+                            setTimeout(() => {
+                                document.getElementById("nombrecompletorequirente").value = reqResult.nombres + " " + reqResult.apellido_paterno + " " + reqResult.apellido_materno
+                                var today = new Date();
+                                var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                                document.getElementById("fecharequirente").value = date
+                            }, 300);
+
+                        }
+                        else{
+                            alert(reqResult.msg)
+                        }
+                    }
+                }
+            }             
         }
     }
 
@@ -174,5 +214,16 @@ export default {
 .nrepertorioleft{
     margin-right: 1em;
     width:6.5em
+}
+
+.buttonAdd{
+    background: #d54b4b;
+    color: white;
+    border-radius: 15em;
+    width: 1em;
+    padding: 0em;
+    margin-left: 10em;
+    margin-right: 30em;
+    height: 2em;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div id="contenedor" class="row">
         <div class="titleFormulario">Acreedor</div>
-        <button v-b-modal.modal-1 id="btncheckacreedor" @click="check()" class="col buttonAdd" >Checkear datos</button>
+        <button id="btncheckacreedor" @click="check()" class="col buttonAdd" >Checkear datos</button>
 
         <div class="row">
             <div class="col row">
@@ -63,7 +63,7 @@
             </div>
         </div>
  
-        <div class="row" v-if="tipoPersona == 'Natural'  && rol!='FUNCIONARIOOFICINA'">
+        <div class="row" v-if="tipoPersona == 'Natural'  && checked">
             <div class="col row" >
                 <div class="titles d-flex justify-content-start" >
                     APELLIDO PATERNO
@@ -107,13 +107,20 @@
 <script>
 import * as Countries from '../data/countries.js';
 export default {
+  mounted(){
+      if(this.rol!='FUNCIONARIOOFICINA'){
+          this.checked = true
+      }
+
+  },
   name: 'AcreedorFormularios',
   data() {
       const countries= Countries.default.countries;
-        return {
+      return {
             countries,
             rol: localStorage.rol,
-        }
+            checked: false
+      }
     },
     methods:{
         changeOption(){
@@ -134,26 +141,57 @@ export default {
         },
         check(){
             if(this.tipoPersona == "Natural"){
-                var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user'
-				var params = '{ "run": "'+this.run+'", "nombres": "'+this.nombres+'", "apellido_paterno": "'+this.Apaterno+'", "apellido_materno": "'+this.Amaterno+'"}'
-					fetch(url, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: params
-					}).then((response)=>{
-						response.json().then((reqResult) => {
-                            if(reqResult.valid){
-                                var color = document.getElementById("btncheckacreedor").style.background = "#5bd54b"
-                                console.log(color)
-                                //alert(reqResult.valid)
-                            }else{
-                                alert("Datos de ACREEDOR invalidos")
-                            }
+                if(this.rol == "FUNCIONARIONOTARIA"){
+                    var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user'
+                    var params = '{ "run": "'+this.run+'", "nombres": "'+this.nombres+'", "apellido_paterno": "'+this.Apaterno+'", "apellido_materno": "'+this.Amaterno+'"}'
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: params
+                        }).then((response)=>{
+                            response.json().then((reqResult) => {
+                                if(reqResult.valid){
+                                    var color = document.getElementById("btncheckacreedor").style.background = "#5bd54b"
+                                    console.log(color)
+                                    //alert(reqResult.valid)
+                                }else{
+                                    alert("Datos de ACREEDOR invalidos")
+                                }
 
+                            })
                         })
-                    })
+                }
+                else{
+                    if(this.run == ""){
+                        alert("No hay ningun run ingresado")
+                    }
+                    else{
+                        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.run
+                        var oReq = new XMLHttpRequest();
+                        oReq.open("GET", url);
+                        oReq.send();
+                        oReq.onload = ()=>{
+                            if(oReq.status == 200){
+                                var reqResult = JSON.parse(oReq.response);
+                                if (reqResult.valid){
+                                    this.checked = true
+                                    document.getElementById("btncheckacreedor").style.background = "#5bd54b"
+                                    setTimeout(() => {
+                                        document.getElementById("apellidopaterno").value = reqResult.apellido_paterno
+                                        document.getElementById("apellidomaterno").value = reqResult.apellido_materno
+                                        document.getElementById("nombresacreedor").value = reqResult.nombres
+                                    }, 300);
+
+                                }
+                                else{
+                                    alert(reqResult.msg)
+                                }
+                            }
+                        }
+                    }                
+                }          
             }
         }
     },
