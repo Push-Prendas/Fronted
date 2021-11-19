@@ -415,21 +415,15 @@ function load_vehicles(id_inscripcion){
 
 var repertorio_contrato_global;
 function load_rpsd(id_inscripcion){
-    
     getDocs(collection(db,"Solicitud_Inscripcion_Prenda")).then((info_Data) => { 
         var myid = info_Data.docs
-
         myid.forEach((p) => {
             var p_data = p.data();
             console.log(p.id)
             if(p.id == id_inscripcion){
                 repertorio_contrato_global = p_data.numeroRepertorioContratoPrenda
             }
-
         })
-
-        
-
     })
 }
 
