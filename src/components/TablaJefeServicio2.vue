@@ -5,21 +5,29 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;" @dblclick="rellenarTabla()">
             <tr>
-              <th scope="col">N° Repertorio Prenda</th>
-              <th scope="col">Notaria</th>
-              <th scope="col">Tipo</th>
+              <th scope="col">N° Rep Prenda</th>
+              <th scope="col">N° Rep Notaria</th>
+              <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Estado</th>
               <th></th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
-              <th>{{item.Rep}}</th>
-              <th>{{item.Notaria}}</th>
+              <th scope="row">{{item.Rep}}</th>
+              <th scope="row">{{item.Not}}</th>
+              <th scope="row">{{item.Oficina}}</th>
+              <th scope="row">{{item.Fecha}}</th>
               <th v-if="item.Tipo == 'I'">Inscripción</th>
               <th v-if="item.Tipo == 'M'">Modificación</th>
               <th v-if="item.Tipo == 'A'">Alzamiento</th>
-              <th>{{item.Fecha}}</th>
+              <td> 
+                  <div class="btn-group" role = "group" aria-label="Basic example">
+                      <th class="status">{{item.Estado}}</th>
+                  </div>
+              </td>
              <th class="rounded-pill" type="button" style="padding-left: 5px; padding-right: 5px; background-color:grey" @click="obtain_id_judge(item.id, item.Tipo)" >Revisar</th>
     
             </tr>
@@ -153,8 +161,9 @@ rellenarTabla() {
                     }
                     let item = {
                             "id" : insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
+                            "Oficina": insc[1]["oficina"],
                             "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Tipo":"I"}
@@ -173,8 +182,9 @@ rellenarTabla() {
                     }
                     let item = {
                             "id" : insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
+                            "Oficina": insc[1]["oficina"],
                             "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Tipo":"I"}
@@ -192,8 +202,9 @@ rellenarTabla() {
                     }
                     let item = {
                             "id" : insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
+                            "Oficina": insc[1]["oficina"],
                             "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Tipo":"I"}

@@ -3,7 +3,10 @@
         <table class="table" >
             <thead class="encabezadoTabla"   > 
                 <tr>
-                <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
+                <th scope="col">N° Rep Notaria</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Estado</th>
                 <th scope="col"></th>
                 </tr>
             </thead>
@@ -11,6 +14,7 @@
             <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
                 <td>{{item.Rep}}</td>
                 <td>{{item.Fecha}}</td>
+                <th>{{item.Tipo}}</th>
                 <td >
                     <p class="titleFormulario">{{item.Estado}} </p>
                 </td>
@@ -256,7 +260,7 @@ export default {
                             estad="Rechazo Notaria"
                         }
                         let item = {
-                                "Rep": insc[1]["numeroRepertorioNotario"],
+                                "Rep": insc[1]["numeroRepertorioContratoPrenda"],
                                 "Funcionario": insc[1]["usuarioCreador"],
                                 "Fecha": insc[1]["fechaRequirente"],
                                 "Estado": estad,

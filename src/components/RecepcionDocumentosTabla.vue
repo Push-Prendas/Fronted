@@ -4,17 +4,21 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Repertorio de Prenda</th>
-              <th scope="col">Oficina</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Adjuntar doc</th>
+				<th scope="col">N° Rep de Prenda</th>
+				<th scope="col">N° Rep de Notaria</th>
+				<th scope="col">Tipo</th>
+				<th scope="col">Oficina</th>
+				<th scope="col">Fecha</th>
+				<th scope="col">Adjuntar doc</th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
-              <th >{{item.Rep}}</th>
-              <th >{{item.Oficina}}</th>
-              <th >{{item.Fecha}}</th>
+				<th >{{item.Rep}}</th>
+				<th >{{item.Not}}</th>
+				<th >{{item.Tipo}}</th>
+				<th >{{item.Oficina}}</th>
+				<th >{{item.Fecha}}</th>
               <th><b-button v-b-modal.modal-6 class="col buttonAdd d-flex justify-content-center"><font-awesome-icon style= "margin-right:5px" icon="file-download" @click="changeIndex(index)" /></b-button></th>
             </tr>
           </tbody>
@@ -432,7 +436,8 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioNotario"],
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
 								"Fecha": insc[1]["fechaRequirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "I"}
@@ -453,7 +458,8 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioNotario"],
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
 								"Fecha": insc[1]["fechaRequirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "M"}
@@ -470,7 +476,8 @@ export default {
 					if(insc[1]["estadoPrimario"] == 3){
 						let item = {
 								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioNotario"],
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
 								"Fecha": insc[1]["fechaRequirente"],
 								"Oficina" : insc[1]["oficina"],
 								"Tipo": "A"}

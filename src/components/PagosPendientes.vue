@@ -2,16 +2,21 @@
     <div id="contenedor" class="row">     
         <table class="table">
             <thead class="encabezadoTabla">
-                <tr>
-                <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
+                <th scope="col">N° Rep Prenda</th>
+				<th scope="col">N° Rep Notaria</th>
+				<th scope="col">Tipo</th>
+				<th scope="col">Fecha</th>
+				<th scope="col">Monto</th>
+				<th scope="col">Estado</th>
                 <th scope="col"></th>
-                </tr>
             </thead>
             <tbody class="bodyTabla" v-if="items.length == 0">
                 <td>No data</td>
             </tbody>
             <tbody class="bodyTabla" v-else v-for="(item,index) in items" :key="index">
                 <td>{{item.Rep}}</td>
+				<td>{{item.Not}}</td>
+				<th>{{item.Tipo}}</th>
                 <td>{{item.Fecha}}</td>
                 <td>{{item.Monto}}</td>
                 <td class="d-flex justify-content-center">
@@ -491,11 +496,11 @@ export default {
                     if (insc[1]["firma"]){ //TODOS LOS DATOS TIENEN ESTE VALOR VACIO
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+							"Not":insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaRequirente"],
                             "Monto": insc[1]["montoTotal"],
-                            "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
                             "Tipo":"I"}
                         this.items.push(item)
@@ -517,11 +522,11 @@ export default {
                     if (insc[1]["firma"]){
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"], //numero repertorio notaria
-                            "Funcionario": insc[1]["usuarioCreador"], 
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+							"Not":insc[1]["numeroRepertorioNotario"],
+                            "Funcionario": insc[1]["usuarioCreador"],
                             "Fecha": insc[1]["fechaRequirente"],
-                            "Monto": insc[1]["montoTotal"], 
-                            "Notaria": insc[1]["nombre_notaria"],
+                            "Monto": insc[1]["montoTotal"],
                             "Estado": estad,
                             "Tipo":"M"}
                         ///console.log(insc[1]) //undefined values
@@ -547,11 +552,11 @@ export default {
                     if (insc[1]["firma"]){
                         let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioNotario"],
+                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+							"Not":insc[1]["numeroRepertorioNotario"],
                             "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": insc[1]["fechaRequirente"], //NO EXISTE TODAVIA
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Monto": insc[1]["montoTotal"],
-                            "Notaria": insc[1]["nombre_notaria"],
                             "Estado": estad,
                             "Tipo":"A"}
                         this.items.push(item)

@@ -18,7 +18,7 @@
             <tr>
 				<th >{{item.Rep}}</th>
 				<th >{{item.Not}}</th>
-				<th >{{item.nombre_oficina}}</th>
+				<th >{{item.Oficina}}</th>
 				<th >{{item.Fecha}}</th>
 				<td> 
 					<div class="btn-group" role = "group" aria-label="Basic example">
@@ -268,7 +268,6 @@ export default {
     methods:{
         rellenarTabla() {
             console.log("relleno tabla")
-            var today = new Date
             buscar_asignaciones(this.emailUser)
             setTimeout(() => {
               console.log("esto es lo que busco")
@@ -287,13 +286,13 @@ export default {
                     }
                     let item = {
 						"id": insc[0],
-						"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-						"Not":insc[1]["numeroRepertorioNotario"],
-						"Funcionario": insc[1]["usuarioCreador"],
-						"Fecha": insc[1]["fechaRequirente"],
-						"Estado": estad,
-						"Tipo": "I",
-						"nombre_oficina": insc[1]["oficina"]}
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
+								"Oficina": insc[1]["oficina"],
+								"Funcionario": insc[1]["usuarioCreador"],
+								"Fecha": insc[1]["fechaRequirente"],
+								"Estado": estad,
+								"Tipo": "I"}
                     console.log(item)
                     console.log(this.items)
                     this.items.push(item)
@@ -309,13 +308,13 @@ export default {
                     }
                     let item = {
 						"id": insc[0],
-						"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-						"Not":insc[1]["numeroRepertorioNotario"],
-						"Funcionario": 'funcionarionotaria@funcionarionotaria.cl',
-						"Fecha": today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
-						"Estado": estad,
-						"Tipo": "M",
-						"nombre_oficina": insc[1]["oficina"]}
+								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+								"Not":insc[1]["numeroRepertorioNotario"],
+								"Oficina": insc[1]["oficina"],
+								"Funcionario": insc[1]["usuarioCreador"],
+								"Fecha": insc[1]["fechaRequirente"],
+								"Estado": estad,
+								"Tipo": "M"}
 
                     this.items.push(item)
                     });
@@ -330,13 +329,13 @@ export default {
                     }
                     let item = {
                             "id": insc[0],
-                            "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+							"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 							"Not":insc[1]["numeroRepertorioNotario"],
-                            "Funcionario": insc[1]["usuarioCreador"],
-                            "Fecha": today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
-                            "Estado": estad,
-                            "Tipo": "A",
-							"nombre_oficina": insc[1]["oficina"]}
+							"Oficina": insc[1]["oficina"],
+							"Funcionario": insc[1]["usuarioCreador"],
+							"Fecha": insc[1]["fechaRequirente"],
+							"Estado": estad,
+							"Tipo": "A"}
 
                     this.items.push(item)
                     });

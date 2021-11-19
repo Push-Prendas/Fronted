@@ -40,9 +40,11 @@
                
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Repertorio Prenda</th>
+              <th scope="col">N° Rep Prenda</th>
+              <th scope="col">N° Rep Notaria</th>
               <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Tipo</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignada</th>
             </tr>
@@ -50,8 +52,10 @@
           <tbody v-for="(item,index) in items" :key="index">
             <tr>
               <th scope="row">{{item.Rep}}</th>
+              <th scope="row">{{item.Not}}</th>
               <th scope="row">{{item.Oficina}}</th>
               <th scope="row">{{item.Fecha}}</th>
+              <th scope="row">{{item.Tipo}}</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
                       <th class="status">{{item.Estado}}</th>
@@ -184,8 +188,9 @@ export default {
                             estad = "Rechazado Definitivo"
                         let item = {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -206,8 +211,9 @@ export default {
                             estad = "Rechazado Definitivo"
                         let item = {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -228,8 +234,9 @@ export default {
                             estad = "Rechazado Definitivo"
                         let item = {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -295,8 +302,9 @@ export default {
                             estad = "Rechazado Definitivo"
                         let item = {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -318,8 +326,9 @@ export default {
                             estad = "Rechazado Definitivo"
                         let item = {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -341,8 +350,9 @@ export default {
                             estad = "Rechazado Definitivo"
                         let item = {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
+                            "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],

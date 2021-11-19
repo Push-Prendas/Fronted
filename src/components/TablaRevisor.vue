@@ -10,14 +10,14 @@
               <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
-              <th scope="col">Asignada</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
 				<th >{{item.Rep}}</th>
 				<th >{{item.Not}}</th>
-				<th >{{item.nombre_oficina}}</th>
+				<th >{{item.Oficina}}</th>
 				<th scope="row">{{item.Fecha}}</th>
 				<td> 
 					<div class="btn-group" role = "group" aria-label="Basic example">
@@ -247,11 +247,11 @@ export default {
 								"id": insc[0],
 								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 								"Not":insc[1]["numeroRepertorioNotario"],
+								"Oficina": insc[1]["oficina"],
 								"Funcionario": insc[1]["usuarioCreador"],
 								"Fecha": insc[1]["fechaRequirente"],
 								"Estado": estad,
-								"Tipo": "I",
-								"nombre_oficina": insc[1]["oficina"]}
+								"Tipo": "I"}
 						console.log(item)
 						console.log(this.items)
 						this.items.push(item)
@@ -269,11 +269,11 @@ export default {
 								"id": insc[0],
 								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 								"Not":insc[1]["numeroRepertorioNotario"],
+								"Oficina": insc[1]["oficina"],
 								"Funcionario": insc[1]["usuarioCreador"],
 								"Fecha": insc[1]["fechaRequirente"],
 								"Estado": estad,
-								"Tipo": "M",
-								"nombre_oficina": insc[1]["oficina"]}
+								"Tipo": "M"}
 
 						this.items.push(item)
 						});
@@ -290,11 +290,11 @@ export default {
 								"id": insc[0],
 								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
 								"Not":insc[1]["numeroRepertorioNotario"],
+								"Oficina": insc[1]["oficina"],
 								"Funcionario": insc[1]["usuarioCreador"],
 								"Fecha": insc[1]["fechaRequirente"],
 								"Estado": estad,
-								"Tipo": "A",
-								"nombre_oficina": insc[1]["oficina"]}
+								"Tipo": "A"}
 
 						this.items.push(item)
 						});

@@ -5,11 +5,11 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;">
             <tr>
-              <th scope="col">N° Contrato Prenda</th>
-              <th scope="col">Oficina/Notaria</th>
-              <th scope="col">Fecha</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Asignada</th>
+              <th scope="col">ARREGLAR</th>
+              <th scope="col">ARREGLAR</th>
+              <th scope="col">ARREGLAR</th>
+              <th scope="col">ARREGLAR</th>
+              <th scope="col">ARREGLAR</th>
             </tr>
           </thead>
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >

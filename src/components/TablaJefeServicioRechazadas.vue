@@ -5,8 +5,11 @@
            <table class="table table-sm table-hover zui-table-rounded" >
           <thead style="color: white;background-color: #514BD5;" @dblclick="rellenarTabla()">
             <tr>
-              <th scope="col">N° Repertorio Prenda</th>
+              <th scope="col">N° Rep Prenda</th>
+              <th scope="col">N° Rep Notaria</th>
+              <th scope="col">Oficina/Notaria</th>
               <th scope="col">Fecha</th>
+              <th scope="col">Tipo</th>
               <th scope="col">Estado</th>
               <th scope="col">Asignar</th>
             </tr>
@@ -14,10 +17,15 @@
           <tbody class="bodyTabla"  v-for="(item,index) in items" :key="index" >
             <tr>
               <th scope="row">{{item.Rep}}</th>
+              <th scope="row">{{item.Not}}</th>
+              <th scope="row">{{item.Oficina}}</th>
               <th scope="row">{{item.Fecha}}</th>
+              <th v-if="item.Tipo == 'I'">Inscripción</th>
+              <th v-if="item.Tipo == 'M'">Modificación</th>
+              <th v-if="item.Tipo == 'A'">Alzamiento</th>
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
-                      <th class="rounded-pill" style="padding-left: 5px; padding-right: 5px; background-color:#B9AA23; color: white">Esperando revisor</th>
+                      <th class="status">{{item.Estado}}</th>
                   </div>
               </td>
               <td class="d-flex justify-content-center"> 

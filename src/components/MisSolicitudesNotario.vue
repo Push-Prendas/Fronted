@@ -4,7 +4,11 @@
         <table class="table" >
             <thead class="encabezadoTabla" >
                 <tr>
-                <th scope="col" v-for="(thead,index) in thread" :key="index">{{thead}}</th>
+                <th scope="col">N° Rep Prenda</th>
+                <th scope="col">Funcionario</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Estado</th>
                 <th scope="col"></th>
                 </tr>
             </thead>
@@ -13,6 +17,7 @@
                 <td>{{item.Rep}}</td>
                 <td>{{item.Funcionario}}</td>
                 <td>{{item.Fecha}}</td>
+                <th>{{item.Tipo}}</th>
                 <td >
                     <p class="titleFormulario">{{item.Estado}} </p>
                 </td>
