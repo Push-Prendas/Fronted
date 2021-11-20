@@ -10,10 +10,13 @@
 			<DeudoresLectura :items="items_Deudores" :modo="'leer'"/>
             <VehiculosLectura :tipoSolicitud="'RevisionDoc'" :items="total_itemsVehiculos" />
 			<ArchivosLectura :items="items_Contrato" :itemsAnexos="items_Anexos" />
+			<h4 style="color:#514BD5">Comentario Rechazo</h4>
+			<textarea id="comentarioRechazo" rows="4" cols="70" readonly>
+			</textarea>
             <!-- FALTA COLOCALAR LOS ARCHIVOS -->
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton"  @click="rechazar()">Rechazar</button>
-                <button class="col-2 titleButton" @click="aceptar()">Aprobar</button>
+                <button id="botonACEPTARRECEPTOR" class="col-2 titleButton" @click="aceptar()">Aprobar</button>
             </div>
         </div>
         
@@ -394,7 +397,34 @@ export default {
 
 	this.clean()
     console.log("MOUNT")
+    console.log(localStorage.pagado)
+    var aux = document.getElementById("botonACEPTARRECEPTOR");
+	if(localStorage.pagado == "Por pagar"){
+		aux.style.display = "none";
+	}
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
+
+    if(localStorage.tipo_judge=="I"){
+	    getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+	    	console.log("MOMENTO "+resp.docs[0].data().comment)
+	    	document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
+	    })
+
+    }else if(localStorage.tipo_judge =="A"){
+	    getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+	    	console.log("MOMENTO "+resp.docs[0].data().comment)
+	    	document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
+	    })
+
+    }else if(localStorage.tipo_judge == "M"){
+	    getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+	    	console.log("MOMENTO "+resp.docs[0].data().comment)
+	    	document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
+	    })
+    }
+
+
+
 
     buscador_especifico_solicitud(parseInt(localStorage.id_judge), localStorage.tipo_judge)
     setTimeout(() => { 
