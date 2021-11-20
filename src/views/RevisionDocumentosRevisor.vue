@@ -14,9 +14,11 @@
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton"  @click="rechazar()">Rechazar</button>
                 <button class="col-2 titleButton" id="botonACEPTARRECEPTOR" @click="aceptar()">Aprobar</button>
+                
             </div>
+            <h4 style="color:#514BD5">Comentario Rechazo</h4>
+            <textarea  id="comentarioRechazo" style="align:right" rows="2" cols="73"></textarea>
         </div>
-        
     </div>
 </template>
 <script scoped>
@@ -415,15 +417,11 @@ export default {
 
 
 	this.clean()
-    console.log("MOUNT")
+    console.log(localStorage.pagado)
+    var aux = document.getElementById("botonACEPTARRECEPTOR");
 	if(localStorage.pagado == "Por pagar"){
-		var aux = document.getElementById("botonACEPTARRECEPTOR");
-		aux.visibility = "hidden";
-	}else{
-		var aux2 = document.getElementById("botonACEPTARRECEPTOR");
-		aux2.visibility = "visible";
+		aux.style.display = "none";
 	}
-
 	
 
 
@@ -725,6 +723,7 @@ export default {
 
 
     var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
+    var commentText=document.getElementById("comentarioRechazo").value
     if(localStorage.tipo_judge.toString() == "I"){
 
 
@@ -745,8 +744,9 @@ export default {
         }).then(() => {
 			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
 							updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
-				aprovRevisor: false
-				,}).then(()=>this.$router.push({path: VOLVER}) )
+				aprovRevisor: false,
+				comment: commentText
+				}).then(()=>this.$router.push({path: VOLVER}) )
 			})
             
         })
@@ -803,7 +803,8 @@ export default {
 		}).then(() => {
 			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
 							updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
-				aprovRevisor: false
+				aprovRevisor: false,
+				comment: commentText
 				,}).then(()=>this.$router.push({path: VOLVER}) )
 			})
 			
@@ -838,7 +839,8 @@ export default {
 		}).then(() => {
 			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
 							updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
-				aprovRevisor: false
+				aprovRevisor: false,
+				comment: commentText
 				,}).then(()=>this.$router.push({path: VOLVER}) )
 			})
 			
