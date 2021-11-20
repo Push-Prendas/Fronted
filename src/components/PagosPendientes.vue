@@ -602,13 +602,14 @@ export default {
 				/*
 					SI OBTENER LA IP NO FUNCIONA
 					APAGAR ADBLOCKER O NO UTILIZAR BRAVE
+					AQUI ACTUALIZAR RVM
 				*/
 				console.log(localStorage.user +','+my_rpsd+','+this.monto)
 				var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
 				console.log("Phase 1 GETTING IP")
 				console.log(localStorage.rutLog)
 				var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
-				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "190.215.234.251"}'
+				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "54.167.53.130"}'
 					fetch(url, {
 						method: 'POST',
 						headers: {
