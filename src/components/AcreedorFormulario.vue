@@ -140,9 +140,10 @@ export default {
             this.$emit("getnombres",this.nombres.toString());
         },
         check(){
+            var url = ""
             if(this.tipoPersona == "Natural"){
                 if(this.rol == "FUNCIONARIONOTARIA"){
-                    var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user'
+                    url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user'
                     var params = '{ "run": "'+this.run+'", "nombres": "'+this.nombres+'", "apellido_paterno": "'+this.Apaterno+'", "apellido_materno": "'+this.Amaterno+'"}'
                         fetch(url, {
                             method: 'POST',
@@ -168,7 +169,7 @@ export default {
                         alert("No hay ningun run ingresado")
                     }
                     else{
-                        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.run
+                        url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + this.run
                         var oReq = new XMLHttpRequest();
                         oReq.open("GET", url);
                         oReq.send();

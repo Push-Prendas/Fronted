@@ -404,24 +404,24 @@ export default {
 	}
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
 
-    if(localStorage.tipo_judge=="I"){
-	    getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
-	    	console.log("MOMENTO "+resp.docs[0].data().comment)
-	    	document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
-	    })
+	if(localStorage.tipo_judge=="I"){
+		getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+			console.log("MOMENTO "+resp.docs[0].data().comment)
+			document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
+		})
 
-    }else if(localStorage.tipo_judge =="A"){
-	    getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
-	    	console.log("MOMENTO "+resp.docs[0].data().comment)
-	    	document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
-	    })
+	}else if(localStorage.tipo_judge =="A"){
+		getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+			console.log("MOMENTO "+resp.docs[0].data().comment)
+			document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
+		})
 
-    }else if(localStorage.tipo_judge == "M"){
-	    getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
-	    	console.log("MOMENTO "+resp.docs[0].data().comment)
-	    	document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
-	    })
-    }
+	}else if(localStorage.tipo_judge == "M"){
+		getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+			console.log("MOMENTO "+resp.docs[0].data().comment)
+			document.getElementById("comentarioRechazo").value = resp.docs[0].data().comment;
+		})
+	}
 
 
 

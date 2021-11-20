@@ -6,26 +6,29 @@
           <thead style="color: black;">
             <tr>
                 <th scope="col">
-                    Folio Repertorio Prenda
+                    Nº Repertorio Prenda
                     <div class="d-flex justify-content-center">
                         
-                        <input type="text"  id="foliorep" placeholder="N° Documento">      
+                        <input type="text"  id="foliorep" placeholder="N° Rep Prenda">      
                     </div>
                 </th>
                 <th scope="col">
-                    Año
+                    Nº Repertorio Notaria
                     <div class="d-flex justify-content-center">
-                        <input type="text" id="yearrep" placeholder="Año">      
+                        
+                        <input type="text"  id="folionot" placeholder="N° Rep Notaria">      
                     </div>
                 </th>
                 <th scope="col">
-                    Tipo de actuación
+                    Identificador Contratante
                     <div class="d-flex justify-content-center">
-                        <select id="tipoact" class="form-select">
-                            <option selected value="Inscripcion">Inscripcion</option>
-                            <option value="Modificacion">Modificacion</option>
-                            <option value="Alzamiento">Alzamiento</option>
-                        </select>   
+                        <input type="text" id="idcont" placeholder="Identificador Contratante">      
+                    </div>
+                </th>
+                <th scope="col">
+                    Identificador Transaccion
+                    <div class="d-flex justify-content-center">
+                        <input type="text" id="idtran" placeholder="Identificador Transaccion">      
                     </div>
                 </th>
                     <th scope="col">
@@ -87,73 +90,68 @@ var modificaciones_encontradasGlobal = []
 var alzamientos_encontradosGlobal = []
 
 
-async function buscar_solcitud_por_requisito(tipo_solicitud = "", year = "", folio = "", estado_solicitud = ""){
+async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", run = "", transaction_id = ""){
 	////DETALLE: USAR ESTADO Y ID ES NUMERO REPERTORIO PRENDA
 	//DEVUELVE EL ID DE LA SOLICITUD QUE CUMPLA CON LOS REQUISITOS ANTES MENCIONADOS
     console.log("PARAMETROS")
-    console.log("FOLIO: " + folio)
-    console.log("YEAR: " + year)
-	if(tipo_solicitud == "I" || tipo_solicitud == ""){
-        console.log("buscar inscripciones")	
-		await getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((per_data) => {
-			var my_docs = per_data.docs
-            console.log("Largo documento inscricpion: " + my_docs.length)
-			my_docs.forEach((d) => {
-				var my_sol = d.data();
-				var my_id = my_sol.numeroRepertorioContratoPrenda
-                if(my_sol.estadoSecundario > 0){
-                    var folio_prenda = my_id.split("-")[0]
-                    var year_prenda = my_id.split("-")[1]
-                    if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
-                        if(my_sol.estadoPrimario == estado_solicitud || estado_solicitud == ""){
-                            inscripciones_encontradasGlobal.push([d.id,my_sol])
-                        }
-                    }
+    console.log("buscar inscripciones")	
+    getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((per_data) => {
+        var my_docs = per_data.docs
+        console.log("Largo documento inscricpion: " + my_docs.length)
+        my_docs.forEach((d) => {
+            var my_sol = d.data();
+            var my_id = d.id;
+            if(my_sol.estadoSecundario > 0){
+                if((num_notaria == "" || num_notaria == my_sol.numeroRepertorioNotario) && 
+                (num_prenda == "" || num_prenda == my_sol.numeroRepertorioContratoPrenda) && 
+                (transaction_id == "" || transaction_id == my_sol.id_transaccion)){
+                    getDocs(collection(db, "Persona_Solicitud")).then((p) => {
+                        var per_docs = p.docs
+                        per_docs.forEach((p) => {
+                            var my_pData = p.data();
+                            if((run == "" || (run == my_pData.runPersona && my_id == my_pData.idInscripcion))){
+                                inscripciones_encontradasGlobal.push([my_id, my_sol])
+                            }
+                        })
+                    })
                 }
-			})
-		})
-	}
-	if (tipo_solicitud == "M" || tipo_solicitud == ""){
-        console.log("buscar modificaciones")	
-		await getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((per_data) => {
-			var my_docs = per_data.docs
-            console.log("Largo documento modificacion: " + my_docs.length)
-			my_docs.forEach((d) => {
-				var my_sol = d.data();
-				var my_id = my_sol.numeroRepertorioContratoPrenda
-                if(my_sol.estadoSecundario > 0){
-                    var folio_prenda = my_id.split("-")[0]
-                    var year_prenda = my_id.split("-")[1]
-                    if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
-                        if(my_sol.estadoPrimario == estado_solicitud || estado_solicitud == ""){
-                            modificaciones_encontradasGlobal.push([d.id,my_sol])
-                        }
-                    }
-                }
-			})
-		})
-
-	}
-	if (tipo_solicitud == "A" || tipo_solicitud == ""){
-        console.log("buscar alzamientos")
-		await getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((per_data) => {
-			var my_docs = per_data.docs
-            console.log("Largo documento alzamiento: " + my_docs.length)
-			my_docs.forEach((d) => {
-				var my_sol = d.data();
-				var my_id = my_sol.numeroRepertorioContratoPrenda
-                if(my_sol.estadoSecundario > 0){
-                    var folio_prenda = my_id.split("-")[0]
-                    var year_prenda = my_id.split("-")[1]
-                    if((folio_prenda == folio || folio == "") && (year_prenda == year || year == "")){
-                        if(my_sol.estadoPrimario == estado_solicitud || estado_solicitud == ""){
-                            alzamientos_encontradosGlobal.push([d.id,my_sol])
-                        }
-                    }
-                }
-			})
-		})
-	}
+            }
+        })
+    })
+    console.log("buscar modificaciones")	
+    getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((per_data) => {
+        var my_docs = per_data.docs
+        console.log("Largo documento modificacion: " + my_docs.length)
+        my_docs.forEach((d) => {
+            var my_sol = d.data();
+            var my_id = my_sol.numeroRepertorioContratoPrenda
+            if(my_sol.estadoSecundario > 0){
+                if((num_notaria == "" || num_notaria == my_sol.numeroRepertorioNotario) && 
+                (num_prenda == "" || num_prenda == my_sol.numeroRepertorioContratoPrenda) && 
+                (transaction_id == "" || transaction_id == my_sol.id_transaccion) && 
+                (run == "" || run == my_sol.rut_acreedor)){
+                    modificaciones_encontradasGlobal.push([my_id, my_sol])
+                }       
+            }
+        })
+    })
+    console.log("buscar alzamientos")
+    getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((per_data) => {
+        var my_docs = per_data.docs
+        console.log("Largo documento alzamiento: " + my_docs.length)
+        my_docs.forEach((d) => {
+            var my_sol = d.data();
+            var my_id = my_sol.numeroRepertorioContratoPrenda
+            if(my_sol.estadoSecundario > 0){
+                if((num_notaria == "" || num_notaria == my_sol.numeroRepertorioNotario) && 
+                (num_prenda == "" || num_prenda == my_sol.numeroRepertorioContratoPrenda) && 
+                (transaction_id == "" || transaction_id == my_sol.id_transaccion) && 
+                (run == "" || run == my_sol.rut_acreedor)){
+                    alzamientos_encontradosGlobal.push([my_id, my_sol])
+                }               
+            }
+        })
+    })
 	//TODAS LAS COSAS ENCONTRADAS
 	//FRONTEND MODIFIQUE DE AQUI
 
@@ -163,6 +161,10 @@ async function buscar_solcitud_por_requisito(tipo_solicitud = "", year = "", fol
 
 export default {
   mounted(){
+      this.items = []
+      inscripciones_encontradasGlobal = []
+      modificaciones_encontradasGlobal = []
+      alzamientos_encontradosGlobal = []
       buscar_solcitud_por_requisito()
       setTimeout(() => {
               if(this.inscripciones_encontradas.length > 0){
@@ -265,18 +267,10 @@ export default {
           alzamientos_encontradosGlobal = []
           console.log("BUSCANDO...")
           const folioRep = document.getElementById('foliorep').value
-          const yearRep = document.getElementById('yearrep').value
-          const tipoAct = document.getElementById('tipoact').value
-          console.log(folioRep + "," + yearRep + "," +  tipoAct)
-          var my_type = "T"
-          if (tipoAct == "Modificacion")
-            my_type = "M"
-          else if (tipoAct == "Alzamiento")
-            my_type = "A"
-          else if (tipoAct == "Inscripcion")
-            my_type = "I"
-          console.log(my_type)
-          buscar_solcitud_por_requisito(my_type, yearRep, folioRep)
+          const folioNot = document.getElementById('folionot').value
+          const idCont = document.getElementById('idcont').value
+          const tranId = document.getElementById('idtran').value
+          buscar_solcitud_por_requisito(folioNot, folioRep, idCont, tranId)
           setTimeout(() => {
               console.log("INSCRIPCIONES ENCONTRADAS: " + inscripciones_encontradasGlobal.length)
               if(inscripciones_encontradasGlobal.length > 0){
