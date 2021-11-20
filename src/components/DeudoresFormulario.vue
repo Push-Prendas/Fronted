@@ -52,7 +52,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" v-if="option == 'Natural'">
+                <button id="btncheckacreedor" @click="check()" class="col buttonAdd2" v-if="option == 'Natural' && !checked">Checkear datos</button>
+                <div class="row" v-if="option == 'Natural' && checked">
                     <div class="col row" >
                             <div class="titles d-flex" >
                                 APELLIDO PATERNO
@@ -138,6 +139,9 @@ export default {
   name: 'AcreedorFormularios',
   mounted(){
       this.items.length=0;
+      if(this.rol != "FUNCIONARIOOFICINA"){
+            this.checked = true
+      }
   },
   data() {
       const countries= Countries.default.countries;
@@ -155,6 +159,7 @@ export default {
             apellidomaterno:'',
             nombrecompleto:'',
             rol: localStorage.rol,
+            checked: false
         }
     },
     props: {
@@ -223,6 +228,7 @@ export default {
                         this.razonsocial="";
                         this.id="";
                         this.nombrecompleto="";
+                        this.checked = false
                     }
                     else{
                         alert(reqResult.msg)
@@ -236,6 +242,39 @@ export default {
         },
         setData(){
             this.$emit("getDeudores",this.items);
+        },
+        check(){
+            var run = document.getElementById("run").value
+            if(run == ""){
+                alert("No hay ningun run ingresado")
+            }
+            else{
+                var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4030/api/users/user?run=' + run
+                var oReq = new XMLHttpRequest();
+                oReq.open("GET", url);
+                oReq.send();
+                oReq.onload = ()=>{
+                    if(oReq.status == 200){
+                        var reqResult = JSON.parse(oReq.response);
+                        if (reqResult.valid){
+                            this.checked = true
+                            document.getElementById("btncheckacreedor").style.display = "none"
+                            setTimeout(() => {
+                                document.getElementById("apellidopaterno").value = reqResult.apellido_paterno
+                                document.getElementById("apellidomaterno").value = reqResult.apellido_materno
+                                document.getElementById("nombres").value = reqResult.nombres
+                                this.nombres = reqResult.nombres
+                                this.apellidopaterno = reqResult.apellido_paterno
+                                this.apellidomaterno = reqResult.apellido_materno
+                            }, 300);
+
+                        }
+                        else{
+                            alert(reqResult.msg)
+                        }
+                    }
+                }
+            }           
         }
     }
 
@@ -309,5 +348,14 @@ export default {
     color: white;
     border-radius: 15em;
     margin-top: 2em;
+}
+.buttonAdd2{
+    background: #d54b4b;
+    color: white;
+    border-radius: 15em;
+    padding: 0em;
+    margin-left: 10em;
+    margin-right: 30em;
+    height: 2em;
 }
 </style>
