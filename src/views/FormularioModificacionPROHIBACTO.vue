@@ -12,6 +12,7 @@
             @getBienes="getBienes" @getNotaria="getNotaria"/> 
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
+            <Bitacora/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton" @click="modificar(false)">Guardar</button>
@@ -34,6 +35,7 @@ import RequirenteFormulario from '../components/RequirenteFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import Bitacora from '../components/BitacoraFormulario.vue'
 //VALIDA EL NUMERO DE REPERTORIO
 function validate_number(inputNumber){
     if(!inputNumber.includes("-")) return false;
@@ -465,7 +467,8 @@ export default {
     AnexosFormulario,
     Monto,
     Menu,
-    Navbar
+    Navbar,
+    Bitacora
   },
   methods: {
 

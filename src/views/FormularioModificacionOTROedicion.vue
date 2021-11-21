@@ -16,6 +16,7 @@
             </div>
             <ContratoFormulario  v-if="rol !== 'FUNCIONARIOOFICINA'" @getContrato="getContrato"/>
             <AnexosFormulario v-if="rol !== 'FUNCIONARIOOFICINA'" @getAnexos="getAnexos"/>
+            <Bitacora/>
             <Monto/>
             <div class="row d-flex justify-content-center" id="contenedor">
                 <button class="col-2 titleButton" @click="modificar(false)">Guardar</button>
@@ -34,6 +35,7 @@ import AntecedentesFormularioALZA from '../components/AntecedentesFormularioMODI
 import ContratoFormulario from '../components/ContratoFormulario.vue'
 import AnexosFormulario from '../components/AnexosFormulario.vue'
 import RequirenteFormulario from '../components/RequirenteFormulario.vue'
+import Bitacora from '../components/BitacoraFormulario.vue'
 
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
@@ -642,7 +644,8 @@ export default {
     AnexosFormulario,
     Monto,
     Menu,
-    Navbar
+    Navbar,
+    Bitacora
   },
   methods: {
 
