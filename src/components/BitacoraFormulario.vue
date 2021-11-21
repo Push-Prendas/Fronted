@@ -8,6 +8,7 @@
                     <th scope="col">Comentario</th>
                     <th scope="col">Fecha de Cambio</th>
                     <th scope="col">Tipo</th>
+                    <th scope="col">estadoPrimario</th>
                     </tr>
                 </thead>
                 <tbody class="bodyTabla" v-if="items.length == 0">
@@ -20,6 +21,7 @@
                     <td v-if="item.idInscripcion != ''">I</td>
                     <td v-if="item.idAlzamiento != '' ">A</td>
                     <td v-if="item.idModificacion != ''" >M</td>
+                    <td> {{item.estadoPrimario}} </td>
 
                 </tbody>
     
@@ -30,8 +32,8 @@
 </template>
 
 <script>
-import { collection, getDocs, setDoc, doc, updateDoc} from "firebase/firestore";
-import {db, storage} from "@/main";
+import { collection, getDocs} from "firebase/firestore";
+import {db} from "@/main";
 export default {
   name: 'AcreedorFormularios',
   data() {
@@ -63,7 +65,7 @@ export default {
             console.log("BITACORA")
 
             bit.docs.forEach(element => {
-                if(element.data().idInscripcion == localStorage.idSol){
+                if(element.data().idInscripcion == localStorage.idSol || element.data().idAlzamiento == localStorage.idSol || element.data().idModificacion == localStorage.idSol){
                     this.items.push(element.data())
                 }
                 

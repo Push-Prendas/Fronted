@@ -133,30 +133,47 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		});
 
 	})
-	var today = new Date();
-	getDocs(collection(db, "Bitacora")).then((bit_data) => {
-		var id_bit = bit_data.docs.length;
-		var id_insc = ""
-		var id_mod = ""
-		var id_alz = ""
-		if(tipo_de_solicitud == "I"){
-			id_insc = id_solicitud
-		}
-		else if(tipo_de_solicitud == "M"){
-			id_mod = id_solicitud
-		}
-		else if(tipo_de_solicitud == "A"){
-			id_alz = id_solicitud
-		}
-		setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
-			idInscripcion: id_insc,
-			idModificacion: id_mod,
-			idAlzamiento: id_alz,
-			idUser: user_id,
-			comment: change_message[estado_secundario],
-			fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
-		})
-	})
+
+    getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((n) => {
+        var estado_primario = ""
+        console.log("INSCRIPCION TEST")
+          var myid = n.docs
+          myid.forEach((p) => {
+            console.log(p.id)
+            if(p.id.toString() == id_solicitud.toString()){
+                console.log("MISMO ID")
+                estado_primario = p.data().estadoPrimario
+                
+            }
+
+            var today = new Date();
+            getDocs(collection(db, "Bitacora")).then((bit_data) => {
+                var id_bit = bit_data.docs.length;
+                var id_insc = ""
+                var id_mod = ""
+                var id_alz = ""
+                if(tipo_de_solicitud == "I"){
+                    id_insc = id_solicitud
+                }
+                else if(tipo_de_solicitud == "M"){
+                    id_mod = id_solicitud
+                }
+                else if(tipo_de_solicitud == "A"){
+                    id_alz = id_solicitud
+                }
+                setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+                    idInscripcion: id_insc,
+                    idModificacion: id_mod,
+                    idAlzamiento: id_alz,
+                    idUser: user_id,
+                    comment: change_message[estado_secundario],
+                    fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate(),
+                    estadoPrimario: estado_primario
+                })
+            })
+          })
+     })
+
 	
 }
 
@@ -349,9 +366,9 @@ function alzamiento(
             alert("Solicitud Guardada Exitosamente")
 				}else{
        
-
+        modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
         if (rol_oficina){
-            modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
+            
             setTimeout(() => {
                 var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
                 var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos)) +'}' //CORREGIR ESTA CUESTION
@@ -440,6 +457,11 @@ function pendiente(){
 
 export default {
   mounted(){
+
+     
+
+
+          
 
       pendiente()
     //buscador_especifico_solicitud(36,"I")
