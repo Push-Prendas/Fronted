@@ -7,6 +7,7 @@
                     <tr>
                     <th scope="col">Comentario</th>
                     <th scope="col">Fecha de Cambio</th>
+                    <th scope="col">Tipo</th>
                     </tr>
                 </thead>
                 <tbody class="bodyTabla" v-if="items.length == 0">
@@ -15,6 +16,10 @@
                 <tbody class="bodyTabla" v-else v-for="(item,index) in items" id="tablapatentesinscripcion" :key="index">
                     <td>{{item.comment}}</td>
                     <td>{{item.fechaCambio}}</td>
+
+                    <td v-if="item.idInscripcion != ''">I</td>
+                    <td v-if="item.idAlzamiento != '' ">A</td>
+                    <td v-if="item.idModificacion != ''" >M</td>
 
                 </tbody>
     
