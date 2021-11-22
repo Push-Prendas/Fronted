@@ -63,7 +63,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 	numero_repertorio_notario, prohibicion_gravar_enajenar, notaria, nombre_requirente,
 	run_requiriente,correo_requiriente, fecha_requiriente, activo_fijo, bienes_agropecuarios, derechos_intangibles, prenda_vehiculo, monto_total, send_flag,
 	tipo_persona_acreedor, run_acreedor, nombres_acreedor,  pais_persona,
-	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, Oficina, userid
+	constituyentes=[], deudores=[], vehiculos=[], contratos=[], archivos=[], rol_oficina=false, Oficina, userid, monto_act
 	){
 
 	//Manejar estado de solicitud primario y secundario"
@@ -155,6 +155,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				bienesAgropecuarios: bienes_agropecuarios,
 				derechosIntangibles: derechos_intangibles,
 				prendaVehiculo: prenda_vehiculo,
+				montoActuacion: monto_act,
 				montoTotal: monto_total,
 				estadoPrimario: estado_inicial,
 				estadoSecundario: 0,
@@ -669,7 +670,8 @@ export default {
 					this.Bienes[1], 
 					this.Bienes[2], 
 					this.Bienes[3], 
-					preciosGlobal[0]["precio"], 
+					//parseInt(document.getElementById('monto').value), 
+					this.monto,
 					flags, 
 					this.tipoPersona, 
 					runacreedor.toString(), //id , rut y run
@@ -682,7 +684,8 @@ export default {
 					this.anexos, 
 					localStorage.rol == 'FUNCIONARIOOFICINA',
 					"mi oficina",
-					localStorage.mail
+					localStorage.mail,
+					preciosGlobal[0]["precio"]
 					)
 			setTimeout(() => {
 				this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})			

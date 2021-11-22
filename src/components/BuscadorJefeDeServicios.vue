@@ -31,7 +31,7 @@
                         <input type="text" id="idtran" placeholder="Identificador Transaccion">      
                     </div>
                 </th>
-                    <th scope="col">
+                <th scope="col">
                     <div class="d-flex justify-content-center">
                         <button class="d-flex justify-content-center button" @click="busqueda()">Buscar</button>   
                     </div>

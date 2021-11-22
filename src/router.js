@@ -33,8 +33,8 @@ import FormularioModificacion4Edit from "./views/FormularioModificacionOTROedici
 import Parametros from "./views/Admin/parametros.vue"
 
 import pagosBoss from "./views/JefeServicios/pagos.vue";
-import rechazoBoss from "./views/JefeServicios/recaudacion.vue";
-import recuadacionBoss from "./views/JefeServicios/rechazos.vue";
+import rechazoBoss from "./views/JefeServicios/rechazos.vue";
+import recuadacionBoss from "./views/JefeServicios/recaudacion.vue";
 
 
 const routes = [
