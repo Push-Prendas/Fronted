@@ -32,6 +32,10 @@ import FormularioModificacion4Edit from "./views/FormularioModificacionOTROedici
 
 import Parametros from "./views/Admin/parametros.vue"
 
+import pagosBoss from "./views/JefeServicios/pagos.vue";
+import rechazoBoss from "./views/JefeServicios/recaudacion.vue";
+import recuadacionBoss from "./views/JefeServicios/rechazos.vue";
+
 
 const routes = [
     {
@@ -229,6 +233,24 @@ const routes = [
     path: "/Dashboard/:rol/:username/Parametros",
     name: "Dashboard",
     component: Parametros,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/ResumendePagos",
+    name: "Dashboard",
+    component: pagosBoss,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/Recaudacion",
+    name: "Dashboard",
+    component: recuadacionBoss,
+    props: true
+  },
+  {
+    path: "/Dashboard/:rol/:username/Rechazos",
+    name: "Dashboard",
+    component: rechazoBoss,
     props: true
   },
   {

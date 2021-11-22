@@ -89,7 +89,7 @@ export default {
           opciones = ['Tareas','Buscador'] 
           break
         case "JEFEDESERVICIO":
-          opciones = ['Tareas','Buscador', 'Informes']
+          opciones = ['Tareas','Buscador', 'Resumen de Pagos', 'Recaudacion', 'Rechazos']
           break
         case "FUNCIONARIOOFICINA":
           opciones = ['Mis Solicitudes','Inscripcion de contrato de prendas', 'Modificacion de contrato de prendas', 'Alzamiento de contrato de prendas', "Buscador"]
