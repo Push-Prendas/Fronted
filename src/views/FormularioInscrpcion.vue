@@ -164,6 +164,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				firma: false,
 				id_transaccion: -1,
 			}).then(() => {
+				console.log("Guardando inscripcion")
 				//TABLAS RELACIONADAS
 				getDocs(collection(db, "Patente_por_Inscripcion")).then((pat_data) => {
 					var patente_id = pat_data.docs.length + 1;
@@ -690,14 +691,7 @@ export default {
 			setTimeout(() => {
 				this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})			
 				this.downloadWithCSS()
-			}, 1000);
-					
-				
-			
-			
-			
-			
-
+			}, 6000);
 		},
 		
   },
