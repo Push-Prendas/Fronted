@@ -437,7 +437,7 @@ function load_vehicles(id_inscripcion){
 		var my_cars = car_Data.docs
 		my_cars.forEach((p) => {
 			var p_data = p.data();
-            if(p_data.idInscripcion == id_inscripcion)
+            if(p_data.idInscripcion == id_inscripcion )
                 autoGlobal.push(p_data)
 		})
         console.log("AUTOS: ")
@@ -597,103 +597,77 @@ export default {
 	},
 	updatePago(item){
 		modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
-			setTimeout(() => {
-				
-				/*
-					SI OBTENER LA IP NO FUNCIONA
-					APAGAR ADBLOCKER O NO UTILIZAR BRAVE
-					AQUI ACTUALIZAR RVM
-				*/
-				console.log(localStorage.user +','+my_rpsd+','+this.monto)
-				var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
-				console.log("Phase 1 GETTING IP")
-				console.log(localStorage.rutLog)
-				var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
-				var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "54.167.53.130"}'
-					fetch(url, {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: params
-					}).then((response)=>{
-						response.json().then((reqResult) => {
-							if (item.Tipo=="I"){
-								updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",item.id),{
-								id_transaccion: reqResult.transaction_id,
-								}).then(() => {
-									console.log("id_transaccion asignado")
-								})
-							}else if (item.Tipo=="M"){
-								updateDoc(doc(db, "Solicitud_Modificacion_Prenda",item.id),{
-								id_transaccion: reqResult.transaction_id,
-								}).then(() => {
-									console.log("id_transaccion asignado")
-								})
-							}else if (item.Tipo=="A"){
-								updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",item.id),{
-								id_transaccion: reqResult.transaction_id,
-								}).then(() => {
-									console.log("id_transaccion asignado")
-								})
-								
-							}
-							console.log(reqResult.transaction_id)
-							alert(reqResult.msg)
-							
-						})
-
-						load_vehicles(item.id)
-
-						var tipoMod = ""
-
-						
-						getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((the_data) => {
-							the_data.docs.forEach((doc) =>{
-								if(doc.data().tipoModificacion  == 1){
-									tipoMod = "AlzPN"
-								}
-								else if(doc.data().tipoModificacion  == 2){
-									tipoMod = "CA"
-								}
-								else if(doc.data().tipoModificacion  == 3){
-									tipoMod = "AlzPH"
-								}else{
-									tipoMod = "AlzPH"
-								}
-
+		setTimeout(() => {
+			
+			/*
+				SI OBTENER LA IP NO FUNCIONA
+				APAGAR ADBLOCKER O NO UTILIZAR BRAVE
+				AQUI ACTUALIZAR RVM
+			*/
+			console.log(localStorage.user +','+my_rpsd+','+this.monto)
+			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
+			console.log("Phase 1 GETTING IP")
+			console.log(localStorage.rutLog)
+			var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
+			var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "54.167.53.130"}'
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: params
+				}).then((response)=>{
+					response.json().then((reqResult) => {
+						if (item.Tipo=="I"){
+							updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",item.id),{
+							id_transaccion: reqResult.transaction_id,
+							}).then(() => {
+								console.log("id_transaccion asignado")
 							})
+						}else if (item.Tipo=="M"){
+							updateDoc(doc(db, "Solicitud_Modificacion_Prenda",item.id),{
+							id_transaccion: reqResult.transaction_id,
+							}).then(() => {
+								console.log("id_transaccion asignado")
+							})
+						}else if (item.Tipo=="A"){
+							updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",item.id),{
+							id_transaccion: reqResult.transaction_id,
+							}).then(() => {
+								console.log("id_transaccion asignado")
+							})
+						}
+						console.log(reqResult.transaction_id)
+						//alert(reqResult.msg)
+					})
 
+					load_vehicles(item.id)
+					var tipoMod = ""
+					if (item.Tipo=="M"){
+						getDocs(collection(db, "Solicitud_Modificacion_Prenda")).where('id'==item.id).then((the_data) => {
+							var doc = the_data.doc
+							if(doc.data().tipoModificacion  == 1){
+								tipoMod = "AlzPN"
+							}else if(doc.data().tipoModificacion  == 2){
+								tipoMod = "CA"
+							}else {
+								tipoMod = false
+							}
 						})
-
-
-						setTimeout(() => {
-
-							autoGlobal.forEach((data)=>{
-
-								var url2 = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/anotation'
-								var type = ""
-
-								if(item.Tipo == "I"){
-									type = "PN"
-
-								}
-								
-								if(item.Tipo == "M"){
-									type = tipoMod
-
-								}
-								
-								if(item.Tipo == "A"){
-									type = "AlzPN"
-
-								}
-
-								console.log("REPERTORIO")
-								
-
-
-								
+					}
+					setTimeout(() => {
+						autoGlobal.forEach((data)=>{
+							var url2 = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/anotation'
+							var type = ""
+							if(item.Tipo == "I"){
+								type = "PN"
+							}else if(item.Tipo == "M"){
+								type = tipoMod
+							}else if(item.Tipo == "A"){
+								type = "AlzPN"
+							}
+							console.log("REPERTORIO")
+							if(type!=false){
 								var params2 =  '{"patente": "' + data.patente + '", "tipo":"' + type + '", "numero_repertorio":"'  + real_rpsd +  '"}'
 								console.log(params2)
 								fetch(url2, {
@@ -704,27 +678,18 @@ export default {
 									body: params2
 								}).then((response2)=>{
 										response2.json().then((reqResult) => {
-											console.log("INGRESAR")
+											console.log("Ingresando Anotaciones a RVM")
 											console.log(reqResult)
-											console.log(reqResult.msg)
+											console.log(reqResult.msg+"para patente:"+data.patente)
 									})
-
 								})
-
-							})
-
-							
-						},3000)
-
-
-
-
-					})
-			}, 1500);
+							}			
+						})					
+					},3000)
+				})
+		}, 1500);
 	}
-	
   }
-
 }
 
 </script>

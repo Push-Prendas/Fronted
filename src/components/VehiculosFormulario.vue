@@ -310,6 +310,7 @@ export default {
                         if(reqResult.valid){
                             //alert(reqResult.valid)
                             patValida=true
+                            console.log(patValida)
                             
                         }
                         else{
@@ -337,6 +338,7 @@ export default {
                         if(reqResult.valid){
                             //alert(reqResult.valid)
                             patPerteneceaContr = true 
+                            console.log(patPerteneceaContr)
                         }
                         else{
                             alert("Patente NO pertenece a constituyentes")
@@ -358,14 +360,19 @@ export default {
                         console.log(reqResult)
                         if(reqResult.success){
                             //alert(reqResult.success)
-                            patPerteneceaContr = true 
+                            partSinProces = true 
+                            console.log(partSinProces)
                         }
                         else{
                             alert("La Patente tiene Solicitudes pendientes")
                         }
                     })
                 })
-                if(patValida && patPerteneceaContr && partSinProces){
+
+                console.log(patValida, patPerteneceaContr , partSinProces)
+                setTimeout(() => {
+                    if(patValida && patPerteneceaContr && partSinProces){
+                    console.log("entre...09")
                     let item = {
                                     "patente": this.patente,
                                     "rvm": this.rvm,
@@ -380,6 +387,8 @@ export default {
                     this.rvm =false;
                     this.GoE=false;
                 }
+                }, 1500);
+                
                 
             }
             else{
