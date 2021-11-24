@@ -65,7 +65,7 @@
                   </div>
               </td>
               <td> 
-                  <div class="tamanoTipoDocumento">
+                  <div >
                       <select id="asignado" class="form-select" v-model="tipoDoc" @change="changeOption()">
                           <option selected value="Revisor #1">Revisor #1</option>
                           <option value="revisor #2">Revisor #2</option>
@@ -91,6 +91,9 @@ var alzamientos_encontradosGlobal = []
 
 
 async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", run = "", transaction_id = ""){
+    inscripciones_encontradasGlobal = []
+    modificaciones_encontradasGlobal = []
+    alzamientos_encontradosGlobal = []
 	////DETALLE: USAR ESTADO Y ID ES NUMERO REPERTORIO PRENDA
 	//DEVUELVE EL ID DE LA SOLICITUD QUE CUMPLA CON LOS REQUISITOS ANTES MENCIONADOS
     console.log("PARAMETROS")
@@ -105,12 +108,18 @@ async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", 
                 if((num_notaria == "" || num_notaria == my_sol.numeroRepertorioNotario) && 
                 (num_prenda == "" || num_prenda == my_sol.numeroRepertorioContratoPrenda) && 
                 (transaction_id == "" || transaction_id == my_sol.id_transaccion)){
+                    
                     getDocs(collection(db, "Persona_Solicitud")).then((p) => {
                         var per_docs = p.docs
+                        var id=[]
                         per_docs.forEach((p) => {
                             var my_pData = p.data();
                             if((run == "" || (run == my_pData.runPersona && my_id == my_pData.idInscripcion))){
-                                inscripciones_encontradasGlobal.push([my_id, my_sol])
+                                if( !id.includes(my_id) ){
+                                    id.push(my_id)
+                                    inscripciones_encontradasGlobal.push([my_id, my_sol])
+                                }
+                                
                             }
                         })
                     })
@@ -162,6 +171,9 @@ async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", 
 export default {
   mounted(){
       this.items = []
+      this.inscripciones_encontradas = []
+      this.modificaciones_encontradas = []
+      this.alzamientos_encontrados = []
       inscripciones_encontradasGlobal = []
       modificaciones_encontradasGlobal = []
       alzamientos_encontradosGlobal = []
@@ -170,7 +182,7 @@ export default {
               if(this.inscripciones_encontradas.length > 0){
                   this.inscripciones_encontradas.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -193,7 +205,7 @@ export default {
               if(this.modificaciones_encontradas.length > 0){
                   this.modificaciones_encontradas.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -216,7 +228,7 @@ export default {
               if(this.alzamientos_encontrados.length > 0){
                   this.alzamientos_encontrados.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -262,6 +274,9 @@ export default {
   methods:{
       busqueda(){
           this.items = []
+          this.inscripciones_encontradas = []
+          this.modificaciones_encontradas = []
+          this.alzamientos_encontrados = []
           inscripciones_encontradasGlobal = []
           modificaciones_encontradasGlobal = []
           alzamientos_encontradosGlobal = []
@@ -270,13 +285,14 @@ export default {
           const folioNot = document.getElementById('folionot').value
           const idCont = document.getElementById('idcont').value
           const tranId = document.getElementById('idtran').value
+          console.log("INSCRIPCIONES ENCONTRADAS98: " + inscripciones_encontradasGlobal.length +" y "+ this.inscripciones_encontradas.length)
           buscar_solcitud_por_requisito(folioNot, folioRep, idCont, tranId)
           setTimeout(() => {
-              console.log("INSCRIPCIONES ENCONTRADAS: " + inscripciones_encontradasGlobal.length)
+              console.log("INSCRIPCIONES ENCONTRADAS99: " + inscripciones_encontradasGlobal.length +" y "+ this.inscripciones_encontradas.length)
               if(inscripciones_encontradasGlobal.length > 0){
                   inscripciones_encontradasGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -300,7 +316,7 @@ export default {
               if(modificaciones_encontradasGlobal.length > 0){
                   modificaciones_encontradasGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -324,7 +340,7 @@ export default {
               if(alzamientos_encontradosGlobal.length > 0){
                   alzamientos_encontradosGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"

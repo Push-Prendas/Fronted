@@ -1,5 +1,5 @@
 <template>
-    <div id="TablaRevisor">
+    <div id="BUSCADOR">
         <div style="padding:50px; margin-left:300px">
         <table class="table table-sm table-hover zui-table-rounded" >
                
@@ -171,7 +171,7 @@ export default {
               if(this.inscripciones_encontradas.length > 0){
                   this.inscripciones_encontradas.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -194,7 +194,7 @@ export default {
               if(this.modificaciones_encontradas.length > 0){
                   this.modificaciones_encontradas.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -217,7 +217,7 @@ export default {
               if(this.alzamientos_encontrados.length > 0){
                   this.alzamientos_encontrados.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -240,7 +240,7 @@ export default {
           }, 1500)
 
   },
-  name: 'TablaRevisor',
+  name: 'BUSCADOR',
   props: {
         opcion:Array,
         username:{
@@ -285,7 +285,7 @@ export default {
               if(inscripciones_encontradasGlobal.length > 0){
                   inscripciones_encontradasGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -297,7 +297,7 @@ export default {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
                             "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -309,7 +309,7 @@ export default {
               if(modificaciones_encontradasGlobal.length > 0){
                   modificaciones_encontradasGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -321,7 +321,7 @@ export default {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
                             "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],
@@ -333,7 +333,7 @@ export default {
               if(alzamientos_encontradosGlobal.length > 0){
                   alzamientos_encontradosGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -345,7 +345,7 @@ export default {
                             "Rep": insc[1]["numeroRepertorioContratoPrenda"],
                             "Not":insc[1]["numeroRepertorioNotario"],
                             "Oficina": insc[1]["oficina"],
-                            "Fecha": insc[1]["fechaSuscripcion"],
+                            "Fecha": insc[1]["fechaRequirente"],
                             "Estado": estad,
                             "Asignada": "",
                             "ID": insc[0],

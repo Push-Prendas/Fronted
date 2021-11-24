@@ -7,6 +7,7 @@
           <BuscadorReceptor v-if="rol == 'RECEPTOR'"/>
           <BuscadorRevisor v-if="rol == 'REVISOR'"/>
           <BuscadorFuncionarioNotaria v-if="rol == 'FUNCIONARIONOTARIA'"/>
+          <BuscadorFuncionarioNotaria v-if="rol == 'FUNCIONARIOOFICINA'"/>
           <BuscadorNotario v-if="rol == 'NOTARIO'"/>
         </div>
 

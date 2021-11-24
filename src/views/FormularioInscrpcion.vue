@@ -478,7 +478,7 @@ export default {
   mounted(){
 	see_prices()
 	setTimeout(() => {
-		console.log("DINERO")
+		//console.log("DINERO")
 		const monto = document.getElementById('monto')
 		monto.innerHTML = "$" + preciosGlobal[0]["precio"]
 	}, 1500);

@@ -49,6 +49,8 @@
 </template>
 
 <script>
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 import * as Countries from '../data/countries.js';
 export default {
   mounted(){
@@ -80,7 +82,7 @@ export default {
         },
         fecha:{
             type: String,
-            default: '',
+            default: date,
         }, 
         nombrecompleto:{
             type: String,

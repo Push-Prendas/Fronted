@@ -237,7 +237,7 @@ export default {
               if(this.inscripciones_encontradas.length > 0){
                   this.inscripciones_encontradas.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -260,7 +260,7 @@ export default {
               if(this.modificaciones_encontradas.length > 0){
                   this.modificaciones_encontradas.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -283,7 +283,7 @@ export default {
               if(this.alzamientos_encontrados.length > 0){
                   this.alzamientos_encontrados.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -351,7 +351,7 @@ export default {
               if(inscripciones_encontradasGlobal.length > 0){
                   inscripciones_encontradasGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -375,7 +375,7 @@ export default {
               if(modificaciones_encontradasGlobal.length > 0){
                   modificaciones_encontradasGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
@@ -399,7 +399,7 @@ export default {
               if(alzamientos_encontradosGlobal.length > 0){
                   alzamientos_encontradosGlobal.forEach((insc)=>{
                         var estad;
-                        if (insc[1]["estadoPrimario"] == 4)
+                        if (insc[1]["estadoPrimario"] <= 4)
                             estad = "En revision"
                         else if (insc[1]["estadoPrimario"] == 5)
                             estad = "Aceptado"
