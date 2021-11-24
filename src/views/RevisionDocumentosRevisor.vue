@@ -307,6 +307,8 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 					solicitud_relacionada_id = doc.id;
 					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
+						console.log("All docum")
+						console.log(all_docs)
 						all_docs.forEach((d) => {
 							var my_doc = d.data();
 							if (my_doc.contrato){

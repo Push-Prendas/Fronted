@@ -490,7 +490,11 @@ export default {
                 this.inscripciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]==0){
                         estad="Por pagar"
-                    }else{
+                    }
+					else if (insc[1]["estadoSecundario"]==1){
+						estad="Esperando Confirmación"
+					}
+					else{
                         estad="Pagado"
                     }
                     if (insc[1]["firma"]){ //TODOS LOS DATOS TIENEN ESTE VALOR VACIO
@@ -516,7 +520,11 @@ export default {
                 this.modificaciones_encontradas.forEach((insc)=>{
                    if(insc[1]["estadoSecundario"]==0){
                         estad="Por pagar"
-                    }else{
+                    }
+					else if (insc[1]["estadoSecundario"]==1){
+						estad="Esperando Confirmación"
+					}
+					else{
                         estad="Pagado"
                     }
                     if (insc[1]["firma"]){
@@ -546,7 +554,11 @@ export default {
                 this.alzamientos_encontrados.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]==0){
                         estad="Por pagar"
-                    }else{
+                    }
+					else if (insc[1]["estadoSecundario"]==1){
+						estad="Esperando Confirmación"
+					}
+					else{
                         estad="Pagado"
                     }
                     if (insc[1]["firma"]){
