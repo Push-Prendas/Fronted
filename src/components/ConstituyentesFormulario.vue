@@ -251,13 +251,24 @@ export default {
 
         },
         setData(){
-            this.$emit("getConstituyentes",this.items);
-            var constitu = []
-            this.items.forEach(cons => {
-                constitu.push('"'+cons.Id+'"')
-                
-            });
-            localStorage.constituyentes = constitu
+
+            setTimeout(() => {
+
+                this.$emit("getConstituyentes",this.items);
+                var constitu = []
+
+                this.items.forEach(cons => {
+                    constitu.push('"'+cons.Id+'"')
+                    
+                });
+                console.log("MY CONSTITUYETE")
+                console.log(constitu)
+                console.log(this.items)
+                localStorage.constituyentes = constitu
+
+            }, 1500);
+
+
         },
         add() {
             var oReq = new XMLHttpRequest();

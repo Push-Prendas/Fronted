@@ -284,6 +284,16 @@ export default {
         },
         borrar(index){
             this.items.splice(index,1);
+
+            const monto = document.getElementById('monto')
+            var valor1 = parseInt(monto.innerHTML.substring(1))
+            valor1 -= preciosGlobal[7]["precio"]
+            valor1 -= preciosGlobal[8]["precio"]
+            monto.innerHTML = "$" + valor1
+            const monto3 = document.getElementById('monto3')
+            var valor2 = parseInt(monto3.innerHTML.substring(1))
+            valor2 -= (preciosGlobal[7]["precio"] + preciosGlobal[8]["precio"])
+            monto3.innerHTML = "$" + valor2
             
         },
         changeOption(){
@@ -383,6 +393,17 @@ export default {
                     valor1 += preciosGlobal[7]["precio"]
                     valor1 += preciosGlobal[8]["precio"]
                     monto.innerHTML = "$" + valor1
+                    const monto3 = document.getElementById('monto3')
+                    console.log("MY MONTO")
+                console.log(monto3.innerHTML.substring(1))
+                    var valor2 = parseInt(monto3.innerHTML.substring(1))
+                    valor2 += (preciosGlobal[7]["precio"] + preciosGlobal[8]["precio"])
+                    monto3.innerHTML = "$" + valor2
+
+      
+
+
+
                     this.patente ="";
                     this.rvm =false;
                     this.GoE=false;
@@ -399,9 +420,17 @@ export default {
 
                 this.items.push(item);
                 const monto = document.getElementById('monto')
+
                 var valor = parseInt(monto.innerHTML.substring(1))
                 valor += preciosGlobal[7]["precio"]
                 monto.innerHTML = "$" + valor
+                const monto3 = document.getElementById('monto3')
+                console.log("MY MONTO")
+                console.log(monto3.innerHTML.substring(1))
+                var valor2 = parseInt(monto3.innerHTML.substring(1))
+                valor2 += (preciosGlobal[7]["precio"] + preciosGlobal[8]["precio"])
+                monto3.innerHTML = "$" + valor2
+                
                 this.patente ="";
                 this.rvm =false;
                 this.GoE=false;

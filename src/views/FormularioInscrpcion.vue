@@ -481,6 +481,10 @@ export default {
 		//console.log("DINERO")
 		const monto = document.getElementById('monto')
 		monto.innerHTML = "$" + preciosGlobal[0]["precio"]
+		const monto2 = document.getElementById('monto2')
+        monto2.innerHTML = "$" + preciosGlobal[0]["precio"]
+		const monto3 = document.getElementById('monto3')
+        monto3.innerHTML = "$" + 0
 	}, 1500);
   },
   name: 'Dashboard',
@@ -618,6 +622,11 @@ export default {
         },
 		getVehiculos(data) {
         this.vehiculos = data
+		this.vehiculos.forEach(() =>{
+				//const monto = document.getElementById('monto')
+				//monto.innerHTML = "$" + preciosGlobal[0]["precio"] + 5000
+				//parseInt(document.getElementById('monto').innerHTML.substring(1))
+		})
         //console.log("Vehiculos:"+this.vehiculos[0]["patente"],)
         },
 		getContrato(data) {

@@ -837,6 +837,10 @@ export default {
 		console.log("DINERO")
 		const monto = document.getElementById('monto')
 		monto.innerHTML = "$" + preciosGlobal[0]["precio"]
+		const monto2 = document.getElementById('monto2')
+        monto2.innerHTML = "$" + preciosGlobal[0]["precio"]
+		const monto3 = document.getElementById('monto3')
+        monto3.innerHTML = "$" + 0
 	}, 1500);
 
 

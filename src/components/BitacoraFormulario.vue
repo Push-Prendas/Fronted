@@ -21,7 +21,20 @@
                     <td v-if="item.idInscripcion != ''">I</td>
                     <td v-if="item.idAlzamiento != '' ">A</td>
                     <td v-if="item.idModificacion != ''" >M</td>
-                    <td> {{item.estadoPrimario}} </td>
+
+
+
+
+                    <td v-if="item.estadoPrimario == 0" >Guardado</td>
+                    <td v-if="item.estadoPrimario == 1" >Enviado desde notaria</td>
+                    <td v-if="item.estadoPrimario == 2" >Rechazado de notaria</td>
+                    <td v-if="item.estadoPrimario == 3" >Enviado desde oficina </td>
+                    <td v-if="item.estadoPrimario == 4" >En revision </td>
+                    <td v-if="item.estadoPrimario == 5" >Aceptado</td>
+                    <td v-if="item.estadoPrimario == 6" >Rechazo de Revisor</td>
+                    <td v-if="item.estadoPrimario == 7" >Rechazo de Jefe de Unidad de Prenda</td>
+                    <td v-if="item.estadoPrimario == 8" >Rechazo notificado</td>
+
 
                 </tbody>
     

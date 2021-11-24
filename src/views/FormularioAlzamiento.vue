@@ -485,9 +485,11 @@ export default {
 
         autoGlobal.forEach((data) => {
 
-        costoTotalAutos += parseInt(preciosGlobal[9]["precio"]) + parseInt(preciosGlobal[8]["precio"])
+        costoTotalAutos += parseInt(preciosGlobal[9]["precio"])  
 
         if(data.inscripcionPrendaRVM == true){
+
+            
 
             console.log("PATENTE")
             
@@ -534,6 +536,11 @@ export default {
         this.items.push(item);
         })
         monto.innerHTML = "$" + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos) )
+
+        const monto2 = document.getElementById('monto2')
+        monto2.innerHTML = "$" + parseInt(preciosGlobal[1]["precio"])//ACTUACION
+		const monto3 = document.getElementById('monto3')
+        monto3.innerHTML = "$" + parseInt(costoTotalAutos)////ANOTACION
       }, 1500);
   },
   name: 'Dashboard',

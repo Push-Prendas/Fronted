@@ -1,8 +1,19 @@
 <template>
+
+
+
     <div id="contenedor" class="row">
-        <div class="titleFormulario col">Monto </div>  
-        <div class="col titleMonto" id="monto"> $ {{this.monto}} </div> 
+        <div class="titleFormulario col">Monto Actuacion </div>  
+        <div class="col titleMonto" id="monto2"> ${{this.monto}} </div> 
+
+        <div class="titleFormulario col">Monto Anotaciones </div>  
+        <div class="col titleMonto" id="monto3"> ${{this.monto}} </div> 
+
+        <div class="titleFormulario col">Monto Total </div>  
+        <div class="col titleMonto" id="monto"> ${{this.monto}} </div> 
+
     </div>
+
     
 </template>
 

@@ -608,6 +608,12 @@ export default {
             console.log(patentes_relacionadas)
             const monto = document.getElementById('monto')
             monto.innerHTML = "$" + preciosGlobal[2]["precio"]
+
+            monto.innerHTML = "$" + (parseInt(preciosGlobal[2]["precio"]))
+            const monto2 = document.getElementById('monto2')
+            monto2.innerHTML = "$" + parseInt(preciosGlobal[2]["precio"])//ACTUACION
+            const monto3 = document.getElementById('monto3')
+            monto3.innerHTML = "$" + 0////ANOTACION
         }, 1500)
   },
   name: 'formularioModificacion',
