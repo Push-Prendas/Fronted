@@ -173,7 +173,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						vehiculos.forEach((ve) => {
 						///Vehiculos es una lista de listas que guarda vehiculos
 						///cada indice de la sublista es 0->PPU, 1->InscripcionPrendaRVM, 2->Prohibicion, 3->alzamiento
-						setDoc(doc(collection(db, "Patente_por_Inscripcion"),id.toString()),{
+						setDoc(doc(collection(db, "Patente_por_Inscripcion"),patente_id.toString()),{
 							patente: ve["patente"],
 							inscripcionPrendaRVM: ve["rvm"],
 							inscripcionProhibicionGravarEnajenar: ve["GoE"],
@@ -641,6 +641,8 @@ export default {
         },
         crearInscripcion(flags){
 			console.log("LOADING INSCRIPCION")
+			console.log("MIS PATENTES")
+			console.log(this.vehiculos)
 			var runacreedor;
 			var nombreacreedor;
 			if(this.tipoPersona == "Natural"){
