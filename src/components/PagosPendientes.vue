@@ -621,18 +621,21 @@ export default {
 						if (item.Tipo=="I"){
 							updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
+							estadoSecundario: 2
 							}).then(() => {
 								console.log("id_transaccion asignado")
 							})
 						}else if (item.Tipo=="M"){
 							updateDoc(doc(db, "Solicitud_Modificacion_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
+							estadoSecundario: 2
 							}).then(() => {
 								console.log("id_transaccion asignado")
 							})
 						}else if (item.Tipo=="A"){
 							updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
+							estadoSecundario: 2
 							}).then(() => {
 								console.log("id_transaccion asignado")
 							})
