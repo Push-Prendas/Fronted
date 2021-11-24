@@ -240,13 +240,14 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 				});
 				//REVISAR DOCUMENTOS
-				var repertorio = null
+				var repertorio = 0
 				console.log("validate revisando documents")
 				getDocs(collection(db,"Document_RPsD")).then((pat_data) => {
 					var id_inspeccion = pat_data.docs.length
-					var pt = pat_data.docs[id_inspeccion-1]
-					repertorio = pt.data().numero_repertorio_RPsD
-					
+					if(id_inspeccion != 0){
+						var pt = pat_data.docs[id_inspeccion-1]
+						repertorio = pt.data().numero_repertorio_RPsD
+					}	
 				}).then(() => {
 				console.log("validate revisando documents 2")
 
