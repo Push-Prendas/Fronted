@@ -702,6 +702,19 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 
 				});
+				var today = new Date();
+				getDocs(collection(db, "Bitacora")).then((bit_data) => {
+					var id_bit = bit_data.docs.length;
+					var id_insc = id;
+					setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+						idInscripcion: id_insc,
+						idModificacion: "",
+						idAlzamiento: "",
+						idUser: localStorage.mail,
+						comment: "Solicitud de Inscricpion Creada",
+						fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+					})
+				})
 				//REVISAR DOCUMENTOS
 				var repertorio = null
 				getDocs(collection(db,"Document_RPsD")).then((pat_data) => {

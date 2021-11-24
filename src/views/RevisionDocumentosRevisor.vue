@@ -32,7 +32,7 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
 
-import { collection, getDocs, updateDoc,query,where, doc} from "firebase/firestore";
+import { collection, getDocs, updateDoc,query,where, doc, setDoc} from "firebase/firestore";
 
 
 var username = localStorage.user
@@ -579,6 +579,7 @@ export default {
 		console.log("VEHICULOS RELACIONADOS")
 		console.log(autoGlobal2)
 		console.log(localStorage.tipo_judge.toString())
+		var today = new Date();
 		//HACER QUE SE CAMBIE EL ESTADO DE LAS PATENTES AL ACEPTAR O RECHAZAR LA SOL.
 		if(localStorage.tipo_judge.toString() == "I"){
 			autoGlobal2.forEach((data) => {
@@ -603,7 +604,19 @@ export default {
 						//console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
 						updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
 							aprovRevisor: true
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: localStorage.id_judge,
+									idModificacion: "",
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Inscricpion Aceptada por el Revisor",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})	
 				})
 		}else if(localStorage.tipo_judge.toString() == "M"){
@@ -646,7 +659,19 @@ export default {
 					getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 						updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
 							aprovRevisor: true
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: localStorage.id_judge,
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Modificacion Aceptada por el Revisor",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})
 				})
 			})
@@ -674,13 +699,26 @@ export default {
 				getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 					updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
 						aprovRevisor: true
-					,}).then(()=>this.$router.push({path: VOLVER}) )
+					,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: "",
+									idAlzamiento: localStorage.id_judge,
+									idUser: localStorage.mail,
+									comment: "Solicitud de Alzamiento Aceptada por el Revisor",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 				})
 			})
 		}
 	},
 	rechazar(){
 		var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
+		var today = new Date();
 		//var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
 		load_vehicles_RVM(solicitud_relacionada_id)
 		console.log("VEHICULOS RELACIONADOS")
@@ -710,7 +748,19 @@ export default {
 						//console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
 						updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
 							aprovRevisor: false
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: localStorage.id_judge,
+									idModificacion: "",
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Inscricpion Rechazada por el Revisor",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})	
 				})
 			}
@@ -754,7 +804,19 @@ export default {
 					getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 						updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
 							aprovRevisor: false
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: localStorage.id_judge,
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Modificacion Rechazada por el Revisor",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})
 				})
 			})
@@ -782,7 +844,19 @@ export default {
 				getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 					updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
 						aprovRevisor: false
-					,}).then(()=>this.$router.push({path: VOLVER}) )
+					,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: "",
+									idAlzamiento: localStorage.id_judge,
+									idUser: localStorage.mail,
+									comment: "Solicitud de Alzamiento Rechazada por el Revisor",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 				})
 			})
 		}

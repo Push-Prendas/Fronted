@@ -30,7 +30,7 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
 
-import { collection, getDocs, updateDoc,query,where, doc} from "firebase/firestore";
+import { collection, getDocs, updateDoc,query,where, doc, setDoc} from "firebase/firestore";
 
 
 var username = localStorage.user
@@ -398,9 +398,11 @@ export default {
   mounted() {
       this.clean()
     console.log("MOUNT hh")
-	console.log(this.tipoA_revisar)
+	
 	
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
+	this.tipoA_revisar = localStorage.tipo_judge
+	console.log(this.tipoA_revisar)
 
     buscador_especifico_solicitud(parseInt(localStorage.id_judge), localStorage.tipo_judge)
     setTimeout(() => { 
@@ -531,13 +533,25 @@ export default {
   },
   methods:{
     aceptar(){
-
+	var today = new Date();
     if(this.tipoA_revisar.toString() == "I"){
 
         updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
         }).then(() => {
-            this.$router.push({path: VOLVER})
+			getDocs(collection(db, "Bitacora")).then((bit_data) => {
+				var id_bit = bit_data.docs.length;
+				setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+					idInscripcion: solicitud_relacionada_id,
+					idModificacion: "",
+					idAlzamiento: "",
+					idUser: localStorage.mail,
+					comment: "Solicitud de Inscricpion Firmada",
+					fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+				})
+			}).then(()=>{
+				this.$router.push({path: VOLVER})
+			})    
         })
 
 
@@ -548,7 +562,19 @@ export default {
         updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
         }).then(() => {
-            this.$router.push({path: VOLVER})
+            getDocs(collection(db, "Bitacora")).then((bit_data) => {
+				var id_bit = bit_data.docs.length;
+				setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+					idInscripcion: "",
+					idModificacion: solicitud_relacionada_id,
+					idAlzamiento: "",
+					idUser: localStorage.mail,
+					comment: "Solicitud de Modificacion Firmada",
+					fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+				})
+			}).then(()=>{
+				this.$router.push({path: VOLVER})
+			})   
         })
 
     }
@@ -558,7 +584,19 @@ export default {
         updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
             firma: true,
         }).then(() => {
-            this.$router.push({path: VOLVER})
+            getDocs(collection(db, "Bitacora")).then((bit_data) => {
+				var id_bit = bit_data.docs.length;
+				setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+					idInscripcion: "",
+					idModificacion: "",
+					idAlzamiento: solicitud_relacionada_id,
+					idUser: localStorage.mail,
+					comment: "Solicitud de Alzamiento Firmada",
+					fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+				})
+			}).then(()=>{
+				this.$router.push({path: VOLVER})
+			}) 
         })
 
     }
@@ -566,15 +604,26 @@ export default {
 
     },
     rechazar(){
-		
+		var today = new Date();
 		if(this.tipoA_revisar.toString() == "I"){
 			console.log("RECHAZANDO")
 			console.log(solicitud_relacionada_id)
 			updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),solicitud_relacionada_id.toString()),{
 				estadoPrimario: 2,
 			}).then(() => {
-				console.log("RECHAZADO OK")
-				this.$router.push({path: VOLVER})
+				getDocs(collection(db, "Bitacora")).then((bit_data) => {
+					var id_bit = bit_data.docs.length;
+					setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+						idInscripcion: solicitud_relacionada_id,
+						idModificacion: "",
+						idAlzamiento: "",
+						idUser: localStorage.mail,
+						comment: "Solicitud de Inscricpion Rechazada por Notario",
+						fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+					})
+				}).then(()=>{
+					this.$router.push({path: VOLVER})
+				})
 			})
 
 		}
@@ -584,8 +633,19 @@ export default {
 			updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),solicitud_relacionada_id.toString()),{
 				estadoPrimario: 2,
 			}).then(() => {
-				console.log("RECHAZADO OK")
-				this.$router.push({path: VOLVER})
+				getDocs(collection(db, "Bitacora")).then((bit_data) => {
+					var id_bit = bit_data.docs.length;
+					setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+						idInscripcion: "",
+						idModificacion: solicitud_relacionada_id,
+						idAlzamiento: "",
+						idUser: localStorage.mail,
+						comment: "Solicitud de Modificacion Rechazada por Notario",
+						fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+					})
+				}).then(()=>{
+					this.$router.push({path: VOLVER})
+				}) 
 			})
 		}
 		else if(this.tipoA_revisar.toString() == "A"){
@@ -594,8 +654,19 @@ export default {
 			updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),solicitud_relacionada_id.toString()),{
 				estadoPrimario: 2,
 			}).then(() => {
-				console.log("RECHAZADO OK")
-				this.$router.push({path: VOLVER})
+				getDocs(collection(db, "Bitacora")).then((bit_data) => {
+					var id_bit = bit_data.docs.length;
+					setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+						idInscripcion: "",
+						idModificacion: "",
+						idAlzamiento: solicitud_relacionada_id,
+						idUser: localStorage.mail,
+						comment: "Solicitud de Alzamiento Rechazada por Notario",
+						fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+					})
+				}).then(()=>{
+					this.$router.push({path: VOLVER})
+				})
 			})
 
 		}
