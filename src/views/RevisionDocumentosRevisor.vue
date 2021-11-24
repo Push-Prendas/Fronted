@@ -410,6 +410,21 @@ function load_vehicles(id_inscripcion){
 	})
 }
 
+var autoGlobal2 = []
+function load_vehicles_RVM(id_inscripcion){
+	autoGlobal2 = []
+    getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
+		var my_cars = car_Data.docs
+		my_cars.forEach((p) => {
+			var p_data = p.data();
+            if(p_data.idInscripcion == id_inscripcion && p_data.inscripcionPrendaRVM && !(p_data.alzamiento))
+                autoGlobal2.push(p_data)
+		})
+        console.log("AUTOS CON ANOTACION AL RVM Y SIN ALZAR: ")
+		console.log(autoGlobal2)
+	})
+}
+
 
 export default {
   mounted() {
@@ -558,297 +573,219 @@ export default {
   },
   methods:{
     aceptar(){
-
-	var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
-
-
-
-
-	//var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
-
-	console.log("VEHICULOS RELACIONADOS")
-	console.log(autoGlobal)
-	console.log(localStorage.tipo_judge.toString())
-
-    if(localStorage.tipo_judge.toString() == "I"){
-
-
-
-
-	autoGlobal.forEach((data) => {
-			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioContratoPrenda.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioContratoPrenda.split("-")[0] +  '"}'
-			
-			console.log("SOLICITUD RELACIONADA")
-			console.log(params)
-
-			fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: params
-				}).then(response =>{
-				console.log("RESPUESTA")
-				console.log(response.json())
-		
-
-				}
-
-				)
-
-			})
-			
-			
-            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
-            estadoPrimario: 5,
-        }).then(() => {
-			console.log("AQUI DEBERIA PASAR A TRUE")
-			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
-				console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
-				updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
-					aprovRevisor: true
-				,}).then(()=>this.$router.push({path: VOLVER}) )
-			})
-			
-		})
-
-    }
-    else if(localStorage.tipo_judge.toString() == "M"){
-
-
-
-
-		// 1 -> Alzamiento Parcial 2 -> Cambio de Acreedor 3-> Prohibicion de Acta 4 -> otro
-
-	var tipoMod = ""
-
-
-	getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((resp)=>{
-		
-		resp.docs.forEach((element) => {
-			if(localStorage.id_judge.toString() == element.id){
-				console.log("Es igual")
-				console.log(element.data().tipoModificacion)
-
-				if(element.data().tipoModificacion == 1){
-					tipoMod = "AlzPN"
-				}
-				else if(element.data().tipoModificacion == 2){
-					tipoMod = "CA"
-				}
-				else if(element.data().tipoModificacion == 3){
-					tipoMod = "AlzPH"
-				}
-				else if(element.data().tipoModificacion == 4){
-					tipoMod = "AlzPH"//no existe en RVM
-				}
-
-
-
-			}
-
-		})	
-	}).then(()=>{
-
-
-		autoGlobal.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":"' + "aceptado"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
-
-		fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: params
-			})
-
-		})
-
-		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
-			estadoPrimario: 5,
-		}).then(() => {
-			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
-
-
-
-				updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
-					aprovRevisor: true
-				,}).then(()=>this.$router.push({path: VOLVER}) )
-			})
-			
-		})
-
-
-
-	})
-
-
-
-
-
-    }
-
-    else if(localStorage.tipo_judge.toString() == "A"){
-
-		autoGlobal.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN"  + '", "aceptarORechazar":"' + "aceptado"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
-		fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: params
-			})
-
-		})
-
-
-		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
-			estadoPrimario: 5,
-		}).then(() => {
-			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
-				updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
-					aprovRevisor: true
-				,}).then(()=>this.$router.push({path: VOLVER}) )
-			})
-			
-		})
-
-    }
-
-
-	},
-
-	rechazar(){
-
-
-    var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
-    var commentText=document.getElementById("comentarioRechazo").value
-    if(localStorage.tipo_judge.toString() == "I"){
-
-
-	autoGlobal.forEach((data) => {
-			var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":' + "rechazada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
-
-			fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: params
+		var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
+		//var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
+		load_vehicles_RVM(solicitud_relacionada_id)
+		console.log("VEHICULOS RELACIONADOS")
+		console.log(autoGlobal2)
+		console.log(localStorage.tipo_judge.toString())
+		//HACER QUE SE CAMBIE EL ESTADO DE LAS PATENTES AL ACEPTAR O RECHAZAR LA SOL.
+		if(localStorage.tipo_judge.toString() == "I"){
+			autoGlobal2.forEach((data) => {
+				var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioContratoPrenda.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioContratoPrenda.split("-")[0] +  '"}'
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: params
+					}).then(response =>{
+						console.log("ACEPTANDO Anotaciones a RVM MODIFICACION DE PATENTE: "+data.patente)
+						console.log("RESPUESTA A PATENTE: "+data.patente)
+						console.log(response.json())
+					})
+			})	
+			updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
+					estadoPrimario: 5,
+				}).then(() => {
+					//console.log("AQUI DEBERIA PASAR A TRUE")
+					getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+						//console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
+						updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
+							aprovRevisor: true
+						,}).then(()=>this.$router.push({path: VOLVER}) )
+					})	
 				})
-	})
+		}else if(localStorage.tipo_judge.toString() == "M"){
+			// 1 -> Alzamiento Parcial 2 -> Cambio de Acreedor 3-> Prohibicion de Acta 4 -> otro
+			var tipoMod = ""
+			getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((resp)=>{
+				resp.docs.forEach((element) => {
+					if(localStorage.id_judge.toString() == element.id){
+						console.log(element.data().tipoModificacion)
+						if(element.data().tipoModificacion == 1){
+							tipoMod = "AlzPN"
+						}else if(doc.data().tipoModificacion  == 2){
+							tipoMod = "CA"
+						}else {
+							tipoMod = false
+						}
+					}
+				})	
+			}).then(()=>{
+				autoGlobal2.forEach((data) => {
+				var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":"' + "aceptada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: params
+					}).then((response2)=>{
+							response2.json().then((reqResult) => {
+								console.log("ACEPTANDO Anotaciones a RVM MODIFICACION: "+tipoMod)
+								console.log(reqResult.msg+"para patente:"+data.patente)
+								console.log(reqResult)
+						})
+					})
+				})
 
-            updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
-            estadoPrimario: 6,
-        }).then(() => {
-			getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
-							updateDoc(doc(collection(db, "Inspeccion_inscripcion"),localStorage.id_judge.toString()),{
-				aprovRevisor: false,
-				comment: commentText
-				}).then(()=>this.$router.push({path: VOLVER}) )
+				updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
+					estadoPrimario: 5,
+				}).then(() => {
+					getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+						updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
+							aprovRevisor: true
+						,}).then(()=>this.$router.push({path: VOLVER}) )
+					})
+				})
 			})
-            
-        })
-
-    }
-    else if(localStorage.tipo_judge.toString() == "M"){
-
-	
-	var tipoMod = ""
-
-
-	getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((resp)=>{
-		
-		resp.docs.forEach((element) => {
-			if(localStorage.id_judge.toString() == element.id){
-				console.log("Es igual")
-				console.log(element.data().tipoModificacion)
-
-				if(element.data().tipoModificacion == 1){
-					tipoMod = "AlzPN"
-				}
-				else if(element.data().tipoModificacion == 2){
-					tipoMod = "CA"
-				}
-				else if(element.data().tipoModificacion == 3){
-					tipoMod = "AlzPH"
-				}
-				else if(element.data().tipoModificacion == 4){
-					tipoMod = ""//no existe en RVM
-				}
-
-
-
+		}
+		else if(localStorage.tipo_judge.toString() == "A"){
+			autoGlobal2.forEach((data) => {
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN"  + '", "aceptarORechazar":"' + "aceptado"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+			fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: params
+				}).then((response2)=>{
+						response2.json().then((reqResult) => {
+							console.log("ACEPTANDO Anotaciones a RVM ALZAMIENTO: "+tipoMod)
+							console.log(reqResult.msg+"para patente:"+data.patente)
+							console.log(reqResult)
+					})
+				})
+			})
+			updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
+				estadoPrimario: 5,
+			}).then(() => {
+				getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+					updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
+						aprovRevisor: true
+					,}).then(()=>this.$router.push({path: VOLVER}) )
+				})
+			})
+		}
+	},
+	rechazar(){
+		var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/api/vehicles/acceptRejectAnotation'
+		//var params = '{"id_persona":"' + localStorage.user + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + this.monto +'}'
+		load_vehicles_RVM(solicitud_relacionada_id)
+		console.log("VEHICULOS RELACIONADOS")
+		console.log(autoGlobal2)
+		console.log(localStorage.tipo_judge.toString())
+		//HACER QUE SE CAMBIE EL ESTADO DE LAS PATENTES AL ACEPTAR O RECHAZAR LA SOL.
+		if(localStorage.tipo_judge.toString() == "I"){
+			autoGlobal2.forEach((data) => {
+				var params = '{"patente": "' + data.patente + '", "tipo":"' + "PN" + '", "aceptarORechazar":"' + "rechazada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioContratoPrenda.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioContratoPrenda.split("-")[0] +  '"}'
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: params
+					}).then(response =>{
+						console.log("RECHAZANDO Anotaciones a RVM MODIFICACION DE PATENTE: "+data.patente)
+						console.log("RESPUESTA A PATENTE: "+data.patente)
+						console.log(response.json())
+					})
+			})	
+			updateDoc(doc(collection(db, "Solicitud_Inscripcion_Prenda"),localStorage.id_judge.toString()),{
+					estadoPrimario: 6,
+				}).then(() => {
+					//console.log("AQUI DEBERIA PASAR A TRUE")
+					getDocs(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+						//console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
+						updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
+							aprovRevisor: false
+						,}).then(()=>this.$router.push({path: VOLVER}) )
+					})	
+				})
 			}
+		else if(localStorage.tipo_judge.toString() == "M"){
+			// 1 -> Alzamiento Parcial 2 -> Cambio de Acreedor 3-> Prohibicion de Acta 4 -> otro
+			var tipoMod = ""
+			getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((resp)=>{
+				resp.docs.forEach((element) => {
+					if(localStorage.id_judge.toString() == element.id){
+						console.log(element.data().tipoModificacion)
+						if(element.data().tipoModificacion == 1){
+							tipoMod = "AlzPN"
+						}else if(doc.data().tipoModificacion  == 2){
+							tipoMod = "CA"
+						}else {
+							tipoMod = false
+						}
+					}
+				})	
+			}).then(()=>{
+				autoGlobal2.forEach((data) => {
+				var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":"' + "rechazada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+				fetch(url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: params
+					}).then((response2)=>{
+							response2.json().then((reqResult) => {
+								console.log("RECHAZANDO Anotaciones a RVM MODIFICACION: "+tipoMod)
+								console.log(reqResult.msg+"para patente:"+data.patente)
+								console.log(reqResult)
+						})
+					})
+				})
 
-		})	
-	}).then(()=>{
-
-		autoGlobal.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + tipoMod + '", "aceptarORechazar":' + "rechazada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
-
-		fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: params
+				updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
+					estadoPrimario: 6,
+				}).then(() => {
+					getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+						updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
+							aprovRevisor: false
+						,}).then(()=>this.$router.push({path: VOLVER}) )
+					})
+				})
 			})
-
-		})
-
-		updateDoc(doc(collection(db, "Solicitud_Modificacion_Prenda"),localStorage.id_judge.toString()),{
-			estadoPrimario: 6,
-		}).then(() => {
-			getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
-							updateDoc(doc(collection(db, "Inspeccion_modificacion"),localStorage.id_judge.toString()),{
-				aprovRevisor: false,
-				comment: commentText
-				,}).then(()=>this.$router.push({path: VOLVER}) )
+		}
+		else if(localStorage.tipo_judge.toString() == "A"){
+			autoGlobal2.forEach((data) => {
+			var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN"  + '", "aceptarORechazar":"' + "rechazada"+ '", "numero_repertorio":"'  + solicitud_relacionada.numeroRepertorioNotario.split("-")[1]+ "-"+solicitud_relacionada.numeroRepertorioNotario.split("-")[0] +  '"}'
+			fetch(url, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: params
+				}).then((response2)=>{
+						response2.json().then((reqResult) => {
+							console.log("RECHAZANDO Anotaciones a RVM ALZAMIENTO: "+tipoMod)
+							console.log(reqResult.msg+"para patente:"+data.patente)
+							console.log(reqResult)
+					})
+				})
 			})
-			
-		})
-
-
-
-
-	})
-
-    }
-
-    else if(localStorage.tipo_judge.toString() == "A"){
-
-		autoGlobal.forEach((data) => {
-		var params = '{"patente": "' + data.patente + '", "tipo":"' + "AlzPN" + '", "aceptarORechazar":' + "rechazada"+ '", "numero_repertorio":' + solicitud_relacionada.numeroRepertorioNotario +  '}'
-
-		fetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: params
+			updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
+				estadoPrimario: 6,
+			}).then(() => {
+				getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
+					updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
+						aprovRevisor: false
+					,}).then(()=>this.$router.push({path: VOLVER}) )
+				})
 			})
-
-		})
-
-
-
-		updateDoc(doc(collection(db, "Solicitud_Alzamiento_Prenda"),localStorage.id_judge.toString()),{
-			estadoPrimario: 6,
-		}).then(() => {
-			getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge))).then(()=>{
-							updateDoc(doc(collection(db, "Inspeccion_alzamiento"),localStorage.id_judge.toString()),{
-				aprovRevisor: false,
-				comment: commentText
-				,}).then(()=>this.$router.push({path: VOLVER}) )
-			})
-			
-		})
-
-    }
-
-
+		}
 	},
 	clean(){
 		patentes_relacionadas.length = 0

@@ -437,10 +437,10 @@ function load_vehicles(id_inscripcion){
 		var my_cars = car_Data.docs
 		my_cars.forEach((p) => {
 			var p_data = p.data();
-            if(p_data.idInscripcion == id_inscripcion )
+            if(p_data.idInscripcion == id_inscripcion && p_data.inscripcionPrendaRVM && !(p_data.alzamiento))
                 autoGlobal.push(p_data)
 		})
-        console.log("AUTOS: ")
+        console.log("AUTOS CON ANOTACION AL RVM Y SIN ALZAR: ")
 		console.log(autoGlobal)
 	})
 }

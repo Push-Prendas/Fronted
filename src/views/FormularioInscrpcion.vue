@@ -671,7 +671,7 @@ export default {
 					this.Bienes[1], 
 					this.Bienes[2], 
 					this.Bienes[3], 
-				    parseInt(document.getElementById('monto').innerHTML.substring(1)), 
+					parseInt(document.getElementById('monto').innerHTML.substring(1)), 
 					//this.monto,
 					flags, 
 					this.tipoPersona, 
