@@ -107,10 +107,14 @@ async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", 
                 (transaction_id == "" || transaction_id == my_sol.id_transaccion)){
                     getDocs(collection(db, "Persona_Solicitud")).then((p) => {
                         var per_docs = p.docs
+                        var id=[]
                         per_docs.forEach((p) => {
                             var my_pData = p.data();
                             if((run == "" || (run == my_pData.runPersona && my_id == my_pData.idInscripcion))){
-                                inscripciones_encontradasGlobal.push([my_id, my_sol])
+                                if( !id.includes(my_id) ){
+                                    id.push(my_id)
+                                    inscripciones_encontradasGlobal.push([my_id, my_sol])
+                                }                            
                             }
                         })
                     })

@@ -108,7 +108,6 @@ async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", 
                 if((num_notaria == "" || num_notaria == my_sol.numeroRepertorioNotario) && 
                 (num_prenda == "" || num_prenda == my_sol.numeroRepertorioContratoPrenda) && 
                 (transaction_id == "" || transaction_id == my_sol.id_transaccion)){
-                    
                     getDocs(collection(db, "Persona_Solicitud")).then((p) => {
                         var per_docs = p.docs
                         var id=[]
@@ -118,8 +117,7 @@ async function buscar_solcitud_por_requisito(num_notaria = "", num_prenda = "", 
                                 if( !id.includes(my_id) ){
                                     id.push(my_id)
                                     inscripciones_encontradasGlobal.push([my_id, my_sol])
-                                }
-                                
+                                }  
                             }
                         })
                     })
