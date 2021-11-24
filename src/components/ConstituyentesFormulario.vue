@@ -310,7 +310,9 @@ export default {
                         this.razonsocial="";
                         this.id="";
                         this.nombrecompleto="";
-                        this.checked = false;
+                        if(this.rol == "FUNCIONARIOOFICINA"){
+                            this.checked = false;
+                        }
                     }
                     else{
                         alert(reqResult.msg)
