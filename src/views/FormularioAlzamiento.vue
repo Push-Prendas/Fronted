@@ -282,7 +282,8 @@ function alzamiento(
     numero_repertorio_RPsD,
     send_flag,
     rol_oficina=false,
-    name_oficina
+    name_oficina,
+    id_inscripcion
     //AGREGADO RECIENTMENTE FALTA PONER EN LA VISTA
     ){
         var validate = true
@@ -359,6 +360,7 @@ function alzamiento(
             firma:false,
             usuarioCreador: localStorage.mail,
             id_transaccion: -1,
+            id_inscripcion: id_inscripcion
     }).then(() => {
         console.log("PAGANDO EN CAJA")
 		//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -532,7 +534,7 @@ export default {
             "patente": data.patente,
             "rvm": data.inscripcionPrendaRVM,
             "GoE": data.inscripcionProhibicionGravarEnajenar,
-            "costo": "-"}
+            "costo": preciosGlobal[9]["precio"]}
         this.items.push(item);
         })
         monto.innerHTML = "$" + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos) )
@@ -747,7 +749,8 @@ export default {
                 -1,-1,
                 flags,
                 localStorage.rol == 'FUNCIONARIOOFICINA',
-                "Mi oficina"
+                "Mi oficina",
+                localStorage.idSol
             )
             this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
 

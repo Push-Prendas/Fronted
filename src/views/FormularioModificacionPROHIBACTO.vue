@@ -280,7 +280,8 @@ function  inscripcion_modificacion(
     GrabarEnagenar,//
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
     fecha_requirente="",//
-    send_flag
+    send_flag,
+    id_inscripcion
     ){
 
 
@@ -364,6 +365,7 @@ function  inscripcion_modificacion(
                 tipoModificacion:3,
                 usuarioCreador: localStorage.mail,
                 id_transaccion: -1,
+                id_inscripcion: id_inscripcion
             }).then(() => {
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -620,7 +622,8 @@ export default {
                 this.ProhibGravEnajenar,//
                 this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                 this.fechaRequirente,//
-                flag
+                flag,
+                localStorage.idSol
             )
   }
   

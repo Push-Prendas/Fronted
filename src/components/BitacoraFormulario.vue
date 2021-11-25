@@ -8,7 +8,7 @@
                     <th scope="col">Comentario</th>
                     <th scope="col">Fecha de Cambio</th>
                     <th scope="col">Tipo</th>
-                    <th scope="col">estadoPrimario</th>
+                    <th scope="col">Descripción</th>
                     </tr>
                 </thead>
                 <tbody class="bodyTabla" v-if="items.length == 0">
