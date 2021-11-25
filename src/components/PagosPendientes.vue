@@ -466,10 +466,10 @@ export default {
 			*/
 			console.log(localStorage.user +','+my_rpsd+','+this.monto)
 			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
-			//console.log("Phase 1 GETTING IP")
-			//console.log(localStorage.rutLog)
+			console.log("Phase 1 GETTING IP")
+			console.log(localStorage.rutLog)
 			var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
-			var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "54.167.53.130"}'
+			var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + 100 +', "confirmation_ip": "54.167.53.130"}'
 				fetch(url, {
 					method: 'POST',
 					headers: {
@@ -477,7 +477,10 @@ export default {
 					},
 					body: params
 				}).then((response)=>{
+					console.log("PRESPUESTA DE PAGO")
+					console.log(response)
 					response.json().then((reqResult) => {
+						console.log(reqResult)
 						if (item.Tipo=="I"){
 							updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
@@ -493,14 +496,15 @@ export default {
 								console.log("id_transaccion asignado", reqResult.transaction_id)
 							})
 						}else if (item.Tipo=="A"){
+							console.log("PRESPUESTA DE PAGO --cambio estado alz")
 							updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",item.id),{
-							id_transaccion: reqResult.transaction_id,
-							estadoSecundario: 1
+								id_transaccion: reqResult.transaction_id,
+								estadoSecundario: 1
 							}).then(() => {
 								console.log("id_transaccion asignado", reqResult.transaction_id)
 							})
 						}
-						//alert(reqResult.msg)
+						console.log(reqResult.msg)
 					})
 
 					load_vehicles(item)
