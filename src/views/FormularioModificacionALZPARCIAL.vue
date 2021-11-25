@@ -435,7 +435,8 @@ function  inscripcion_modificacion(
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
     fecha_requirente="",//
     send_flag,
-    id_inscripcion
+    id_inscripcion,
+    patentesAlzparcial
     ){
 
 
@@ -460,28 +461,6 @@ function  inscripcion_modificacion(
             //////////////////////////
         }
 
-        //console.log("verificar")
-        //console.log(rut_acreedor)
-
-        /*
-
-        var rut_acc_code = rut_acreedor.split('-');
-        if(!validate_run(rut_acc_code[0],rut_acc_code[1])){
-            validate = false
-            console.log("RUN ACREEDOR INVALIDO")
-            //FRONTEND => MOSTRAR ERROR
-    
-            //////////////////////////
-        }
-
-        var run_req_code = run_requiriente.split('-');
-        if(!validate_run(run_req_code[0],run_req_code[1])){
-            validate = false
-            console.log("RUN REQUIRIENTE INVALIDO")
-            //FRONTEND => MOSTRAR ERROR
-    
-            //////////////////////////
-        }*/
 
 
 
@@ -526,9 +505,9 @@ function  inscripcion_modificacion(
                 tipoModificacion:1,
                 usuarioCreador: localStorage.mail,
                 id_transaccion: -1,
-                id_inscripcion: id_inscripcion
+                id_inscripcion: id_inscripcion,
+                patentesAlzparcial: patentesAlzparcial,
             }).then(() => {
-            console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
             if(send_flag){   
             if (localStorage.rol == "FUNCIONARIOOFICINA"){
@@ -567,10 +546,6 @@ function  inscripcion_modificacion(
                 Subir_archivos_en_oficina(contratos,archivos,ids,1)
                 console.log("enviado")
             }
-
-
-
-        
         })
     }
     }
@@ -634,11 +609,6 @@ export default {
       see_prices()
       load_vehicles(localStorage.idSol)
       load_rpsd(localStorage.idSol)
-
-
-
-
-
       setTimeout(() => {
         console.log("SOLICITUD DE INSCRIPCION ENCONTRADA EN ESTOS LUGARES")
         console.log(solicitud_relacionada)
@@ -664,7 +634,6 @@ export default {
         oReq.send();
         oReq.onload = ()=>{
                 if(oReq.status == 200){
-
                     var reqResult = JSON.parse(oReq.response);
                     console.log("MENSAJE RECIVIDO")
                     console.log(reqResult)
@@ -895,6 +864,13 @@ export default {
                }
             }
 
+            var patentesAlzparcial = []
+            for (let index = 0; index < this.items.length; index++) {
+                if (document.getElementById(index.toString()+'P').checked == true){
+                    patentesAlzparcial.push(this.items[index])
+                }	
+            }
+
             if(!solicitudPendiente){
 
                 inscripcion_modificacion(
@@ -922,7 +898,8 @@ export default {
                 this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                 this.fechaRequirente,//,
                 flag,
-                localStorage.idSol
+                localStorage.idSol,
+                patentesAlzparcial
             )
                 this.downloadWithCSS()
                 this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})

@@ -1,5 +1,8 @@
 <template>
-    <div id="contenedor" class="row">     
+    <div id="contenedor" class="row"> 
+		<div class="d-flex justify-content-end">
+			<button @click="reloadPage" class="ReloadButton">Reload</button> 
+		</div>   
         <table class="table">
             <thead class="encabezadoTabla">
                 <th scope="col">N° Rep Prenda</th>
@@ -696,6 +699,9 @@ export default {
 					},3000)
 				})
 		}, 1500);
+	},
+	reloadPage(){
+		window.location.reload();
 	}
   }
 }
@@ -750,5 +756,14 @@ export default {
     margin-bottom: 2em;
     margin-left: 2em;
     margin-right: 2em;
+}
+.ReloadButton{
+    color: white;
+    font-family: Roboto;
+    font-weight: bold;
+    background: #514BD5;
+    border-radius: 15em;
+    width: 10em;
+    margin-bottom: 2em;
 }
 </style>
