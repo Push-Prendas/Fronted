@@ -670,12 +670,16 @@ export default {
 
 
         }
-
+        var alzamiento = "No Alzado"
+        if(data.alzamiento){
+            alzamiento = "Alzado"
+        }
 
         let item = {
             "patente": data.patente,
             "rvm": data.inscripcionPrendaRVM,
             "GoE": data.inscripcionProhibicionGravarEnajenar,
+            "estado": alzamiento,
             "costo": preciosGlobal[9]["precio"]}
         this.items.push(item);
 
