@@ -591,6 +591,17 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
+        downloadWithCSS() {
+            const doc = new jsPDF();
+            /** WITH CSS */
+            var canvasElement = document.createElement('canvas');
+                html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
+                }).then(function (canvas) {
+                const img = canvas.toDataURL("image/jpeg",1);
+                doc.addImage(img,'JPEG',20,20,120,120);
+                doc.save("ModificacionPrenda.pdf");
+            });
+        },
         modificar(flag){//agregar flags
             var est_p = 0
             if(flag){
@@ -630,7 +641,7 @@ export default {
                 flag
             )
             this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
-
+            downloadWithCSS()
   }
   
 }
