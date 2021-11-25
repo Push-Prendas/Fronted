@@ -721,7 +721,7 @@ export default {
         },
         async alzar(flags){
 
-        if(!solicitudPendiente){
+        if(true){
 
 
             console.log("MIS BIENES")
