@@ -775,7 +775,7 @@ export default {
 						console.log(element.data().tipoModificacion)
 						if(element.data().tipoModificacion == 1){
 							tipoMod = "AlzPN"
-						}else if(doc.data().tipoModificacion  == 2){
+						}else if(element.data().tipoModificacion  == 2){
 							tipoMod = "CA"
 						}else {
 							tipoMod = false

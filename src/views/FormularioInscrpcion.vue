@@ -285,7 +285,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						console.log("---------------------")
 						setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 							id_alzamiento: "",
-							id_modificacion: document_id.toString(),
+							id_modificacion: "",
 							idInscripcion: id,
 							año_repertorio_del_contrato: new Date().getFullYear(),
 							numero_repertorio_RPsD: repertorio + 1,
@@ -301,7 +301,7 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 						setDoc(doc(collection(db, "Document_RPsD"),document_id.toString()),{
 							idInscripcion: id,
 							id_alzamiento: "",
-							id_modificacion: document_id.toString(),
+							id_modificacion: "",
 							año_repertorio_del_contrato: new Date().getFullYear(),
 							numero_repertorio_RPsD: repertorio + 1,
 							url: url_file,
