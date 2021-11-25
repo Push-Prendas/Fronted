@@ -424,73 +424,74 @@ export default {
 			alzamientos_encontradosGlobal = []
             
             //buscador_solicitud(3,1,"T",-1)
-            buscador_solicitud(3,0,"T", -1)
+            buscador_solicitud(3,2,"T", -1)
 			setTimeout(() => { 
 			//var estad;
-            if(this.inscripciones_encontradas.length>0){
-                console.log(this.inscripciones_encontradas);
-                
-                this.inscripciones_encontradas.forEach((insc)=>{
-					console.log("INSCRIPCION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
-     
-					if(insc[1]["estadoPrimario"] == 3){
-						let item = {
-								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-								"Not":insc[1]["numeroRepertorioNotario"],
-								"Fecha": insc[1]["fechaRequirente"],
-								"Oficina" : insc[1]["oficina"],
-								"Tipo": "I"}
-						console.log(item)
+				console.log("ENTRO TIMEOUT")
+				if(inscripciones_encontradasGlobal.length>0){
+					console.log(inscripciones_encontradasGlobal);
+					console.log("VICTORY ROYALE")
+					inscripciones_encontradasGlobal.forEach((insc)=>{
+						console.log("INSCRIPCION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+		
+						if(insc[1]["estadoPrimario"] == 3){
+							let item = {
+									"id": insc[0],
+									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+									"Not":insc[1]["numeroRepertorioNotario"],
+									"Fecha": insc[1]["fechaRequirente"],
+									"Oficina" : insc[1]["oficina"],
+									"Tipo": "I"}
+							console.log(item)
 
-						console.log(this.items)
-						this.items.push(item)
+							console.log(this.items)
+							this.items.push(item)
+						}
+						});
+
 					}
-                    });
+				if(modificaciones_encontradasGlobal.length>0){
+					modificaciones_encontradasGlobal.forEach((insc)=>{
+						console.log("MODIFICACION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+	
+						console.log("DEBUG")
+						console.log(insc)
+						if(insc[1]["estadoPrimario"] == 3){
+							let item = {
+									"id": insc[0],
+									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+									"Not":insc[1]["numeroRepertorioNotario"],
+									"Fecha": insc[1]["fechaRequirente"],
+									"Oficina" : insc[1]["oficina"],
+									"Tipo": "M"}
 
-                }
-            if(this.modificaciones_encontradas.length>0){
-                this.modificaciones_encontradas.forEach((insc)=>{
-					console.log("MODIFICACION-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
-  
-					console.log("DEBUG")
-					console.log(insc)
-					if(insc[1]["estadoPrimario"] == 3){
-						let item = {
-								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-								"Not":insc[1]["numeroRepertorioNotario"],
-								"Fecha": insc[1]["fechaRequirente"],
-								"Oficina" : insc[1]["oficina"],
-								"Tipo": "M"}
+							this.items.push(item)
+						}
+						});
 
-						this.items.push(item)
 					}
-                    });
+				if(alzamientos_encontradosGlobal.length>0){
+					alzamientos_encontradosGlobal.forEach((insc)=>{
+						console.log("ALZAMIENTOS-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
+		
+						if(insc[1]["estadoPrimario"] == 3){
+							let item = {
+									"id": insc[0],
+									"Rep": insc[1]["numeroRepertorioContratoPrenda"],
+									"Not":insc[1]["numeroRepertorioNotario"],
+									"Fecha": insc[1]["fechaRequirente"],
+									"Oficina" : insc[1]["oficina"],
+									"Tipo": "A"}
 
-                }
-            if(this.alzamientos_encontrados.length>0){
-                this.alzamientos_encontrados.forEach((insc)=>{
-					console.log("ALZAMIENTOS-"+insc[1]["estadoPrimario"]+ "-"+insc[1]["estadoSecundario"])
-     
-					if(insc[1]["estadoPrimario"] == 3){
-						let item = {
-								"id": insc[0],
-								"Rep": insc[1]["numeroRepertorioContratoPrenda"],
-								"Not":insc[1]["numeroRepertorioNotario"],
-								"Fecha": insc[1]["fechaRequirente"],
-								"Oficina" : insc[1]["oficina"],
-								"Tipo": "A"}
+							this.items.push(item)
+						}
+						});
 
-						this.items.push(item)
 					}
-                    });
-
-                }
-            //this.items=i
-            console.log(this.items)
-            },2500);
-            },
+				//this.items=i
+				console.log(this.items)
+				},1500);
+			},
       add(){
         var item = this.items[this.indexSelect]
         var anexo = document.getElementById("anexos").files
