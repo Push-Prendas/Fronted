@@ -30,7 +30,7 @@
 				</td>
                 <td v-if="tipoSolicitud == 'Modificacion'"> 
                     <div class="form-check ">
-                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck" >
+                            <input class="form-check-input" type="checkbox" value="" :id="index.toString()+'P'" >
                     </div>
                 </td>
             </tbody>

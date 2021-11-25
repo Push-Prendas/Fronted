@@ -867,6 +867,13 @@ export default {
                }
             }
 
+            var patentesAlzparcial = []
+            for (let index = 0; index < this.items.length; index++) {
+                if (document.getElementById(index.toString()+'P').checked == true){
+                    patentesAlzparcial.push(this.items[index])
+                }	
+            }
+
             if(!solicitudPendiente){
 
                 inscripcion_modificacion(
@@ -895,7 +902,7 @@ export default {
                 this.fechaRequirente,//,
                 flag,
                 localStorage.idSol,
-                //patentesAlzparcial
+                patentesAlzparcial
             )
                 this.downloadWithCSS()
                 this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})
