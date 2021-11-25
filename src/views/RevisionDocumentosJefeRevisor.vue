@@ -33,11 +33,12 @@ import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
 import {db} from "@/main";
 
-import { collection, getDocs, updateDoc,query,where, doc} from "firebase/firestore";
+import { collection, getDocs, updateDoc,query,where, doc, setDoc} from "firebase/firestore";
 
 
 var username = localStorage.user
 const VOLVER= "/Dashboard/" + localStorage.rol + "/" + username + "/MisSolicitudes"
+var today = new Date();
 
 
 var total_items = []
@@ -594,7 +595,19 @@ export default {
 						//console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
 						updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
 							aprovJefeRevisor: true
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: localStorage.id_judge,
+									idModificacion: "",
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Inscricpion Aceptada por el Jefe de Unidad de Prenda",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})	
 				})
 		}else if(localStorage.tipo_judge.toString() == "M"){
@@ -637,7 +650,19 @@ export default {
 					getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 						updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
 							aprovJefeRevisor: true
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: localStorage.id_judge,
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Modificacion Aceptada por el Jefe de Unidad de Prenda",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})
 				})
 			})
@@ -664,7 +689,19 @@ export default {
 				getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 					updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
 						aprovJefeRevisor: true
-					,}).then(()=>this.$router.push({path: VOLVER}) )
+					,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: "",
+									idAlzamiento: localStorage.id_judge,
+									idUser: localStorage.mail,
+									comment: "Solicitud de Alzamiento Aceptada por el Jefe de Unidad de Prenda",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 				})
 			})
 		}
@@ -700,7 +737,19 @@ export default {
 						//console.log("AQUI DEBERIA PASAR A TRUE-2", localStorage.id_judge)
 						updateDoc(doc(collection(db, "Inspeccion_inscripcion"),resp.docs[0].id.toString()),{
 							aprovJefeRevisor: false
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: localStorage.id_judge,
+									idModificacion: "",
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Inscricpion Rechazada por el Jefe de Unidad de Prenda",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})	
 				})
 			}
@@ -744,7 +793,19 @@ export default {
 					getDocs(query(collection(db, "Inspeccion_modificacion"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 						updateDoc(doc(collection(db, "Inspeccion_modificacion"),resp.docs[0].id.toString()),{
 							aprovJefeRevisor: false
-						,}).then(()=>this.$router.push({path: VOLVER}) )
+						,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: localStorage.id_judge,
+									idAlzamiento: "",
+									idUser: localStorage.mail,
+									comment: "Solicitud de Modificacion Rechazada por el Jefe de Unidad de Prenda",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 					})
 				})
 			})
@@ -772,7 +833,19 @@ export default {
 				getDocs(query(collection(db, "Inspeccion_alzamiento"), where("solicitudId", "==", localStorage.id_judge.toString()))).then((resp)=>{
 					updateDoc(doc(collection(db, "Inspeccion_alzamiento"),resp.docs[0].id.toString()),{
 						aprovJefeRevisor: false
-					,}).then(()=>this.$router.push({path: VOLVER}) )
+					,}).then(()=>{
+							getDocs(collection(db, "Bitacora")).then((bit_data) => {
+								var id_bit = bit_data.docs.length;
+								setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+									idInscripcion: "",
+									idModificacion: "",
+									idAlzamiento: localStorage.id_judge,
+									idUser: localStorage.mail,
+									comment: "Solicitud de Alzamiento Rechazada por el Jefe de Unidad de Prenda",
+									fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+								})
+							})
+						}).then(()=>this.$router.push({path: VOLVER}) )
 				})
 			})
 		}

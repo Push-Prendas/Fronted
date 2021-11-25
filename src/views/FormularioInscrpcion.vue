@@ -239,14 +239,28 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 
 				});
+				var today = new Date();
+				getDocs(collection(db, "Bitacora")).then((bit_data) => {
+					var id_bit = bit_data.docs.length;
+					var id_insc = id;
+					setDoc(doc(collection(db, "Bitacora"),id_bit.toString()), {
+						idInscripcion: id_insc,
+						idModificacion: "",
+						idAlzamiento: "",
+						idUser: localStorage.mail,
+						comment: "Solicitud de Inscricpion Creada",
+						fechaCambio: today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+					})
+				})
 				//REVISAR DOCUMENTOS
-				var repertorio = null
+				var repertorio = 0
 				console.log("validate revisando documents")
 				getDocs(collection(db,"Document_RPsD")).then((pat_data) => {
 					var id_inspeccion = pat_data.docs.length
-					var pt = pat_data.docs[id_inspeccion-1]
-					repertorio = pt.data().numero_repertorio_RPsD
-					
+					if(id_inspeccion != 0){
+						var pt = pat_data.docs[id_inspeccion-1]
+						repertorio = pt.data().numero_repertorio_RPsD
+					}	
 				}).then(() => {
 				console.log("validate revisando documents 2")
 
@@ -256,8 +270,6 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 
 					console.log(contratos)
 					console.log(archivos)
-
-
 
 					console.log("---------------------")
 					//const storageRef = ref(storage); 	
@@ -643,9 +655,9 @@ export default {
             var canvasElement = document.createElement('canvas');
                 html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
                 }).then(function (canvas) {
-                const img = canvas.toDataURL("image/jpeg",0.8);
+                const img = canvas.toDataURL("image/jpeg",1);
                 doc.addImage(img,'JPEG',20,20,120,120);
-                doc.save("sample.pdf");
+                doc.save("InscripcionPrenda.pdf");
             });
         },
         crearInscripcion(flags){

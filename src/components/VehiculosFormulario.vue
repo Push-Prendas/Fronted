@@ -395,7 +395,7 @@ export default {
                     monto.innerHTML = "$" + valor1
                     const monto3 = document.getElementById('monto3')
                     console.log("MY MONTO")
-                console.log(monto3.innerHTML.substring(1))
+                    console.log(monto3.innerHTML.substring(1))
                     var valor2 = parseInt(monto3.innerHTML.substring(1))
                     valor2 += (preciosGlobal[7]["precio"] + preciosGlobal[8]["precio"])
                     monto3.innerHTML = "$" + valor2
@@ -428,7 +428,7 @@ export default {
                 console.log("MY MONTO")
                 console.log(monto3.innerHTML.substring(1))
                 var valor2 = parseInt(monto3.innerHTML.substring(1))
-                valor2 += (preciosGlobal[7]["precio"] + preciosGlobal[8]["precio"])
+                valor2 += preciosGlobal[7]["precio"]
                 monto3.innerHTML = "$" + valor2
                 
                 this.patente ="";

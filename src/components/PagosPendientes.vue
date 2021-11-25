@@ -478,8 +478,9 @@ export default {
             console.log("relleno tabla")
             //EstPrimario 1 y EstSecundario 0 y firma true
 
-            //buscador_solicitud(4,0,"T", -1) 
+            //buscador_solicitud(4,1,"T", -1) 
             buscador_solicitud(1,0,"T", -1)
+			buscador_solicitud(1,1,"T", -1)
             console.log("PHASE 1")
 
             setTimeout(() => { 
@@ -490,7 +491,11 @@ export default {
                 this.inscripciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]==0){
                         estad="Por pagar"
-                    }else{
+                    }
+					else if (insc[1]["estadoSecundario"]==1){
+						estad="Esperando Confirmación"
+					}
+					else{
                         estad="Pagado"
                     }
                     if (insc[1]["firma"]){ //TODOS LOS DATOS TIENEN ESTE VALOR VACIO
@@ -516,7 +521,11 @@ export default {
                 this.modificaciones_encontradas.forEach((insc)=>{
                    if(insc[1]["estadoSecundario"]==0){
                         estad="Por pagar"
-                    }else{
+                    }
+					else if (insc[1]["estadoSecundario"]==1){
+						estad="Esperando Confirmación"
+					}
+					else{
                         estad="Pagado"
                     }
                     if (insc[1]["firma"]){
@@ -529,13 +538,6 @@ export default {
                             "Monto": insc[1]["montoTotal"],
                             "Estado": estad,
                             "Tipo":"M"}
-                        ///console.log(insc[1]) //undefined values
-                        /*
-                        <td>{{item.Rep}}</td>
-                        <td>{{item.Notaria}}</td>
-                        <td>{{item.Fecha}}</td>
-                        <td>{{item.Monto}}</td>
-                        */
                         this.items.push(item)
                     }
                     });
@@ -546,7 +548,11 @@ export default {
                 this.alzamientos_encontrados.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]==0){
                         estad="Por pagar"
-                    }else{
+                    }
+					else if (insc[1]["estadoSecundario"]==1){
+						estad="Esperando Confirmación"
+					}
+					else{
                         estad="Pagado"
                     }
                     if (insc[1]["firma"]){
