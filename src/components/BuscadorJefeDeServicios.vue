@@ -49,7 +49,6 @@
               <th scope="col">Fecha</th>
               <th scope="col">Tipo</th>
               <th scope="col">Estado</th>
-              <th scope="col">Asignada</th>
             </tr>
           </thead>
           <tbody v-for="(item,index) in items" :key="index">
@@ -62,14 +61,8 @@
               <td> 
                   <div class="btn-group" role = "group" aria-label="Basic example">
                       <th class="status">{{item.Estado}}</th>
-                  </div>
-              </td>
-              <td> 
-                  <div >
-                      <select id="asignado" class="form-select" v-model="tipoDoc" @change="changeOption()">
-                          <option selected value="Revisor #1">Revisor #1</option>
-                          <option value="revisor #2">Revisor #2</option>
-                      </select>
+                       <th > - </th>
+                      <th class="status2" @click="change(item)">Change</th>
                   </div>
               </td>
             </tr>
@@ -83,7 +76,7 @@
 <script>
 
 import {db} from "@/main";
-import { collection, getDocs} from "firebase/firestore";
+import { collection, getDocs, updateDoc, getDoc, query, where} from "firebase/firestore";
 
 var inscripciones_encontradasGlobal = []
 var modificaciones_encontradasGlobal = []
@@ -270,6 +263,18 @@ export default {
         }
     },
   methods:{
+      change(item){
+          updateDoc(getDoc(collection(db, "Solicitud_Inscripcion_Prenda",item.ID)),{
+			estadoPrimario: 4
+		}).then(() => {
+			console.log("CAMBIAR STATUS")
+            getDoc(query(collection(db, "Inspeccion_inscripcion"), where("solicitudId", "==", item.ID)))
+            .then((it) => {
+                console.log(it.id)
+            })
+		
+            })
+      },
       busqueda(){
           this.items = []
           this.inscripciones_encontradas = []
@@ -389,6 +394,15 @@ export default {
     padding-left: 5px; 
     padding-right: 5px; 
     background-color:#B9AA23;
+    color: white;
+    border-radius: 15px;
+
+}
+.status2{
+    margin-left: 5px;
+    padding-left: 5px; 
+    padding-right: 5px; 
+    background-color:#d64850;
     color: white;
     border-radius: 15px;
 

@@ -49,7 +49,6 @@
               <th scope="col">Fecha</th>
               <th scope="col">Tipo</th>
               <th scope="col">Estado</th>
-              <th scope="col">Asignada</th>
             </tr>
           </thead>
           <tbody v-for="(item,index) in items" :key="index">
@@ -64,14 +63,7 @@
                       <th class="status">{{item.Estado}}</th>
                   </div>
               </td>
-              <td> 
-                  <div class="tamanoTipoDocumento">
-                      <select id="asignado" class="form-select" v-model="tipoDoc" @change="changeOption()">
-                          <option selected value="Revisor #1">Revisor #1</option>
-                          <option value="revisor #2">Revisor #2</option>
-                      </select>
-                  </div>
-              </td>
+        
             </tr>
           </tbody>
         </table>
@@ -383,6 +375,8 @@ export default {
     border-radius: 15px;
 
 }
+
+
 
 .contenedor{
     margin-top: 2em;

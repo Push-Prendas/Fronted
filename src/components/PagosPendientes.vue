@@ -138,167 +138,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			///////
 		})
 	}
-
-    
-
-
 }
-/*
-function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
-	///A TRAVES DE UN ID Y EL TIPO DE SOLICITUD SE BUSCARA LA ACTUACION QUE SE NECESITE
-	///CON TODAS SUS DEPENDEDNCIAS
-	var solicitud_relacionada;
-	var acreedores_relacionados = []
-	var constituyentes_relacionados = []
-	var deudores_relacionados = []
-	var contratos_relacionados = []
-	var archivos_relacionados = []
-	var patentes_relacionadas = []
-	if(tipo_de_solicitud == "I"){
-		getDocs(collection(db, "Solicitud_Inscripcion_Prenda")).then((sol_data) => {
-			all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				if(id_inscripcion == doc.id){
-					solicitud_relacionada = doc.data();					
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
-						all_docs = file_data.docs;
-						all_docs.forEach((d) => {
-							my_doc = d.data();
-							if (my_doc.contrato){
-								contratos_relacionados.push(my_doc)
-							}
-							else{
-								archivos_relacionados.push(my_doc)
-							}
-						})
-					}).then(() => {
-						console.log("ARCHIVOS")
-						console.log(contratos_relacionados)
-						console.log(archivos_relacionados)
-					})
-					getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
-						all_personas = persona_data.docs;
-						all_personas.forEach((d) => {
-							my_doc = d.data();
-							if (my_doc.tipoContratante == 0){
-								acreedores_relacionados.push(my_doc)
-							}
-							else if (my_doc.tipoContratante == 1){
-								constituyentes_relacionados.push(my_doc)
-							}
-							else if (my_doc.tipoContratante == 2){
-								deudores_relacionados.push(my_doc)
-							}
-						})
-					}).then(() => {
-						console.log("PERSONAS")
-						console.log(acreedores_relacionados)
-						console.log(constituyentes_relacionados)
-						console.log(deudores_relacionados)
-					})
-					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", id_inscripcion))).then((patente_data) => {
-						all_patentes = patente_data.docs;
-						all_patentes.forEach((p) => {
-							my_doc = p.data();
-							patentes_relacionadas.push(my_doc)
-						})
-
-					}).then(() => {
-						console.log("PATENTES")
-						console.log(patentes_relacionadas)
-					})
-				}
-			})
-		}).then(() => {
-			console.log("INSCRIPCION")
-			console.log(solicitud_relacionada)
-			///INSCRIPCION ENCONTRADA
-			///FRONTEND -> MODIFICAR ACA
-
-
-
-
-			///
-
-		})
-	}
-	else if(tipo_de_solicitud == "M"){
-		getDocs(collection(db, "Solicitud_Modificacion_Prenda")).then((sol_data) => {
-			all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				if(id_inscripcion == doc.id){
-					solicitud_relacionada = doc.data();
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
-						all_docs = file_data.docs;
-						all_docs.forEach((d) => {
-							my_doc = d.data();
-							if (my_doc.contrato){
-								contratos_relacionados.push(my_doc)
-							}
-							else{
-								archivos_relacionados.push(my_doc)
-							}
-						})
-					}).then(() => {
-						console.log("ARCHIVOS")
-						console.log(contratos_relacionados)
-						console.log(archivos_relacionados)
-					})
-
-
-				}
-			})
-		}).then(() => {
-			console.log("MODIFICACION")
-			console.log(solicitud_relacionada)
-			///MODIFICACION ENCONTRADA
-			///FRONTEND MODIFICAR ACA
-
-
-
-			///
-
-		})
-		
-	}
-	else if (tipo_de_solicitud == "A"){
-		//VER COMO ESTA CONSTITUIDO ALZAMIENTO
-		getDocs(collection(db, "Solicitud_Alzamiento_Prenda")).then((sol_data) => {
-			all_insc = sol_data.docs
-			all_insc.forEach((doc) => {
-				if(id_inscripcion == doc.id){
-					solicitud_relacionada = doc.data();
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
-						all_docs = file_data.docs;
-						all_docs.forEach((d) => {
-							my_doc = d.data();
-							if (my_doc.contrato){
-								contratos_relacionados.push(my_doc)
-							}
-							else{
-								archivos_relacionados.push(my_doc)
-							}
-						})
-					}).then(() => {
-						console.log("ARCHIVOS")
-						console.log(contratos_relacionados)
-						console.log(archivos_relacionados)
-					})
-				}
-			})
-		}).then(() => {
-			console.log("ALZAMIENTO")
-			console.log(solicitud_relacionada)
-
-			///ALZAMIENTO ENCONTRADO
-			///FRONTEND MODIFICAR DE ACA
-
-
-			//////////////////////
-		})
-	}
-}
-*/
 
 var my_rpsd;
 function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundario, user_id){
@@ -434,7 +274,9 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 
 
 var autoGlobal = []
-function load_vehicles(id_inscripcion){
+var autoGlobalALZ = []
+function load_vehicles(ite){
+	var id_inscripcion=ite.id
     autoGlobal = []
     getDocs(collection(db,"Patente_por_Inscripcion")).then((car_Data) => { 
 		var my_cars = car_Data.docs
@@ -445,10 +287,21 @@ function load_vehicles(id_inscripcion){
 		})
         console.log("AUTOS CON ANOTACION AL RVM Y SIN ALZAR: ")
 		console.log(autoGlobal)
+		if(ite.Tipo == "M"){
+			getDocs(collection(db,"Solicitud_Modificacion_Prenda")).then((data) => { 
+				data.docs.forEach((doc)=>{
+					if(doc.patentesAlzparcial && doc.tipoModificacion==1 && doc.numeroRepertorioNotario==ite.Not){
+						doc.patentesAlzparcial.forEach((dopatc)=>{
+							autoGlobalALZ.push(dopatc)
+						})
+						
+					}
+				})
+			})
+		}
+		
 	})
 }
-
-
 
 export default {
   name: 'PagosPendientes',
@@ -484,6 +337,7 @@ export default {
             //buscador_solicitud(4,1,"T", -1) 
             buscador_solicitud(1,0,"T", -1)
 			buscador_solicitud(1,1,"T", -1)
+			buscador_solicitud(4,1,"T", -1)
             //console.log("PHASE 1")
 
             setTimeout(() => { 
@@ -606,11 +460,8 @@ export default {
 	},
 	updatePago(item){
 		modifySecondaryStatus(item.Tipo, item.id, 1, this.emailUser)
-		setTimeout(() => {
-			
+		setTimeout(() => {			
 			/*
-				SI OBTENER LA IP NO FUNCIONA
-				APAGAR ADBLOCKER O NO UTILIZAR BRAVE
 				AQUI ACTUALIZAR RVM
 			*/
 			console.log(localStorage.user +','+my_rpsd+','+this.monto)
@@ -652,7 +503,7 @@ export default {
 						//alert(reqResult.msg)
 					})
 
-					load_vehicles(item.id)
+					load_vehicles(item)
 					var tipoMod = ""
 					if (item.Tipo=="M"){
 						getDocs(collection(db, "Solicitud_Modificacion_Prenda")).where('id'==item.id).then((the_data) => {
@@ -673,7 +524,11 @@ export default {
 							if(item.Tipo == "I"){
 								type = "PN"
 							}else if(item.Tipo == "M"){
-								type = tipoMod
+								if(autoGlobalALZ.includes(data)){
+									type = tipoMod
+								}else{
+									type = false
+								}
 							}else if(item.Tipo == "A"){
 								type = "AlzPN"
 							}

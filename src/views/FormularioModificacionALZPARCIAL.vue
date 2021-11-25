@@ -610,57 +610,11 @@ export default {
       load_vehicles(localStorage.idSol)
       load_rpsd(localStorage.idSol)
       setTimeout(() => {
-        console.log("SOLICITUD DE INSCRIPCION ENCONTRADA EN ESTOS LUGARES")
-        console.log(solicitud_relacionada)
-
-
         this.items = []
-        console.log(autoGlobal)
         const monto = document.getElementById('monto')
-
-
-        console.log("Enviando REQUEST")
         costoTotalAutos = 0
-
         autoGlobal.forEach((data) => {
-
         costoTotalAutos += parseInt(preciosGlobal[9]["precio"])
-
-        if(data.inscripcionPrendaRVM == true){
-
-        var oReq = new XMLHttpRequest();
-        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/licensePlates?patente=' + data.patente
-        oReq.open("GET", url);
-        oReq.send();
-        oReq.onload = ()=>{
-                if(oReq.status == 200){
-                    var reqResult = JSON.parse(oReq.response);
-                    console.log("MENSAJE RECIVIDO")
-                    console.log(reqResult)
-                    solicitudPendiente = false
-                    reqResult.solicitudes.forEach((mensaje)=>{
-
-                        console.log(mensaje.numero_repertorio)
-                        console.log((repertorio_contrato_global.split("-")[1] + "-" + repertorio_contrato_global.split("-")[0]))
-
-                        if(mensaje.numero_repertorio == (repertorio_contrato_global.split("-")[1] + "-" + repertorio_contrato_global.split("-")[0])){
-                                console.log("ENTRO EN PENDIENTE")
-                                solicitudPendiente = true
-                         }
-
-                    })
-                    console.log("LARGO")
-                    console.log(reqResult.solicitudes.length)
-                    console.log(solicitudPendiente)
-
-
-                } 
-            
-        }
-
-
-        }
-
         var alzamiento = "No Alzado"
         if(data.alzamiento){
             alzamiento = "Alzado"
@@ -672,11 +626,32 @@ export default {
             "estado": alzamiento,
             "costo": preciosGlobal[9]["precio"]}
         this.items.push(item);
-
-
-
-
         })
+
+        
+        load_rpsd(localStorage.idSol)
+        var oReq = new XMLHttpRequest();
+        var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4031/API/vehicles/currentAnotations?numero_repertorio=' + repertorio_contrato_global
+        oReq.open("GET", url);
+        oReq.send();
+        oReq.onload = ()=>{
+                if(oReq.status == 200){
+                    var reqResult = JSON.parse(oReq.response);
+                    solicitudPendiente = false
+                    reqResult.vehicles.forEach((ve)=>{
+                        this.items.forEach((data) => {
+                            if(data.patente==ve[0]){
+                                if(ve[1]){
+                                    data.estado = "Alzado"
+                                }else{
+                                    data.estado = "No Alzado"
+                                }
+                            }
+                        })
+                    })
+                }           
+        }
+        
 
         monto.innerHTML = "$" + (parseInt(preciosGlobal[2]["precio"]) + parseInt(costoTotalAutos) )
         const monto2 = document.getElementById('monto2')
@@ -872,7 +847,6 @@ export default {
             }
 
             if(!solicitudPendiente){
-
                 inscripcion_modificacion(
                 this.tipoDoc.toString(),//
                 this.FSuscripcion.toString(),//
