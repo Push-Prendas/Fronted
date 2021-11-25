@@ -532,9 +532,9 @@ function  inscripcion_modificacion(
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
             if(send_flag){
-            modifySecondaryStatus("M",ids.toString(),1,localStorage.mail)
+            
             if (localStorage.rol == "FUNCIONARIOOFICINA"){
-               
+                modifySecondaryStatus("M",ids.toString(),1,localStorage.mail)
                 setTimeout(() => {
                     var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
                     var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[2]["precio"])) +'}' //CORREGIR ESTA CUESTION

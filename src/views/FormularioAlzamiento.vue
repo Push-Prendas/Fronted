@@ -368,9 +368,9 @@ function alzamiento(
             alert("Solicitud Guardada Exitosamente")
 				}else{
        
-        modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
+        
         if (rol_oficina){
-            
+            modifySecondaryStatus("A",ids.toString(),1,localStorage.mail)
             setTimeout(() => {
                 var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
                 var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + (parseInt(preciosGlobal[1]["precio"]) + parseInt(costoTotalAutos)) +'}' //CORREGIR ESTA CUESTION

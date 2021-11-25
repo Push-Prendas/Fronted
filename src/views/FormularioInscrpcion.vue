@@ -319,8 +319,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 					alert("Solicitud Guardada Exitosamente")
 				}else{
 					//PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
-					modifySecondaryStatus("I",id.toString(),1,userid)
+					
 					if (rol_oficina){
+						modifySecondaryStatus("I",id.toString(),1,userid)
 						setTimeout(() => {
 							var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4033/api/checkout/pay'
 							var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd + '", "monto":' + monto_total +'}'
