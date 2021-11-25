@@ -36,6 +36,8 @@ import Bitacora from '../components/BitacoraFormulario.vue'
 import Monto from '../components/Monto.vue'
 import Menu from '../components/Menu.vue'
 import Navbar from '../components/Navbar.vue'
+import jsPDF  from 'jspdf';
+import html2canvas from 'html2canvas';
 //VALIDA EL NUMERO DE REPERTORIO
 function validate_number(inputNumber){
     if(!inputNumber.includes("-")) return false;
@@ -808,7 +810,7 @@ export default {
                 flag,
                 localStorage.idSol
             )
-            downloadWithCSS()
+            this.downloadWithCSS()
         } 
     }
 }
