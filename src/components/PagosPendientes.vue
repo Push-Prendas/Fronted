@@ -91,7 +91,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(inscripciones_encontradasGlobal)
 			//UNA VEZ LAS INSCRIPCIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-			console.log(inscripciones_encontradasGlobal.length)
+			//console.log(inscripciones_encontradasGlobal.length)
 			///////
 		})
 
@@ -111,7 +111,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			console.log("MODIFICACIONES ENCONTRADAS")
 			console.log(modificaciones_encontradasGlobal)
 			//UNA VEZ LOS MODIFICACIONES ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-            console.log(inscripciones_encontradasGlobal.length)
+            //console.log(inscripciones_encontradasGlobal.length)
 			///////
 		})
 
@@ -131,7 +131,7 @@ async function buscador_solicitud(estado_primario, estado_secundario, tipo_de_so
 			console.log("INSCRIPCIONES ENCONTRADAS")
 			console.log(alzamientos_encontradosGlobal)
 			//UNA VEZ LOS ALZAMIENTOS ESTAN LISTAS VER QUE HACER CON ELLAS ACA
-            console.log(alzamientos_encontradosGlobal.length)
+            //console.log(alzamientos_encontradosGlobal.length)
 			///////
 		})
 	}
@@ -321,7 +321,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 		}
 		var year = counter_data.year;
 		my_rpsd = counter + "-" + year.toString()
-		console.log("RPSD: " + my_rpsd)
+		//.log("RPSD: " + my_rpsd)
 		if(estado_secundario == 1){
 			if (tipo_de_solicitud == "I"){
 				updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",id_solicitud),{
@@ -330,7 +330,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 					numeroRepertorioContratoPrenda: counter + "-" + year.toString()
 
 				}).then(() => {
-					console.log("ACTUALIZADO")
+					//console.log("ACTUALIZADO")
 				})
 
 			}
@@ -356,7 +356,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 					estadoSecundario: estado_secundario,
 
 				}).then(() => {
-					console.log("ACTUALIZADO")
+					//console.log("ACTUALIZADO")
 				})
 
 			}
@@ -380,7 +380,7 @@ function modifySecondaryStatus(tipo_de_solicitud, id_solicitud, estado_secundari
 					estadoSecundario: estado_secundario,
 
 				}).then(() => {
-					console.log("ACTUALIZADO")
+					//console.log("ACTUALIZADO")
 				})
 
 			}
@@ -481,12 +481,12 @@ export default {
             //buscador_solicitud(4,1,"T", -1) 
             buscador_solicitud(1,0,"T", -1)
 			buscador_solicitud(1,1,"T", -1)
-            console.log("PHASE 1")
+            //console.log("PHASE 1")
 
             setTimeout(() => { 
             if(this.inscripciones_encontradas.length>0){
-                console.log("CHECKING")
-                console.log(this.inscripciones_encontradas);
+                //console.log("CHECKING")
+                //console.log(this.inscripciones_encontradas);
                 var estad;
                 this.inscripciones_encontradas.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]==0){
@@ -509,14 +509,14 @@ export default {
                             "Estado": estad,
                             "Tipo":"I"}
                         this.items.push(item)
-                        console.log(insc[1])
+                        //console.log(insc[1])
                         this.monto+= parseFloat(insc[1]["montoTotal"]);
                     }
                                         
                     });
 
             }
-            console.log("PHASE 2")
+            //console.log("PHASE 2")
             if(this.modificaciones_encontradas.length>0){
                 this.modificaciones_encontradas.forEach((insc)=>{
                    if(insc[1]["estadoSecundario"]==0){
@@ -543,7 +543,7 @@ export default {
                     });
 
                 }
-            console.log("PHASE 3")
+            //console.log("PHASE 3")
             if(this.alzamientos_encontrados.length>0){
                 this.alzamientos_encontrados.forEach((insc)=>{
                     if(insc[1]["estadoSecundario"]==0){
@@ -586,10 +586,10 @@ export default {
 		}
 		for (let w = 0; w < indexCheck.length; w++) {
             var item = this.items[indexCheck[w]]
-            console.log(item)
-			console.log("SENDING DATA")		
+            //console.log(item)
+			//console.log("SENDING DATA")		
 			this.updatePago(item)
-			console.log(indexCheck[w])
+			//console.log(indexCheck[w])
         }
 		this.items.length=0
 		this.clean()
@@ -612,8 +612,8 @@ export default {
 			*/
 			console.log(localStorage.user +','+my_rpsd+','+this.monto)
 			var url = 'http://ec2-75-101-231-83.compute-1.amazonaws.com:4032/api/transaction/payment'
-			console.log("Phase 1 GETTING IP")
-			console.log(localStorage.rutLog)
+			//console.log("Phase 1 GETTING IP")
+			//console.log(localStorage.rutLog)
 			var real_rpsd = my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0]
 			var params = '{"id_persona":"' + localStorage.rutLog + '", "numero_repertorio":"' + my_rpsd.split("-")[1]+"-"+my_rpsd.split("-")[0] + '", "monto":' + this.monto +', "confirmation_ip": "54.167.53.130"}'
 				fetch(url, {
@@ -627,26 +627,25 @@ export default {
 						if (item.Tipo=="I"){
 							updateDoc(doc(db, "Solicitud_Inscripcion_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
-							estadoSecundario: 2
+							estadoSecundario: 1
 							}).then(() => {
-								console.log("id_transaccion asignado")
+								console.log("id_transaccion asignado", reqResult.transaction_id)
 							})
 						}else if (item.Tipo=="M"){
 							updateDoc(doc(db, "Solicitud_Modificacion_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
-							estadoSecundario: 2
+							estadoSecundario: 1
 							}).then(() => {
-								console.log("id_transaccion asignado")
+								console.log("id_transaccion asignado", reqResult.transaction_id)
 							})
 						}else if (item.Tipo=="A"){
 							updateDoc(doc(db, "Solicitud_Alzamiento_Prenda",item.id),{
 							id_transaccion: reqResult.transaction_id,
-							estadoSecundario: 2
+							estadoSecundario: 1
 							}).then(() => {
-								console.log("id_transaccion asignado")
+								console.log("id_transaccion asignado", reqResult.transaction_id)
 							})
 						}
-						console.log(reqResult.transaction_id)
 						//alert(reqResult.msg)
 					})
 
@@ -675,10 +674,10 @@ export default {
 							}else if(item.Tipo == "A"){
 								type = "AlzPN"
 							}
-							console.log("REPERTORIO")
+							//console.log("REPERTORIO")
 							if(type!=false){
 								var params2 =  '{"patente": "' + data.patente + '", "tipo":"' + type + '", "numero_repertorio":"'  + real_rpsd +  '"}'
-								console.log(params2)
+								//console.log(params2)
 								fetch(url2, {
 									method: 'POST',
 									headers: {
