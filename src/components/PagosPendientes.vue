@@ -24,7 +24,7 @@
                 </td>
                 <td>
                     <div class="form-check ">
-                            <input class="form-check-input" type="checkbox" value="" :id="index" >
+                            <input class="form-check-input" type="checkbox" value="" :id="index" v-if="item.Estado != 'Pagado'">
                     </div>
                 </td>
             </tbody>

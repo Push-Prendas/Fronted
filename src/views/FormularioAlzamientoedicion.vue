@@ -440,7 +440,8 @@ function alzamiento(
     numero_repertorio_RPsD,
     send_flag,
     rol_oficina=false,
-    name_oficina
+    name_oficina,
+    id_inscripcion
     //AGREGADO RECIENTMENTE FALTA PONER EN LA VISTA
     ){
         var validate = true
@@ -519,7 +520,8 @@ function alzamiento(
             numeroRepertorioContratoPrenda: numero_repertorio_RPsD,
             oficina: "mi oficina",
             firma:false,
-            usuarioCreador: localStorage.mail
+            usuarioCreador: localStorage.mail,
+            id_inscripcion: id_inscripcion
 
 
 
@@ -668,13 +670,17 @@ export default {
 
 
         }
-
+        var alzamiento = "No Alzado"
+        if(data.alzamiento){
+            alzamiento = "Alzado"
+        }
 
         let item = {
             "patente": data.patente,
             "rvm": data.inscripcionPrendaRVM,
             "GoE": data.inscripcionProhibicionGravarEnajenar,
-            "costo": "-"}
+            "estado": alzamiento,
+            "costo": preciosGlobal[9]["precio"]}
         this.items.push(item);
 
 
@@ -874,7 +880,8 @@ export default {
                 -1,-1,
                 flags,
                 localStorage.rol == 'FUNCIONARIOOFICINA',
-                "Mi oficina"
+                "Mi oficina",
+                localStorage.idSol
             )
         }else{
             alert("Existen patentes con solicitudes pendientes")

@@ -435,6 +435,7 @@ function  inscripcion_modificacion(
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
     fecha_requirente="",//
     send_flag,
+    id_inscripcion
     ){
 
 
@@ -525,6 +526,7 @@ function  inscripcion_modificacion(
                 tipoModificacion:1,
                 usuarioCreador: localStorage.mail,
                 id_transaccion: -1,
+                id_inscripcion: id_inscripcion
             }).then(() => {
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -693,12 +695,16 @@ export default {
 
         }
 
-
+        var alzamiento = "No Alzado"
+        if(data.alzamiento){
+            alzamiento = "Alzado"
+        }
         let item = {
             "patente": data.patente,
             "rvm": data.inscripcionPrendaRVM,
             "GoE": data.inscripcionProhibicionGravarEnajenar,
-            "costo": "-"}
+            "estado": alzamiento,
+            "costo": preciosGlobal[9]["precio"]}
         this.items.push(item);
 
 
@@ -918,7 +924,8 @@ export default {
                 this.ProhibGravEnajenar,//
                 this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
                 this.fechaRequirente,//,
-                flag
+                flag,
+                localStorage.idSol
             )
                 this.downloadWithCSS()
                 this.$router.push({path: `/Dashboard/${localStorage.rol}/${localStorage.user}/MisSolicitudes`, params: {username: localStorage.user, rol: localStorage.rol}})

@@ -208,7 +208,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();
 					solicitud_relacionada_id = doc.id
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+					getDocs(query(collection(db, "Document_RPsD"), where("id_modificacion", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
 							var my_doc = d.data();
@@ -232,13 +232,17 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 				
 						})
 					})
-                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+	
+                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(solicitud_relacionada.id_inscripcion)))).then((persona_data) => {
 						var all_personas = persona_data.docs;
 						console.log("per")
 						console.log(persona_data.docs)
 						all_personas.forEach((d) => {
 							var my_doc = d.data();
 							if (my_doc.tipoContratante == 0){
+								my_doc.nombrePersona = solicitud_relacionada.nombre_acreedor
+								my_doc.runPersona = solicitud_relacionada.rut_acreedor
+
 								acreedores_relacionados.push(my_doc)
 							}
 							else if (my_doc.tipoContratante == 1){
@@ -262,7 +266,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 				
 						})
 					})
-					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(solicitud_relacionada.id_inscripcion)))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
 						all_patentes.forEach((p) => {
 							var my_doc = p.data();
@@ -304,7 +308,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 				if(id_inscripcion == doc.id){
 					solicitud_relacionada = doc.data();
 					solicitud_relacionada_id = doc.id
-					getDocs(query(collection(db, "Document_RPsD"), where("idInscripcion", "==", id_inscripcion))).then((file_data) => {
+					getDocs(query(collection(db, "Document_RPsD"), where("id_alzamiento", "==", id_inscripcion))).then((file_data) => {
 						var all_docs = file_data.docs;
 						all_docs.forEach((d) => {
 							var my_doc = d.data();
@@ -328,13 +332,15 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 				
 						})
 					})
-                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", id_inscripcion))).then((persona_data) => {
+                    getDocs(query(collection(db, "Persona_Solicitud"), where("idInscripcion", "==", parseInt(solicitud_relacionada.id_inscripcion)))).then((persona_data) => {
 						var all_personas = persona_data.docs;
 						console.log("per")
 						console.log(persona_data.docs)
 						all_personas.forEach((d) => {
 							var my_doc = d.data();
 							if (my_doc.tipoContratante == 0){
+								my_doc.nombrePersona = solicitud_relacionada.nombre_acreedor
+								my_doc.runPersona = solicitud_relacionada.rut_acreedor
 								acreedores_relacionados.push(my_doc)
 							}
 							else if (my_doc.tipoContratante == 1){
@@ -358,7 +364,7 @@ function buscador_especifico_solicitud(id_inscripcion, tipo_de_solicitud){
 				
 						})
 					})
-					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==", parseInt(id_inscripcion)))).then((patente_data) => {
+					getDocs(query(collection(db, "Patente_por_Inscripcion"), where("idInscripcion", "==",parseInt(solicitud_relacionada.id_inscripcion)))).then((patente_data) => {
 						var all_patentes = patente_data.docs;
 						all_patentes.forEach((p) => {
 							var my_doc = p.data();
@@ -403,6 +409,7 @@ export default {
     console.log(localStorage.id_judge+" "+localStorage.tipo_judge)
 	this.tipoA_revisar = localStorage.tipo_judge
 	console.log(this.tipoA_revisar)
+
 
     buscador_especifico_solicitud(parseInt(localStorage.id_judge), localStorage.tipo_judge)
     setTimeout(() => { 
@@ -473,6 +480,8 @@ export default {
 			const nombre =  document.getElementById("nombresacreedor");
 			const apPaterno =  document.getElementById("apellidopaterno");
 			const apMaterno =  document.getElementById("apellidomaterno");
+			console.log("ACREEDORES RELACIONADOS")
+			console.log(acreedores_relacionados)
 			const nombreCompleto = acreedores_relacionados[0].nombrePersona.split(" ");
 			
 			//VALUES
