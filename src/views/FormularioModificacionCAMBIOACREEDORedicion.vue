@@ -441,7 +441,8 @@ function  inscripcion_modificacion(
     GrabarEnagenar,//
     correo_requirente="",//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
     fecha_requirente="",//
-    send_flag
+    send_flag,
+    id_inscripcion
     ){
 
 
@@ -524,7 +525,8 @@ function  inscripcion_modificacion(
                 revisorAsignado :-1,
                 firma:false,
                 tipoModificacion:2,
-                usuarioCreador: localStorage.mail
+                usuarioCreador: localStorage.mail,
+                id_inscripcion: id_inscripcion
             }).then(() => {
             console.log("PAGANDO EN CAJA")
             //PARA FRONTED: SI QUIEREN HACER ALGO DESPUES DE QUE SE SUBA EL FORMULARIO PONGANLO ACA
@@ -686,7 +688,7 @@ export default {
             "patente": data.patente,
             "rvm": data.inscripcionPrendaRVM,
             "GoE": data.inscripcionProhibicionGravarEnajenar,
-            "costo": "-"}
+            "costo": preciosGlobal[9]["precio"]}
         this.items.push(item);
 
 
@@ -858,6 +860,17 @@ export default {
         this.anexos = data
         console.log("Anexos:"+this.anexos)
         },
+        downloadWithCSS() {
+            const doc = new jsPDF();
+            /** WITH CSS */
+            var canvasElement = document.createElement('canvas');
+                html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
+                }).then(function (canvas) {
+                const img = canvas.toDataURL("image/jpeg",1);
+                doc.addImage(img,'JPEG',20,20,120,120);
+                doc.save("ModificacionPrenda.pdf");
+            });
+        },
         modificar(flag){//agregar flags
             var est_p = 0
             if(flag){
@@ -900,9 +913,10 @@ export default {
                             this.Bienes[3],//EL VEHICULOS LE CORRESPONDE EL GRUPO DE SERVICIOS Y HAY BUSCAR LOS VEHICULOS QUE LE PERTENECE A LA MODIFICACION
                             this.ProhibGravEnajenar,//
                             this.correoRequirente,//EN EL HTML SE PUEDE USAR EL INPUT TEXT DE MAIL PARA VERIFICAR
-                            this.fechaRequirente//
+                            this.fechaRequirente,//
+                            localStorage.idSol
                         )
-
+                            downloadWithCSS()
                         }else{
                             alert("Existen patentes con solicitudes pendientes")
                         }

@@ -780,9 +780,9 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 				var canvasElement = document.createElement('canvas');
 					html2canvas(this.$refs.content,{scale:1}, { canvas: canvasElement 
 					}).then(function (canvas) {
-					const img = canvas.toDataURL("image/jpeg",0.8);
+					const img = canvas.toDataURL("image/jpeg",1);
 					doc.addImage(img,'JPEG',20,20,120,120);
-					doc.save("sample.pdf");
+					doc.save("InscripcionPrenda.pdf");
 				});
 				console.log("EVERYTHING ITS SEND SUCCESFULLY")
 				if (send_flag==false){
