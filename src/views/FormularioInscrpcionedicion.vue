@@ -594,8 +594,21 @@ function enviar_solicitud_de_inscripcion_prenda(tipo_documento, fecha_suscripcio
 		var estado_inicial = 0 //GUARDADO
 		console.log("validate")
 		if(send_flag){ ///VERIFICAR SI VIENE O NO DE OFICINA
-			if(rol_oficina)
+			if(rol_oficina){
 				estado_inicial = 3 //ENVIADO DESDE OFICINA
+				///AGARRAR DATOS
+				try{
+					console.log("MI NOMBRES")
+					nombre_requirente = document.getElementById('nombrecompletorequirente').value
+					console.log(nombre_requirente)
+					nombres_acreedor = document.getElementById('nombresacreedor').value + " " + document.getElementById('apellidopaterno').value + " " + document.getElementById('apellidomaterno').value
+					console.log(nombres_acreedor)
+				}
+				catch{
+					console.log("ERROR")
+				}
+			}
+				
 			else
 				estado_inicial = 1 //ENVIADO DESDE NOTARIA
 		
